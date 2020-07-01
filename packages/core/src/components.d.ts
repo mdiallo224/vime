@@ -7,6 +7,11 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Params } from "./utils/network";
 import { EmbedEvent, EmbedEventPayload } from "./components/core/embed/EmbedEvent";
+import { MediaProvider, MediaProviderAdapter, MockMediaProviderAdapter } from "./components/providers/MediaProvider";
+import { PlayerProp, PlayerProps } from "./components/core/player/PlayerProps";
+import { TextTrack } from "./components/core/player/TextTrack";
+import { ViewType } from "./components/core/player/ViewType";
+import { MediaType } from "./components/core/player/MediaType";
 export namespace Components {
     interface VimeEmbed {
         /**
@@ -18,7 +23,7 @@ export namespace Components {
          */
         "embedSrc": string;
         /**
-          * Reflects the title attribute of the root iframe. It should contain the title of the current media.
+          * The title of the current media so it can be set on the inner `iframe` for screen readers.
          */
         "mediaTitle": string;
         /**
@@ -38,6 +43,47 @@ export namespace Components {
          */
         "preconnections": string[];
     }
+    interface VimeFaketube {
+        /**
+          * **INTERNAL:** Do not interact with this prop, refer to the `vime-player` component.
+          * @inheritDoc
+         */
+        "autoplay": boolean;
+        /**
+          * **INTERNAL:** Do not interact with this prop, refer to the `vime-player` component.
+          * @inheritDoc
+         */
+        "controls": boolean;
+        /**
+          * **INTERNAL:** Do not interact with this prop, refer to `vime-player` component.
+          * @inheritDoc
+         */
+        "debug": boolean;
+        /**
+          * Dispatches a state change event.
+         */
+        "dispatchStateChange": (prop: PlayerProp, value: any) => Promise<void>;
+        /**
+          * **INTERNAL:** Returns the adapter that each provider must implement, to enable the core player component (`vime-player`) to control it. Do not interact with this method directly.
+          * @inheritDoc
+         */
+        "getAdapter": () => Promise<MockMediaProviderAdapter>;
+        /**
+          * **INTERNAL:** Do not interact with this prop, refer to the `vime-player` component.
+          * @inheritDoc
+         */
+        "loop": boolean;
+        /**
+          * **INTERNAL:** Do not interact with this prop, refer to the `vime-player` component.
+          * @inheritDoc
+         */
+        "muted": boolean;
+        /**
+          * **INTERNAL:** Do not interact with this prop, refer to the `vime-player` component.
+          * @inheritDoc
+         */
+        "playsinline": boolean;
+    }
     interface VimeIcon {
         /**
           * The color (fill) of the icon.
@@ -56,6 +102,307 @@ export namespace Components {
          */
         "scale": number;
     }
+    interface VimePlayer {
+        /**
+          * The aspect ratio of the player expressed as `width:height` (`16:9`). This is only applied if the `viewType` is `video` and the player is not in fullscreen mode.
+          * @inheritDoc
+         */
+        "aspectRatio": string;
+        /**
+          * Whether the player should automatically pause when another Vime player starts/resumes playback.
+          * @inheritDoc
+         */
+        "autopause": boolean;
+        /**
+          * Whether playback should automatically begin playing once the media is ready to do so. This will only work if the browsers `autoplay` policies have been satisfied. It'll generally work if the player is muted, or the user frequently interacts with your site. You can check if it's possible to autoplay via the `canAutoplay()` or `canMutedAutoplay()` methods.
+          * @inheritDoc
+         */
+        "autoplay": boolean;
+        /**
+          * **READONLY:** The length of the media in seconds that has been downloaded by the browser.
+          * @inheritDoc
+         */
+        "buffered": number;
+        /**
+          * **READONLY:** Whether playback has temporarily stopped because of a lack of temporary data.
+          * @inheritDoc
+         */
+        "buffering": boolean;
+        /**
+          * Determines whether the player can start playback of the current media automatically.
+          * @inheritDoc
+         */
+        "canAutoplay": () => Promise<boolean>;
+        /**
+          * Determines whether the player can start playback of the current media automatically given the player is muted.
+          * @inheritDoc
+         */
+        "canMutedAutoplay": () => Promise<boolean>;
+        /**
+          * Determines whether the current provider recognizes, and can play the given type.
+          * @inheritDoc
+         */
+        "canPlay": (type: string) => Promise<boolean>;
+        /**
+          * Returns whether the native browser fullscreen API is available, or the current provider can toggle fullscreen mode. This does not mean that the operation is guaranteed to be successful, only that it can be attempted.
+          * @inheritDoc
+         */
+        "canSetFullscreen": () => Promise<boolean>;
+        /**
+          * Returns whether the current provider allows setting the `mediaQuality` prop.
+          * @inheritDoc
+         */
+        "canSetMediaQuality": () => Promise<boolean>;
+        /**
+          * Returns whether the current provider exposes an API for entering and exiting picture-in-picture mode. This does not mean the operation is guaranteed to be successful, only that it can be attempted.
+          * @inheritDoc
+         */
+        "canSetPiP": () => Promise<boolean>;
+        /**
+          * Returns whether the current provider allows setting the `playbackRate` prop.
+          * @inheritDoc
+         */
+        "canSetPlaybackRate": () => Promise<boolean>;
+        /**
+          * Indicates whether a user interface should be shown for controlling the resource. Set this to `false` when you want to provide your own custom controls, and `true` if you want the current provider to supply its own default controls.
+          * @inheritDoc
+         */
+        "controls": boolean;
+        /**
+          * **READONLY:** The absolute URL of the media resource that has been chosen. Defaults to `undefined` if no media has been loaded.
+          * @inheritDoc
+         */
+        "currentSrc"?: string;
+        /**
+          * A `double` indicating the current playback time in seconds. Defaults to `0` if the media has not started to play and has not seeked. Setting this value seeks the media to the new time. The value can be set to a minimum of `0` and maximum of the total length of the media (indicated by the duration prop).
+          * @inheritDoc
+         */
+        "currentTime": number;
+        /**
+          * **READONLY:** Whether the player is in debug mode and should `console.log` information about its internal state.
+          * @inheritDoc
+         */
+        "debug": boolean;
+        /**
+          * **READONLY:** A `double` indicating the total playback length of the media in seconds. Defaults to `-1` if no media has been loaded.
+          * @inheritDoc
+         */
+        "duration": number;
+        /**
+          * Requests to enter fullscreen mode, returning a `Promise` that will resolve if the request is made, or reject with a reason for failure. This method will first attempt to use the browsers native fullscreen API, and then fallback to requesting the provider to do it (if available). Do not rely on a resolved promise to determine if the player is in fullscreen or not. The only way to be certain is by listening to the `vFullscreenChange` event. Some common reasons for failure are: the fullscreen API is not available, the request is made when `viewType` is audio, or the user has not interacted with the page yet.
+          * @inheritDoc
+         */
+        "enterFullscreen": (options?: FullscreenOptions | undefined) => Promise<any>;
+        /**
+          * Request to enter picture-in-picture (PiP) mode, returning a `Promise` that will resolve if the request is made, or reject with a reason for failure. Do not rely on a resolved promise to determine if the player is in PiP mode or not. The only way to be certain is by listening to the `vPiPChange` event. Some common reasons for failure are the same as the reasons for `enterFullscreen()`.
+          * @inheritDoc
+         */
+        "enterPiP": () => Promise<void>;
+        /**
+          * **READONLY:** A collection of errors that have occurred ordered by `[oldest, ..., newest]`.
+          * @inheritDoc
+         */
+        "errors": Error[];
+        /**
+          * Requests to exit fullscreen mode, returning a `Promise` that will resolve if the request is successful, or reject with a reason for failure. Refer to `enterFullscreen()` for more information.
+          * @inheritDoc
+         */
+        "exitFullscreen": () => Promise<any>;
+        /**
+          * Request to exit picture-in-picture mode, returns a `Promise` that will resolve if the request is successful, or reject with a reason for failure. Refer to `enterPiP()` for more information.
+          * @inheritDoc
+         */
+        "exitPiP": () => Promise<void | undefined>;
+        /**
+          * Extends the translation map for a given language.
+          * @inheritDoc
+         */
+        "extendLanguage": (language: string, translations: Record<string, string>) => Promise<void>;
+        /**
+          * **INTERNAL:** Returns the current media provider's adapter. Shorthand for `getProvider().getAdapter()`.
+          * @inheritDoc
+         */
+        "getAdapter": <InternalPlayerType = any>() => Promise<MediaProviderAdapter<InternalPlayerType>>;
+        /**
+          * Returns the current media provider
+          * @inheritDoc
+         */
+        "getProvider": <InternalPlayerType = any>() => Promise<MediaProvider<InternalPlayerType>>;
+        /**
+          * **READONLY:** A dictionary of translations for the current language.
+          * @inheritDoc
+         */
+        "i18n": Record<string, string>;
+        /**
+          * **READONLY:** Whether the current media is of type `audio`, shorthand for `mediaType === MediaType.Audio`.
+          * @inheritDoc
+         */
+        "isAudio": boolean;
+        /**
+          * **READONLY:** Whether the current view is of type `audio`, shorthand for `viewType === ViewType.Audio`.
+          * @inheritDoc
+         */
+        "isAudioView": boolean;
+        /**
+          * **READONLY:** Whether the player is currently in fullscreen mode.
+          * @inheritDoc
+         */
+        "isFullscreenActive": boolean;
+        /**
+          * **READONLY:** Whether the current media is being broadcast live.
+          * @inheritDoc
+         */
+        "isLive": boolean;
+        /**
+          * **READONLY:** Whether the player is in mobile mode. This is determined by parsing `window.navigator.userAgent`.
+          * @inheritDoc
+         */
+        "isMobile": boolean;
+        /**
+          * **READONLY:** Whether the player is currently in picture-in-picture mode.
+          * @inheritDoc
+         */
+        "isPiPActive": boolean;
+        /**
+          * **READONLY:** Whether the player is in touch mode. This is determined by listening for mouse and touch events and toggling this value.
+          * @inheritDoc
+         */
+        "isTouch": boolean;
+        /**
+          * **READONLY:** Whether the current media is of type `video`, shorthand for `mediaType === MediaType.Video`.
+          * @inheritDoc
+         */
+        "isVideo": boolean;
+        /**
+          * **READONLY:** Whether the current view is of type `video`, shorthand for `viewType === ViewType.Video`.
+          * @inheritDoc
+         */
+        "isVideoView": boolean;
+        /**
+          * The current language of the player. This can be any code defined via the `extendLanguage` method or the default `en`. It's recommended to use an ISO 639-1 code as that'll be used by Vime when adding new language defaults in the future.
+          * @inheritDoc
+         */
+        "language": string;
+        /**
+          * **READONLY:** The languages that are currently available. You can add new languages via the `extendLanguage` method.
+          * @inheritDoc
+         */
+        "languages": string[];
+        /**
+          * **READONLY:** Whether the metadata for current media resource has loaded.
+          * @inheritDoc
+         */
+        "loadedMetadata": boolean;
+        /**
+          * Whether media should automatically start playing from the beginning every time it ends.
+          * @inheritDoc
+         */
+        "loop": boolean;
+        /**
+          * **READONLY:** The media qualities available for the current media.
+          * @inheritDoc
+         */
+        "mediaQualities": string[];
+        /**
+          * Indicates the quality of the media. The value will differ between audio and video. For audio this might be some combination of the encoding format (AAC, MP3), bitrate in kilobits per second (kbps) and sample rate in kilohertz (kHZ). For video this will be the number of vertical pixels it supports. For example, if the video has a resolution of `1920x1080` then the quality will return `1080p`. Defaults to `undefined` which you can interpret as the quality is unknown. The quality can only be set to a quality found in the `mediaQualities` prop. Some providers may not allow changing the quality, you can check if it's possible via `canSetMediaQuality()`.
+          * @inheritDoc
+         */
+        "mediaQuality"?: string;
+        /**
+          * **READONLY:** The title of the current media. Defaults to an empty string if no media has been loaded.
+          * @inheritDoc
+         */
+        "mediaTitle": string;
+        /**
+          * **READONLY:** The type of media that is currently active, whether it's audio or video. Defaults to `undefined` when no media has been loaded or the type cannot be determined.
+          * @inheritDoc
+         */
+        "mediaType"?: MediaType;
+        /**
+          * Whether the audio is muted or not.
+          * @inheritDoc
+         */
+        "muted": boolean;
+        /**
+          * Pauses playback of the media.
+          * @inheritDoc
+         */
+        "pause": () => Promise<void>;
+        /**
+          * Whether playback should be paused. Defaults to `true` if no media has loaded or playback has not started. Setting this to `true` will begin/resume playback.
+          * @inheritDoc
+         */
+        "paused": boolean;
+        /**
+          * Begins/resumes playback of the media. If this method is called programmatically before the user has interacted with the player, the promise may be rejected subject to the browser's autoplay policies.
+          * @inheritDoc
+         */
+        "play": () => Promise<void>;
+        /**
+          * **READONLY:** Whether media playback has reached the end. In other words it'll be true if `currentTime === duration`.
+          * @inheritDoc
+         */
+        "playbackEnded": boolean;
+        /**
+          * A `double` indicating the rate at which media is being played back. If the value is `<1` then playback is slowed down; if `>1` then playback is sped up. Defaults to `1`. The playback rate can only be set to a rate found in the `playbackRates` prop. Some providers may not allow changing the playback rate, you can check if it's possible via `canSetPlaybackRate()`.
+          * @inheritDoc
+         */
+        "playbackRate": number;
+        /**
+          * **READONLY:** The playback rates available for the current media.
+          * @inheritDoc
+         */
+        "playbackRates": number[];
+        /**
+          * **READONLY:** Whether media is ready for playback to begin.
+          * @inheritDoc
+         */
+        "playbackReady": boolean;
+        /**
+          * **READONLY:** Whether the media has initiated playback. In other words it will be true if `currentTime > 0`.
+          * @inheritDoc
+         */
+        "playbackStarted": boolean;
+        /**
+          * **READONLY:** Whether media is actively playing back. Defaults to `false` if no media has loaded or playback has not started.
+          * @inheritDoc
+         */
+        "playing": boolean;
+        /**
+          * Whether the video is to be played "inline", that is within the element's playback area. Note that setting this to false does not imply that the video will always be played in fullscreen.
+          * @inheritDoc
+         */
+        "playsinline": boolean;
+        /**
+          * **READONLY:** Whether the player is in the process of seeking to a new time position.
+          * @inheritDoc
+         */
+        "seeking": boolean;
+        /**
+          * **READONLY:** The text tracks (WebVTT) associated with the current media.
+          * @inheritDoc
+         */
+        "textTracks": TextTrack[];
+        /**
+          * **READONLY:** Contains each language and it's respective translation map.
+          * @inheritDoc
+         */
+        "translations": Record<string, Record<string, string>>;
+        /**
+          * **READONLY:** The type of player view that is being used, whether it's an audio player view or video player view. Normally if the media type is of audio then the view is of type audio, but in some cases it might be desirable to show a different view type. For example, when playing audio with a poster. This is subject to the provider allowing it. Defaults to `undefined` when no media has been loaded.
+          * @inheritDoc
+         */
+        "viewType"?: ViewType;
+        /**
+          * An `int` between `0` (silent) and `100` (loudest) indicating the audio volume.
+          * @inheritDoc
+         */
+        "volume": number;
+        /**
+          * **TESTING:** Used to wait for the playback ready queue to be flushed.
+         */
+        "waitForQueueToFlush": () => Promise<any>;
+    }
 }
 declare global {
     interface HTMLVimeEmbedElement extends Components.VimeEmbed, HTMLStencilElement {
@@ -64,15 +411,29 @@ declare global {
         prototype: HTMLVimeEmbedElement;
         new (): HTMLVimeEmbedElement;
     };
+    interface HTMLVimeFaketubeElement extends Components.VimeFaketube, HTMLStencilElement {
+    }
+    var HTMLVimeFaketubeElement: {
+        prototype: HTMLVimeFaketubeElement;
+        new (): HTMLVimeFaketubeElement;
+    };
     interface HTMLVimeIconElement extends Components.VimeIcon, HTMLStencilElement {
     }
     var HTMLVimeIconElement: {
         prototype: HTMLVimeIconElement;
         new (): HTMLVimeIconElement;
     };
+    interface HTMLVimePlayerElement extends Components.VimePlayer, HTMLStencilElement {
+    }
+    var HTMLVimePlayerElement: {
+        prototype: HTMLVimePlayerElement;
+        new (): HTMLVimePlayerElement;
+    };
     interface HTMLElementTagNameMap {
         "vime-embed": HTMLVimeEmbedElement;
+        "vime-faketube": HTMLVimeFaketubeElement;
         "vime-icon": HTMLVimeIconElement;
+        "vime-player": HTMLVimePlayerElement;
     }
 }
 declare namespace LocalJSX {
@@ -86,21 +447,21 @@ declare namespace LocalJSX {
          */
         "embedSrc"?: string;
         /**
-          * Reflects the title attribute of the root iframe. It should contain the title of the current media.
+          * The title of the current media so it can be set on the inner `iframe` for screen readers.
          */
         "mediaTitle"?: string;
         /**
           * Emitted when the embedded player and any new media has loaded.
          */
-        "onVimeEmbedLoaded"?: (event: CustomEvent<EmbedEventPayload[EmbedEvent.Loaded]>) => void;
+        "onVEmbedLoaded"?: (event: CustomEvent<EmbedEventPayload[EmbedEvent.Loaded]>) => void;
         /**
           * Emitted when a new message is received from the embedded player via `postMessage`.
          */
-        "onVimeEmbedMessage"?: (event: CustomEvent<EmbedEventPayload[EmbedEvent.Message]>) => void;
+        "onVEmbedMessage"?: (event: CustomEvent<EmbedEventPayload[EmbedEvent.Message]>) => void;
         /**
           * Emitted when the `embedSrc` or `params` props change. The payload contains the `params` serialized into a query string and appended to `embedSrc`.
          */
-        "onVimeEmbedSrcChange"?: (event: CustomEvent<EmbedEventPayload[EmbedEvent.SrcChange]>) => void;
+        "onVEmbedSrcChange"?: (event: CustomEvent<EmbedEventPayload[EmbedEvent.SrcChange]>) => void;
         /**
           * Where the src request had originated from without any path information.
          */
@@ -113,6 +474,38 @@ declare namespace LocalJSX {
           * A collection of URLs to that the browser should immediately start establishing a connection with.
          */
         "preconnections"?: string[];
+    }
+    interface VimeFaketube {
+        /**
+          * **INTERNAL:** Do not interact with this prop, refer to the `vime-player` component.
+          * @inheritDoc
+         */
+        "autoplay"?: boolean;
+        /**
+          * **INTERNAL:** Do not interact with this prop, refer to the `vime-player` component.
+          * @inheritDoc
+         */
+        "controls"?: boolean;
+        /**
+          * **INTERNAL:** Do not interact with this prop, refer to `vime-player` component.
+          * @inheritDoc
+         */
+        "debug"?: boolean;
+        /**
+          * **INTERNAL:** Do not interact with this prop, refer to the `vime-player` component.
+          * @inheritDoc
+         */
+        "loop"?: boolean;
+        /**
+          * **INTERNAL:** Do not interact with this prop, refer to the `vime-player` component.
+          * @inheritDoc
+         */
+        "muted"?: boolean;
+        /**
+          * **INTERNAL:** Do not interact with this prop, refer to the `vime-player` component.
+          * @inheritDoc
+         */
+        "playsinline"?: boolean;
     }
     interface VimeIcon {
         /**
@@ -132,9 +525,383 @@ declare namespace LocalJSX {
          */
         "scale"?: number;
     }
+    interface VimePlayer {
+        /**
+          * The aspect ratio of the player expressed as `width:height` (`16:9`). This is only applied if the `viewType` is `video` and the player is not in fullscreen mode.
+          * @inheritDoc
+         */
+        "aspectRatio"?: string;
+        /**
+          * Whether the player should automatically pause when another Vime player starts/resumes playback.
+          * @inheritDoc
+         */
+        "autopause"?: boolean;
+        /**
+          * Whether playback should automatically begin playing once the media is ready to do so. This will only work if the browsers `autoplay` policies have been satisfied. It'll generally work if the player is muted, or the user frequently interacts with your site. You can check if it's possible to autoplay via the `canAutoplay()` or `canMutedAutoplay()` methods.
+          * @inheritDoc
+         */
+        "autoplay"?: boolean;
+        /**
+          * **READONLY:** The length of the media in seconds that has been downloaded by the browser.
+          * @inheritDoc
+         */
+        "buffered"?: number;
+        /**
+          * **READONLY:** Whether playback has temporarily stopped because of a lack of temporary data.
+          * @inheritDoc
+         */
+        "buffering"?: boolean;
+        /**
+          * Indicates whether a user interface should be shown for controlling the resource. Set this to `false` when you want to provide your own custom controls, and `true` if you want the current provider to supply its own default controls.
+          * @inheritDoc
+         */
+        "controls"?: boolean;
+        /**
+          * **READONLY:** The absolute URL of the media resource that has been chosen. Defaults to `undefined` if no media has been loaded.
+          * @inheritDoc
+         */
+        "currentSrc"?: string;
+        /**
+          * A `double` indicating the current playback time in seconds. Defaults to `0` if the media has not started to play and has not seeked. Setting this value seeks the media to the new time. The value can be set to a minimum of `0` and maximum of the total length of the media (indicated by the duration prop).
+          * @inheritDoc
+         */
+        "currentTime"?: number;
+        /**
+          * **READONLY:** Whether the player is in debug mode and should `console.log` information about its internal state.
+          * @inheritDoc
+         */
+        "debug"?: boolean;
+        /**
+          * **READONLY:** A `double` indicating the total playback length of the media in seconds. Defaults to `-1` if no media has been loaded.
+          * @inheritDoc
+         */
+        "duration"?: number;
+        /**
+          * **READONLY:** A collection of errors that have occurred ordered by `[oldest, ..., newest]`.
+          * @inheritDoc
+         */
+        "errors"?: Error[];
+        /**
+          * **READONLY:** A dictionary of translations for the current language.
+          * @inheritDoc
+         */
+        "i18n"?: Record<string, string>;
+        /**
+          * **READONLY:** Whether the current media is of type `audio`, shorthand for `mediaType === MediaType.Audio`.
+          * @inheritDoc
+         */
+        "isAudio"?: boolean;
+        /**
+          * **READONLY:** Whether the current view is of type `audio`, shorthand for `viewType === ViewType.Audio`.
+          * @inheritDoc
+         */
+        "isAudioView"?: boolean;
+        /**
+          * **READONLY:** Whether the player is currently in fullscreen mode.
+          * @inheritDoc
+         */
+        "isFullscreenActive"?: boolean;
+        /**
+          * **READONLY:** Whether the current media is being broadcast live.
+          * @inheritDoc
+         */
+        "isLive"?: boolean;
+        /**
+          * **READONLY:** Whether the player is in mobile mode. This is determined by parsing `window.navigator.userAgent`.
+          * @inheritDoc
+         */
+        "isMobile"?: boolean;
+        /**
+          * **READONLY:** Whether the player is currently in picture-in-picture mode.
+          * @inheritDoc
+         */
+        "isPiPActive"?: boolean;
+        /**
+          * **READONLY:** Whether the player is in touch mode. This is determined by listening for mouse and touch events and toggling this value.
+          * @inheritDoc
+         */
+        "isTouch"?: boolean;
+        /**
+          * **READONLY:** Whether the current media is of type `video`, shorthand for `mediaType === MediaType.Video`.
+          * @inheritDoc
+         */
+        "isVideo"?: boolean;
+        /**
+          * **READONLY:** Whether the current view is of type `video`, shorthand for `viewType === ViewType.Video`.
+          * @inheritDoc
+         */
+        "isVideoView"?: boolean;
+        /**
+          * The current language of the player. This can be any code defined via the `extendLanguage` method or the default `en`. It's recommended to use an ISO 639-1 code as that'll be used by Vime when adding new language defaults in the future.
+          * @inheritDoc
+         */
+        "language"?: string;
+        /**
+          * **READONLY:** The languages that are currently available. You can add new languages via the `extendLanguage` method.
+          * @inheritDoc
+         */
+        "languages"?: string[];
+        /**
+          * **READONLY:** Whether the metadata for current media resource has loaded.
+          * @inheritDoc
+         */
+        "loadedMetadata"?: boolean;
+        /**
+          * Whether media should automatically start playing from the beginning every time it ends.
+          * @inheritDoc
+         */
+        "loop"?: boolean;
+        /**
+          * **READONLY:** The media qualities available for the current media.
+          * @inheritDoc
+         */
+        "mediaQualities"?: string[];
+        /**
+          * Indicates the quality of the media. The value will differ between audio and video. For audio this might be some combination of the encoding format (AAC, MP3), bitrate in kilobits per second (kbps) and sample rate in kilohertz (kHZ). For video this will be the number of vertical pixels it supports. For example, if the video has a resolution of `1920x1080` then the quality will return `1080p`. Defaults to `undefined` which you can interpret as the quality is unknown. The quality can only be set to a quality found in the `mediaQualities` prop. Some providers may not allow changing the quality, you can check if it's possible via `canSetMediaQuality()`.
+          * @inheritDoc
+         */
+        "mediaQuality"?: string;
+        /**
+          * **READONLY:** The title of the current media. Defaults to an empty string if no media has been loaded.
+          * @inheritDoc
+         */
+        "mediaTitle"?: string;
+        /**
+          * **READONLY:** The type of media that is currently active, whether it's audio or video. Defaults to `undefined` when no media has been loaded or the type cannot be determined.
+          * @inheritDoc
+         */
+        "mediaType"?: MediaType;
+        /**
+          * Whether the audio is muted or not.
+          * @inheritDoc
+         */
+        "muted"?: boolean;
+        /**
+          * Emitted when the `buffered` prop changes value.
+          * @inheritDoc
+         */
+        "onVBufferedChange"?: (event: CustomEvent<PlayerProps[PlayerProp.Buffered]>) => void;
+        /**
+          * Emitted when the `buffering` prop changes value.
+          * @inheritDoc
+         */
+        "onVBufferingChange"?: (event: CustomEvent<PlayerProps[PlayerProp.Buffering]>) => void;
+        /**
+          * Emitted when the `currentSrc` prop changes value.
+          * @inheritDoc
+         */
+        "onVCurrentSrcChange"?: (event: CustomEvent<PlayerProps[PlayerProp.CurrentSrc]>) => void;
+        /**
+          * Emitted when the `currentTime` prop changes value.
+          * @inheritDoc
+         */
+        "onVCurrentTimeChange"?: (event: CustomEvent<PlayerProps[PlayerProp.CurrentTime]>) => void;
+        /**
+          * Emitted when the `duration` prop changes value.
+          * @inheritDoc
+         */
+        "onVDurationChange"?: (event: CustomEvent<PlayerProps[PlayerProp.Duration]>) => void;
+        /**
+          * Emitted when the `errors` prop changes value.
+          * @inheritDoc
+         */
+        "onVErrorsChange"?: (event: CustomEvent<PlayerProps[PlayerProp.Errors]>) => void;
+        /**
+          * Emitted when the `isFullscreenActive` prop changes value.
+          * @inheritDoc
+         */
+        "onVFullscreenChange"?: (event: CustomEvent<PlayerProps[PlayerProp.IsFullscreenActive]>) => void;
+        /**
+          * Emitted when the `language` prop changes value.
+          * @inheritDoc
+         */
+        "onVLanguageChange"?: (event: CustomEvent<PlayerProps[PlayerProp.Language]>) => void;
+        /**
+          * Emitted when the `languages` prop changes value.
+          * @inheritDoc
+         */
+        "onVLanguagesChange"?: (event: CustomEvent<PlayerProps[PlayerProp.Languages]>) => void;
+        /**
+          * Emitted when the `isLive` prop changes value.
+          * @inheritDoc
+         */
+        "onVLiveChange"?: (event: CustomEvent<PlayerProps[PlayerProp.IsLive]>) => void;
+        /**
+          * Emitted when the player starts loading a media resource.
+          * @inheritDoc
+         */
+        "onVLoadStart"?: (event: CustomEvent<void>) => void;
+        /**
+          * Emitted when the metadata for current media resource has loaded.
+          * @inheritDoc
+         */
+        "onVLoadedMetadata"?: (event: CustomEvent<void>) => void;
+        /**
+          * Emitted when the `mediaQualities` prop changes value.
+          * @inheritDoc
+         */
+        "onVMediaQualitiesChange"?: (event: CustomEvent<PlayerProps[PlayerProp.MediaQualities]>) => void;
+        /**
+          * Emitted when the `mediaQuality` prop changes value.
+          * @inheritDoc
+         */
+        "onVMediaQualityChange"?: (event: CustomEvent<PlayerProps[PlayerProp.MediaQuality]>) => void;
+        /**
+          * Emitted when the `mediaTitle` prop changes value.
+          * @inheritDoc
+         */
+        "onVMediaTitleChange"?: (event: CustomEvent<PlayerProps[PlayerProp.MediaTitle]>) => void;
+        /**
+          * Emitted when the `mediaType` prop changes value.
+          * @inheritDoc
+         */
+        "onVMediaTypeChange"?: (event: CustomEvent<PlayerProps[PlayerProp.MediaType]>) => void;
+        /**
+          * Emitted when the `paused` prop changes value.
+          * @inheritDoc
+         */
+        "onVPausedChange"?: (event: CustomEvent<PlayerProps[PlayerProp.Paused]>) => void;
+        /**
+          * Emitted when the `isPiPActive` prop changes value.
+          * @inheritDoc
+         */
+        "onVPiPChange"?: (event: CustomEvent<PlayerProps[PlayerProp.isPiPActive]>) => void;
+        /**
+          * Emitted when the media is transitioning from `paused` to `playing`. Event flow: `vPaused` -> `vPlay` -> `vPlaying`. The media starts `playing` once enough content has buffered to resume playback.
+          * @inheritDoc
+         */
+        "onVPlay"?: (event: CustomEvent<void>) => void;
+        /**
+          * Emitted when playback reaches the end of the media.
+          * @inheritDoc
+         */
+        "onVPlaybackEnded"?: (event: CustomEvent<void>) => void;
+        /**
+          * Emitted when the `playbackRate` prop changes value.
+          * @inheritDoc
+         */
+        "onVPlaybackRateChange"?: (event: CustomEvent<PlayerProps[PlayerProp.PlaybackRate]>) => void;
+        /**
+          * Emitted when the `playbackRates` prop changes value.
+          * @inheritDoc
+         */
+        "onVPlaybackRatesChange"?: (event: CustomEvent<PlayerProps[PlayerProp.PlaybackRates]>) => void;
+        /**
+          * Emitted when the media is ready to begin playback.
+          * @inheritDoc
+         */
+        "onVPlaybackReady"?: (event: CustomEvent<void>) => void;
+        /**
+          * Emitted when the media initiates playback.
+          * @inheritDoc
+         */
+        "onVPlaybackStarted"?: (event: CustomEvent<void>) => void;
+        /**
+          * Emitted when the `playing` prop changes value.
+          * @inheritDoc
+         */
+        "onVPlayingChange"?: (event: CustomEvent<PlayerProps[PlayerProp.Playing]>) => void;
+        /**
+          * Emitted directly after the player has successfully transitioned/seeked to a new time position. Event flow: `vSeeking` -> `vSeeked`.
+          * @inheritDoc
+         */
+        "onVSeeked"?: (event: CustomEvent<void>) => void;
+        /**
+          * Emitted when the `seeking` prop changes value.
+          * @inheritDoc
+         */
+        "onVSeekingChange"?: (event: CustomEvent<PlayerProps[PlayerProp.Seeking]>) => void;
+        /**
+          * Emitted when the `textTracks` prop changes value.
+          * @inheritDoc
+         */
+        "onVTextTracksChange"?: (event: CustomEvent<PlayerProps[PlayerProp.TextTracks]>) => void;
+        /**
+          * Emitted when the `isTouch` prop changes value.
+          * @inheritDoc
+         */
+        "onVTouchChange"?: (event: CustomEvent<PlayerProps[PlayerProp.IsTouch]>) => void;
+        /**
+          * Emitted when the `viewType` prop changes value.
+          * @inheritDoc
+         */
+        "onVViewTypeChange"?: (event: CustomEvent<PlayerProps[PlayerProp.ViewType]>) => void;
+        /**
+          * Emitted when the `volume` prop changes value.
+          * @inheritDoc
+         */
+        "onVVolumeChange"?: (event: CustomEvent<PlayerProps[PlayerProp.Volume]>) => void;
+        /**
+          * Whether playback should be paused. Defaults to `true` if no media has loaded or playback has not started. Setting this to `true` will begin/resume playback.
+          * @inheritDoc
+         */
+        "paused"?: boolean;
+        /**
+          * **READONLY:** Whether media playback has reached the end. In other words it'll be true if `currentTime === duration`.
+          * @inheritDoc
+         */
+        "playbackEnded"?: boolean;
+        /**
+          * A `double` indicating the rate at which media is being played back. If the value is `<1` then playback is slowed down; if `>1` then playback is sped up. Defaults to `1`. The playback rate can only be set to a rate found in the `playbackRates` prop. Some providers may not allow changing the playback rate, you can check if it's possible via `canSetPlaybackRate()`.
+          * @inheritDoc
+         */
+        "playbackRate"?: number;
+        /**
+          * **READONLY:** The playback rates available for the current media.
+          * @inheritDoc
+         */
+        "playbackRates"?: number[];
+        /**
+          * **READONLY:** Whether media is ready for playback to begin.
+          * @inheritDoc
+         */
+        "playbackReady"?: boolean;
+        /**
+          * **READONLY:** Whether the media has initiated playback. In other words it will be true if `currentTime > 0`.
+          * @inheritDoc
+         */
+        "playbackStarted"?: boolean;
+        /**
+          * **READONLY:** Whether media is actively playing back. Defaults to `false` if no media has loaded or playback has not started.
+          * @inheritDoc
+         */
+        "playing"?: boolean;
+        /**
+          * Whether the video is to be played "inline", that is within the element's playback area. Note that setting this to false does not imply that the video will always be played in fullscreen.
+          * @inheritDoc
+         */
+        "playsinline"?: boolean;
+        /**
+          * **READONLY:** Whether the player is in the process of seeking to a new time position.
+          * @inheritDoc
+         */
+        "seeking"?: boolean;
+        /**
+          * **READONLY:** The text tracks (WebVTT) associated with the current media.
+          * @inheritDoc
+         */
+        "textTracks"?: TextTrack[];
+        /**
+          * **READONLY:** Contains each language and it's respective translation map.
+          * @inheritDoc
+         */
+        "translations"?: Record<string, Record<string, string>>;
+        /**
+          * **READONLY:** The type of player view that is being used, whether it's an audio player view or video player view. Normally if the media type is of audio then the view is of type audio, but in some cases it might be desirable to show a different view type. For example, when playing audio with a poster. This is subject to the provider allowing it. Defaults to `undefined` when no media has been loaded.
+          * @inheritDoc
+         */
+        "viewType"?: ViewType;
+        /**
+          * An `int` between `0` (silent) and `100` (loudest) indicating the audio volume.
+          * @inheritDoc
+         */
+        "volume"?: number;
+    }
     interface IntrinsicElements {
         "vime-embed": VimeEmbed;
+        "vime-faketube": VimeFaketube;
         "vime-icon": VimeIcon;
+        "vime-player": VimePlayer;
     }
 }
 export { LocalJSX as JSX };
@@ -142,7 +909,9 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "vime-embed": LocalJSX.VimeEmbed & JSXBase.HTMLAttributes<HTMLVimeEmbedElement>;
+            "vime-faketube": LocalJSX.VimeFaketube & JSXBase.HTMLAttributes<HTMLVimeFaketubeElement>;
             "vime-icon": LocalJSX.VimeIcon & JSXBase.HTMLAttributes<HTMLVimeIconElement>;
+            "vime-player": LocalJSX.VimePlayer & JSXBase.HTMLAttributes<HTMLVimePlayerElement>;
         }
     }
 }
