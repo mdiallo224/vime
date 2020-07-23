@@ -5,14 +5,126 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { MediaPreloadOption } from "./components/providers/file/MediaFileProvider";
 import { Params } from "./utils/network";
 import { EmbedEvent, EmbedEventPayload } from "./components/core/embed/EmbedEvent";
 import { MediaProvider, MediaProviderAdapter, MockMediaProviderAdapter } from "./components/providers/MediaProvider";
 import { PlayerProp, PlayerProps } from "./components/core/player/PlayerProp";
-import { TextTrack } from "./components/core/player/TextTrack";
 import { ViewType } from "./components/core/player/ViewType";
 import { MediaType } from "./components/core/player/MediaType";
 export namespace Components {
+    interface VimeAudio {
+        /**
+          * This enumerated attribute indicates whether to use CORS to fetch the related image.  The allowed values are:  - `anonymous`: Sends a cross-origin request without a credential. In other words, it sends the `Origin: HTTP` header without a cookie, X.509 certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (by not setting the Access-Control-Allow-Origin: HTTP header), the image will be tainted, and its usage restricted.  - `use-credentials`: Sends a cross-origin request with a credential. In other words, it sends the `Origin: HTTP` header with a cookie, a certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (through Access-Control-Allow-Credentials: HTTP header), the image will be tainted and its usage restricted.  When not present, the resource is fetched without a CORS request (i.e. without sending the Origin: HTTP header), preventing its non-tainted use in <canvas> elements. If invalid, it is handled as if the enumerated keyword anonymous was used. See CORS settings attributes for additional information.
+          * @inheritdoc
+         */
+        "crossOrigin"?: string;
+        /**
+          * **EXPERIMENTAL:** Whether to disable the capability of remote playback in devices that are attached using wired (HDMI, DVI, etc.) and wireless technologies (Miracast, Chromecast, DLNA, AirPlay, etc).
+          * @inheritdoc
+         */
+        "disableRemotePlayback"?: boolean;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLMediaElement>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
+        /**
+          * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience with regards to what content is loaded before the video is played.  It may have one of the following values:  - `none`: Indicates that the video should not be preloaded. - `metadata`: Indicates that only video metadata (e.g. length) is fetched. - `auto`: Indicates that the whole video file can be downloaded, even if the user is not expected to use it. - `''` (empty string): Synonym of the auto value.  The default value is different for each browser. The spec advises it to be set to metadata.
+          * @inheritdoc
+         */
+        "preload"?: MediaPreloadOption;
+        "willAttach": boolean;
+    }
+    interface VimeDailymotion {
+        "autoplay": boolean;
+        /**
+          * Change the default highlight color used in the controls (hex value without the leading #). Color set in the Partner HQ will override this prop.
+         */
+        "color"?: string;
+        "controls": boolean;
+        "debug": boolean;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLVimeEmbedElement>; play: () => Promise<void>; pause: () => Promise<void>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackQuality: () => Promise<boolean>; setPlaybackQuality: (quality: string) => Promise<void>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<void>; exitFullscreen: () => Promise<void>; }>;
+        "language": string;
+        "loop": boolean;
+        "muted": boolean;
+        "playsinline": boolean;
+        /**
+          * Whether to automatically play the next video in the queue.
+         */
+        "shouldAutoplayQueue": boolean;
+        /**
+          * Whether to display the Dailymotion logo.
+         */
+        "showDailymotionLogo": boolean;
+        /**
+          * Whether to show buttons for sharing the video.
+         */
+        "showShareButtons": boolean;
+        /**
+          * Whether to show the 'Up Next' queue.
+         */
+        "showUpNextQueue": boolean;
+        /**
+          * Whether to show video information (title and owner) on the start screen.
+         */
+        "showVideoInfo": boolean;
+        /**
+          * Forwards your syndication key to the player.
+         */
+        "syndication"?: string;
+        /**
+          * The Dailymotion resource ID of the video to load.
+         */
+        "videoId": string;
+    }
+    interface VimeDash {
+        /**
+          * **EXPERIMENTAL:** Whether the browser should automatically toggle picture-in-picture mode as the user switches back and forth between this document and another document or application.
+          * @inheritdoc
+         */
+        "autoPiP"?: boolean;
+        "autoplay": boolean;
+        /**
+          * The `dashjs` configuration.
+         */
+        "config": Record<string, any>;
+        /**
+          * Determines what controls to show on the media element whenever the browser shows its own set of controls (e.g. when the controls attribute is specified).
+          * @inheritdoc
+         */
+        "controlsList"?: string;
+        /**
+          * This enumerated attribute indicates whether to use CORS to fetch the related image.  The allowed values are:  - `anonymous`: Sends a cross-origin request without a credential. In other words, it sends the `Origin: HTTP` header without a cookie, X.509 certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (by not setting the Access-Control-Allow-Origin: HTTP header), the image will be tainted, and its usage restricted.  - `use-credentials`: Sends a cross-origin request with a credential. In other words, it sends the `Origin: HTTP` header with a cookie, a certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (through Access-Control-Allow-Credentials: HTTP header), the image will be tainted and its usage restricted.  When not present, the resource is fetched without a CORS request (i.e. without sending the Origin: HTTP header), preventing its non-tainted use in <canvas> elements. If invalid, it is handled as if the enumerated keyword anonymous was used. See CORS settings attributes for additional information.
+          * @inheritdoc
+         */
+        "crossOrigin"?: string;
+        /**
+          * **EXPERIMENTAL:** Prevents the browser from suggesting a picture-in-picture context menu or to request picture-in-picture automatically in some cases.
+          * @inheritdoc
+         */
+        "disablePiP"?: boolean;
+        /**
+          * **EXPERIMENTAL:** Whether to disable the capability of remote playback in devices that are attached using wired (HDMI, DVI, etc.) and wireless technologies (Miracast, Chromecast, DLNA, AirPlay, etc).
+          * @inheritdoc
+         */
+        "disableRemotePlayback"?: boolean;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<any>; canPlay: (type: any) => Promise<boolean>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
+        /**
+          * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
+          * @inheritdoc
+         */
+        "poster"?: string;
+        /**
+          * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience with regards to what content is loaded before the video is played.  It may have one of the following values:  - `none`: Indicates that the video should not be preloaded. - `metadata`: Indicates that only video metadata (e.g. length) is fetched. - `auto`: Indicates that the whole video file can be downloaded, even if the user is not expected to use it. - `''` (empty string): Synonym of the auto value.  The default value is different for each browser. The spec advises it to be set to metadata.
+          * @inheritdoc
+         */
+        "preload"?: MediaPreloadOption;
+        /**
+          * The URL of the `manifest.mpd` file to use.
+         */
+        "src": string;
+        /**
+          * The NPM package version of the `dashjs` library to download and use.
+         */
+        "version": string;
+    }
     interface VimeEmbed {
         /**
           * A function which accepts the raw message received from the embedded media player via `postMessage` and converts it into a POJO.
@@ -67,6 +179,106 @@ export namespace Components {
         "loop": boolean;
         "muted": boolean;
         "playsinline": boolean;
+    }
+    interface VimeFile {
+        /**
+          * **EXPERIMENTAL:** Whether the browser should automatically toggle picture-in-picture mode as the user switches back and forth between this document and another document or application.
+          * @inheritdoc
+         */
+        "autoPiP"?: boolean;
+        "autoplay": boolean;
+        "controls": boolean;
+        /**
+          * Determines what controls to show on the media element whenever the browser shows its own set of controls (e.g. when the controls attribute is specified).
+          * @inheritdoc
+         */
+        "controlsList"?: string;
+        /**
+          * This enumerated attribute indicates whether to use CORS to fetch the related image.  The allowed values are:  - `anonymous`: Sends a cross-origin request without a credential. In other words, it sends the `Origin: HTTP` header without a cookie, X.509 certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (by not setting the Access-Control-Allow-Origin: HTTP header), the image will be tainted, and its usage restricted.  - `use-credentials`: Sends a cross-origin request with a credential. In other words, it sends the `Origin: HTTP` header with a cookie, a certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (through Access-Control-Allow-Credentials: HTTP header), the image will be tainted and its usage restricted.  When not present, the resource is fetched without a CORS request (i.e. without sending the Origin: HTTP header), preventing its non-tainted use in <canvas> elements. If invalid, it is handled as if the enumerated keyword anonymous was used. See CORS settings attributes for additional information.
+          * @inheritdoc
+         */
+        "crossOrigin"?: string;
+        "debug": boolean;
+        /**
+          * **EXPERIMENTAL:** Prevents the browser from suggesting a picture-in-picture context menu or to request picture-in-picture automatically in some cases.
+          * @inheritdoc
+         */
+        "disablePiP"?: boolean;
+        /**
+          * **EXPERIMENTAL:** Whether to disable the capability of remote playback in devices that are attached using wired (HDMI, DVI, etc.) and wireless technologies (Miracast, Chromecast, DLNA, AirPlay, etc).
+          * @inheritdoc
+         */
+        "disableRemotePlayback"?: boolean;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLMediaElement>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
+        "language": string;
+        "loop": boolean;
+        "muted": boolean;
+        /**
+          * The playback rates that are available for this media.
+         */
+        "playbackRates": number[];
+        "playsinline": boolean;
+        /**
+          * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
+          * @inheritdoc
+         */
+        "poster"?: string;
+        /**
+          * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience with regards to what content is loaded before the video is played.  It may have one of the following values:  - `none`: Indicates that the video should not be preloaded. - `metadata`: Indicates that only video metadata (e.g. length) is fetched. - `auto`: Indicates that the whole video file can be downloaded, even if the user is not expected to use it. - `''` (empty string): Synonym of the auto value.  The default value is different for each browser. The spec advises it to be set to metadata.
+          * @inheritdoc
+         */
+        "preload"?: MediaPreloadOption;
+        /**
+          * Whether to use an `audio` or `video` element to play the media.
+         */
+        "viewType"?: ViewType;
+        "willAttach": boolean;
+    }
+    interface VimeHls {
+        /**
+          * **EXPERIMENTAL:** Whether the browser should automatically toggle picture-in-picture mode as the user switches back and forth between this document and another document or application.
+          * @inheritdoc
+         */
+        "autoPiP"?: boolean;
+        /**
+          * The `hls.js` configuration.
+         */
+        "config"?: Hls.Config;
+        /**
+          * Determines what controls to show on the media element whenever the browser shows its own set of controls (e.g. when the controls attribute is specified).
+          * @inheritdoc
+         */
+        "controlsList"?: string;
+        /**
+          * This enumerated attribute indicates whether to use CORS to fetch the related image.  The allowed values are:  - `anonymous`: Sends a cross-origin request without a credential. In other words, it sends the `Origin: HTTP` header without a cookie, X.509 certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (by not setting the Access-Control-Allow-Origin: HTTP header), the image will be tainted, and its usage restricted.  - `use-credentials`: Sends a cross-origin request with a credential. In other words, it sends the `Origin: HTTP` header with a cookie, a certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (through Access-Control-Allow-Credentials: HTTP header), the image will be tainted and its usage restricted.  When not present, the resource is fetched without a CORS request (i.e. without sending the Origin: HTTP header), preventing its non-tainted use in <canvas> elements. If invalid, it is handled as if the enumerated keyword anonymous was used. See CORS settings attributes for additional information.
+          * @inheritdoc
+         */
+        "crossOrigin"?: string;
+        /**
+          * **EXPERIMENTAL:** Prevents the browser from suggesting a picture-in-picture context menu or to request picture-in-picture automatically in some cases.
+          * @inheritdoc
+         */
+        "disablePiP"?: boolean;
+        /**
+          * **EXPERIMENTAL:** Whether to disable the capability of remote playback in devices that are attached using wired (HDMI, DVI, etc.) and wireless technologies (Miracast, Chromecast, DLNA, AirPlay, etc).
+          * @inheritdoc
+         */
+        "disableRemotePlayback"?: boolean;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<import("/Users/rahim/Desktop/vime/node_modules/.pnpm/@types/hls.js@0.13.0/node_modules/@types/hls.js/index") | undefined>; canPlay: (type: any) => Promise<boolean>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
+        /**
+          * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
+          * @inheritdoc
+         */
+        "poster"?: string;
+        /**
+          * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience with regards to what content is loaded before the video is played.  It may have one of the following values:  - `none`: Indicates that the video should not be preloaded. - `metadata`: Indicates that only video metadata (e.g. length) is fetched. - `auto`: Indicates that the whole video file can be downloaded, even if the user is not expected to use it. - `''` (empty string): Synonym of the auto value.  The default value is different for each browser. The spec advises it to be set to metadata.
+          * @inheritdoc
+         */
+        "preload"?: MediaPreloadOption;
+        /**
+          * The NPM package version of the `hls.js` library to download and use if HLS is not natively supported.
+         */
+        "version": string;
     }
     interface VimeIcon {
         /**
@@ -192,7 +404,7 @@ export namespace Components {
           * `@readonly` A collection of errors that have occurred ordered by `[oldest, ..., newest]`.
           * @inheritDoc
          */
-        "errors": Error[];
+        "errors": any[];
         /**
           * Requests to exit fullscreen mode, returning a `Promise` that will resolve if the request is successful, or reject with a reason for failure. Refer to `enterFullscreen()` for more information.
           * @inheritDoc
@@ -368,7 +580,7 @@ export namespace Components {
           * `@readonly` The text tracks (WebVTT) associated with the current media.
           * @inheritDoc
          */
-        "textTracks": TextTrack[];
+        "textTracks"?: TextTrackList;
         /**
           * `@readonly` Contains each language and it's respective translation map.
           * @inheritDoc
@@ -384,6 +596,45 @@ export namespace Components {
           * @inheritDoc
          */
         "volume": number;
+    }
+    interface VimeVideo {
+        /**
+          * **EXPERIMENTAL:** Whether the browser should automatically toggle picture-in-picture mode as the user switches back and forth between this document and another document or application.
+          * @inheritdoc
+         */
+        "autoPiP"?: boolean;
+        /**
+          * Determines what controls to show on the media element whenever the browser shows its own set of controls (e.g. when the controls attribute is specified).
+          * @inheritdoc
+         */
+        "controlsList"?: string;
+        /**
+          * This enumerated attribute indicates whether to use CORS to fetch the related image.  The allowed values are:  - `anonymous`: Sends a cross-origin request without a credential. In other words, it sends the `Origin: HTTP` header without a cookie, X.509 certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (by not setting the Access-Control-Allow-Origin: HTTP header), the image will be tainted, and its usage restricted.  - `use-credentials`: Sends a cross-origin request with a credential. In other words, it sends the `Origin: HTTP` header with a cookie, a certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (through Access-Control-Allow-Credentials: HTTP header), the image will be tainted and its usage restricted.  When not present, the resource is fetched without a CORS request (i.e. without sending the Origin: HTTP header), preventing its non-tainted use in <canvas> elements. If invalid, it is handled as if the enumerated keyword anonymous was used. See CORS settings attributes for additional information.
+          * @inheritdoc
+         */
+        "crossOrigin"?: string;
+        /**
+          * **EXPERIMENTAL:** Prevents the browser from suggesting a picture-in-picture context menu or to request picture-in-picture automatically in some cases.
+          * @inheritdoc
+         */
+        "disablePiP"?: boolean;
+        /**
+          * **EXPERIMENTAL:** Whether to disable the capability of remote playback in devices that are attached using wired (HDMI, DVI, etc.) and wireless technologies (Miracast, Chromecast, DLNA, AirPlay, etc).
+          * @inheritdoc
+         */
+        "disableRemotePlayback"?: boolean;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLMediaElement>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
+        /**
+          * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
+          * @inheritdoc
+         */
+        "poster"?: string;
+        /**
+          * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience with regards to what content is loaded before the video is played.  It may have one of the following values:  - `none`: Indicates that the video should not be preloaded. - `metadata`: Indicates that only video metadata (e.g. length) is fetched. - `auto`: Indicates that the whole video file can be downloaded, even if the user is not expected to use it. - `''` (empty string): Synonym of the auto value.  The default value is different for each browser. The spec advises it to be set to metadata.
+          * @inheritdoc
+         */
+        "preload"?: MediaPreloadOption;
+        "willAttach": boolean;
     }
     interface VimeVimeo {
         "autoplay": boolean;
@@ -435,6 +686,24 @@ export namespace Components {
     }
 }
 declare global {
+    interface HTMLVimeAudioElement extends Components.VimeAudio, HTMLStencilElement {
+    }
+    var HTMLVimeAudioElement: {
+        prototype: HTMLVimeAudioElement;
+        new (): HTMLVimeAudioElement;
+    };
+    interface HTMLVimeDailymotionElement extends Components.VimeDailymotion, HTMLStencilElement {
+    }
+    var HTMLVimeDailymotionElement: {
+        prototype: HTMLVimeDailymotionElement;
+        new (): HTMLVimeDailymotionElement;
+    };
+    interface HTMLVimeDashElement extends Components.VimeDash, HTMLStencilElement {
+    }
+    var HTMLVimeDashElement: {
+        prototype: HTMLVimeDashElement;
+        new (): HTMLVimeDashElement;
+    };
     interface HTMLVimeEmbedElement extends Components.VimeEmbed, HTMLStencilElement {
     }
     var HTMLVimeEmbedElement: {
@@ -447,6 +716,18 @@ declare global {
         prototype: HTMLVimeFaketubeElement;
         new (): HTMLVimeFaketubeElement;
     };
+    interface HTMLVimeFileElement extends Components.VimeFile, HTMLStencilElement {
+    }
+    var HTMLVimeFileElement: {
+        prototype: HTMLVimeFileElement;
+        new (): HTMLVimeFileElement;
+    };
+    interface HTMLVimeHlsElement extends Components.VimeHls, HTMLStencilElement {
+    }
+    var HTMLVimeHlsElement: {
+        prototype: HTMLVimeHlsElement;
+        new (): HTMLVimeHlsElement;
+    };
     interface HTMLVimeIconElement extends Components.VimeIcon, HTMLStencilElement {
     }
     var HTMLVimeIconElement: {
@@ -458,6 +739,12 @@ declare global {
     var HTMLVimePlayerElement: {
         prototype: HTMLVimePlayerElement;
         new (): HTMLVimePlayerElement;
+    };
+    interface HTMLVimeVideoElement extends Components.VimeVideo, HTMLStencilElement {
+    }
+    var HTMLVimeVideoElement: {
+        prototype: HTMLVimeVideoElement;
+        new (): HTMLVimeVideoElement;
     };
     interface HTMLVimeVimeoElement extends Components.VimeVimeo, HTMLStencilElement {
     }
@@ -472,15 +759,131 @@ declare global {
         new (): HTMLVimeYoutubeElement;
     };
     interface HTMLElementTagNameMap {
+        "vime-audio": HTMLVimeAudioElement;
+        "vime-dailymotion": HTMLVimeDailymotionElement;
+        "vime-dash": HTMLVimeDashElement;
         "vime-embed": HTMLVimeEmbedElement;
         "vime-faketube": HTMLVimeFaketubeElement;
+        "vime-file": HTMLVimeFileElement;
+        "vime-hls": HTMLVimeHlsElement;
         "vime-icon": HTMLVimeIconElement;
         "vime-player": HTMLVimePlayerElement;
+        "vime-video": HTMLVimeVideoElement;
         "vime-vimeo": HTMLVimeVimeoElement;
         "vime-youtube": HTMLVimeYoutubeElement;
     }
 }
 declare namespace LocalJSX {
+    interface VimeAudio {
+        /**
+          * This enumerated attribute indicates whether to use CORS to fetch the related image.  The allowed values are:  - `anonymous`: Sends a cross-origin request without a credential. In other words, it sends the `Origin: HTTP` header without a cookie, X.509 certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (by not setting the Access-Control-Allow-Origin: HTTP header), the image will be tainted, and its usage restricted.  - `use-credentials`: Sends a cross-origin request with a credential. In other words, it sends the `Origin: HTTP` header with a cookie, a certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (through Access-Control-Allow-Credentials: HTTP header), the image will be tainted and its usage restricted.  When not present, the resource is fetched without a CORS request (i.e. without sending the Origin: HTTP header), preventing its non-tainted use in <canvas> elements. If invalid, it is handled as if the enumerated keyword anonymous was used. See CORS settings attributes for additional information.
+          * @inheritdoc
+         */
+        "crossOrigin"?: string;
+        /**
+          * **EXPERIMENTAL:** Whether to disable the capability of remote playback in devices that are attached using wired (HDMI, DVI, etc.) and wireless technologies (Miracast, Chromecast, DLNA, AirPlay, etc).
+          * @inheritdoc
+         */
+        "disableRemotePlayback"?: boolean;
+        /**
+          * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience with regards to what content is loaded before the video is played.  It may have one of the following values:  - `none`: Indicates that the video should not be preloaded. - `metadata`: Indicates that only video metadata (e.g. length) is fetched. - `auto`: Indicates that the whole video file can be downloaded, even if the user is not expected to use it. - `''` (empty string): Synonym of the auto value.  The default value is different for each browser. The spec advises it to be set to metadata.
+          * @inheritdoc
+         */
+        "preload"?: MediaPreloadOption;
+        "willAttach"?: boolean;
+    }
+    interface VimeDailymotion {
+        "autoplay": boolean;
+        /**
+          * Change the default highlight color used in the controls (hex value without the leading #). Color set in the Partner HQ will override this prop.
+         */
+        "color"?: string;
+        "controls": boolean;
+        "debug": boolean;
+        "language": string;
+        "loop": boolean;
+        "muted": boolean;
+        "onVLoadStart"?: (event: CustomEvent<void>) => void;
+        "playsinline": boolean;
+        /**
+          * Whether to automatically play the next video in the queue.
+         */
+        "shouldAutoplayQueue"?: boolean;
+        /**
+          * Whether to display the Dailymotion logo.
+         */
+        "showDailymotionLogo"?: boolean;
+        /**
+          * Whether to show buttons for sharing the video.
+         */
+        "showShareButtons"?: boolean;
+        /**
+          * Whether to show the 'Up Next' queue.
+         */
+        "showUpNextQueue"?: boolean;
+        /**
+          * Whether to show video information (title and owner) on the start screen.
+         */
+        "showVideoInfo"?: boolean;
+        /**
+          * Forwards your syndication key to the player.
+         */
+        "syndication"?: string;
+        /**
+          * The Dailymotion resource ID of the video to load.
+         */
+        "videoId": string;
+    }
+    interface VimeDash {
+        /**
+          * **EXPERIMENTAL:** Whether the browser should automatically toggle picture-in-picture mode as the user switches back and forth between this document and another document or application.
+          * @inheritdoc
+         */
+        "autoPiP"?: boolean;
+        "autoplay": boolean;
+        /**
+          * The `dashjs` configuration.
+         */
+        "config"?: Record<string, any>;
+        /**
+          * Determines what controls to show on the media element whenever the browser shows its own set of controls (e.g. when the controls attribute is specified).
+          * @inheritdoc
+         */
+        "controlsList"?: string;
+        /**
+          * This enumerated attribute indicates whether to use CORS to fetch the related image.  The allowed values are:  - `anonymous`: Sends a cross-origin request without a credential. In other words, it sends the `Origin: HTTP` header without a cookie, X.509 certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (by not setting the Access-Control-Allow-Origin: HTTP header), the image will be tainted, and its usage restricted.  - `use-credentials`: Sends a cross-origin request with a credential. In other words, it sends the `Origin: HTTP` header with a cookie, a certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (through Access-Control-Allow-Credentials: HTTP header), the image will be tainted and its usage restricted.  When not present, the resource is fetched without a CORS request (i.e. without sending the Origin: HTTP header), preventing its non-tainted use in <canvas> elements. If invalid, it is handled as if the enumerated keyword anonymous was used. See CORS settings attributes for additional information.
+          * @inheritdoc
+         */
+        "crossOrigin"?: string;
+        /**
+          * **EXPERIMENTAL:** Prevents the browser from suggesting a picture-in-picture context menu or to request picture-in-picture automatically in some cases.
+          * @inheritdoc
+         */
+        "disablePiP"?: boolean;
+        /**
+          * **EXPERIMENTAL:** Whether to disable the capability of remote playback in devices that are attached using wired (HDMI, DVI, etc.) and wireless technologies (Miracast, Chromecast, DLNA, AirPlay, etc).
+          * @inheritdoc
+         */
+        "disableRemotePlayback"?: boolean;
+        /**
+          * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
+          * @inheritdoc
+         */
+        "poster"?: string;
+        /**
+          * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience with regards to what content is loaded before the video is played.  It may have one of the following values:  - `none`: Indicates that the video should not be preloaded. - `metadata`: Indicates that only video metadata (e.g. length) is fetched. - `auto`: Indicates that the whole video file can be downloaded, even if the user is not expected to use it. - `''` (empty string): Synonym of the auto value.  The default value is different for each browser. The spec advises it to be set to metadata.
+          * @inheritdoc
+         */
+        "preload"?: MediaPreloadOption;
+        /**
+          * The URL of the `manifest.mpd` file to use.
+         */
+        "src": string;
+        /**
+          * The NPM package version of the `dashjs` library to download and use.
+         */
+        "version"?: string;
+    }
     interface VimeEmbed {
         /**
           * A function which accepts the raw message received from the embedded media player via `postMessage` and converts it into a POJO.
@@ -532,6 +935,105 @@ declare namespace LocalJSX {
         "muted": boolean;
         "onVLoadStart"?: (event: CustomEvent<void>) => void;
         "playsinline": boolean;
+    }
+    interface VimeFile {
+        /**
+          * **EXPERIMENTAL:** Whether the browser should automatically toggle picture-in-picture mode as the user switches back and forth between this document and another document or application.
+          * @inheritdoc
+         */
+        "autoPiP"?: boolean;
+        "autoplay": boolean;
+        "controls": boolean;
+        /**
+          * Determines what controls to show on the media element whenever the browser shows its own set of controls (e.g. when the controls attribute is specified).
+          * @inheritdoc
+         */
+        "controlsList"?: string;
+        /**
+          * This enumerated attribute indicates whether to use CORS to fetch the related image.  The allowed values are:  - `anonymous`: Sends a cross-origin request without a credential. In other words, it sends the `Origin: HTTP` header without a cookie, X.509 certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (by not setting the Access-Control-Allow-Origin: HTTP header), the image will be tainted, and its usage restricted.  - `use-credentials`: Sends a cross-origin request with a credential. In other words, it sends the `Origin: HTTP` header with a cookie, a certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (through Access-Control-Allow-Credentials: HTTP header), the image will be tainted and its usage restricted.  When not present, the resource is fetched without a CORS request (i.e. without sending the Origin: HTTP header), preventing its non-tainted use in <canvas> elements. If invalid, it is handled as if the enumerated keyword anonymous was used. See CORS settings attributes for additional information.
+          * @inheritdoc
+         */
+        "crossOrigin"?: string;
+        "debug": boolean;
+        /**
+          * **EXPERIMENTAL:** Prevents the browser from suggesting a picture-in-picture context menu or to request picture-in-picture automatically in some cases.
+          * @inheritdoc
+         */
+        "disablePiP"?: boolean;
+        /**
+          * **EXPERIMENTAL:** Whether to disable the capability of remote playback in devices that are attached using wired (HDMI, DVI, etc.) and wireless technologies (Miracast, Chromecast, DLNA, AirPlay, etc).
+          * @inheritdoc
+         */
+        "disableRemotePlayback"?: boolean;
+        "language": string;
+        "loop": boolean;
+        "muted": boolean;
+        "onVLoadStart"?: (event: CustomEvent<void>) => void;
+        /**
+          * The playback rates that are available for this media.
+         */
+        "playbackRates"?: number[];
+        "playsinline": boolean;
+        /**
+          * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
+          * @inheritdoc
+         */
+        "poster"?: string;
+        /**
+          * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience with regards to what content is loaded before the video is played.  It may have one of the following values:  - `none`: Indicates that the video should not be preloaded. - `metadata`: Indicates that only video metadata (e.g. length) is fetched. - `auto`: Indicates that the whole video file can be downloaded, even if the user is not expected to use it. - `''` (empty string): Synonym of the auto value.  The default value is different for each browser. The spec advises it to be set to metadata.
+          * @inheritdoc
+         */
+        "preload"?: MediaPreloadOption;
+        /**
+          * Whether to use an `audio` or `video` element to play the media.
+         */
+        "viewType"?: ViewType;
+        "willAttach"?: boolean;
+    }
+    interface VimeHls {
+        /**
+          * **EXPERIMENTAL:** Whether the browser should automatically toggle picture-in-picture mode as the user switches back and forth between this document and another document or application.
+          * @inheritdoc
+         */
+        "autoPiP"?: boolean;
+        /**
+          * The `hls.js` configuration.
+         */
+        "config"?: Hls.Config;
+        /**
+          * Determines what controls to show on the media element whenever the browser shows its own set of controls (e.g. when the controls attribute is specified).
+          * @inheritdoc
+         */
+        "controlsList"?: string;
+        /**
+          * This enumerated attribute indicates whether to use CORS to fetch the related image.  The allowed values are:  - `anonymous`: Sends a cross-origin request without a credential. In other words, it sends the `Origin: HTTP` header without a cookie, X.509 certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (by not setting the Access-Control-Allow-Origin: HTTP header), the image will be tainted, and its usage restricted.  - `use-credentials`: Sends a cross-origin request with a credential. In other words, it sends the `Origin: HTTP` header with a cookie, a certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (through Access-Control-Allow-Credentials: HTTP header), the image will be tainted and its usage restricted.  When not present, the resource is fetched without a CORS request (i.e. without sending the Origin: HTTP header), preventing its non-tainted use in <canvas> elements. If invalid, it is handled as if the enumerated keyword anonymous was used. See CORS settings attributes for additional information.
+          * @inheritdoc
+         */
+        "crossOrigin"?: string;
+        /**
+          * **EXPERIMENTAL:** Prevents the browser from suggesting a picture-in-picture context menu or to request picture-in-picture automatically in some cases.
+          * @inheritdoc
+         */
+        "disablePiP"?: boolean;
+        /**
+          * **EXPERIMENTAL:** Whether to disable the capability of remote playback in devices that are attached using wired (HDMI, DVI, etc.) and wireless technologies (Miracast, Chromecast, DLNA, AirPlay, etc).
+          * @inheritdoc
+         */
+        "disableRemotePlayback"?: boolean;
+        /**
+          * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
+          * @inheritdoc
+         */
+        "poster"?: string;
+        /**
+          * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience with regards to what content is loaded before the video is played.  It may have one of the following values:  - `none`: Indicates that the video should not be preloaded. - `metadata`: Indicates that only video metadata (e.g. length) is fetched. - `auto`: Indicates that the whole video file can be downloaded, even if the user is not expected to use it. - `''` (empty string): Synonym of the auto value.  The default value is different for each browser. The spec advises it to be set to metadata.
+          * @inheritdoc
+         */
+        "preload"?: MediaPreloadOption;
+        /**
+          * The NPM package version of the `hls.js` library to download and use if HLS is not natively supported.
+         */
+        "version"?: string;
     }
     interface VimeIcon {
         /**
@@ -611,7 +1113,7 @@ declare namespace LocalJSX {
           * `@readonly` A collection of errors that have occurred ordered by `[oldest, ..., newest]`.
           * @inheritDoc
          */
-        "errors"?: Error[];
+        "errors"?: any[];
         /**
           * `@readonly` A dictionary of translations for the current language.
           * @inheritDoc
@@ -911,7 +1413,7 @@ declare namespace LocalJSX {
           * `@readonly` The text tracks (WebVTT) associated with the current media.
           * @inheritDoc
          */
-        "textTracks"?: TextTrack[];
+        "textTracks"?: TextTrackList;
         /**
           * `@readonly` Contains each language and it's respective translation map.
           * @inheritDoc
@@ -927,6 +1429,44 @@ declare namespace LocalJSX {
           * @inheritDoc
          */
         "volume"?: number;
+    }
+    interface VimeVideo {
+        /**
+          * **EXPERIMENTAL:** Whether the browser should automatically toggle picture-in-picture mode as the user switches back and forth between this document and another document or application.
+          * @inheritdoc
+         */
+        "autoPiP"?: boolean;
+        /**
+          * Determines what controls to show on the media element whenever the browser shows its own set of controls (e.g. when the controls attribute is specified).
+          * @inheritdoc
+         */
+        "controlsList"?: string;
+        /**
+          * This enumerated attribute indicates whether to use CORS to fetch the related image.  The allowed values are:  - `anonymous`: Sends a cross-origin request without a credential. In other words, it sends the `Origin: HTTP` header without a cookie, X.509 certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (by not setting the Access-Control-Allow-Origin: HTTP header), the image will be tainted, and its usage restricted.  - `use-credentials`: Sends a cross-origin request with a credential. In other words, it sends the `Origin: HTTP` header with a cookie, a certificate, or performing HTTP Basic authentication. If the server does not give credentials to the origin site (through Access-Control-Allow-Credentials: HTTP header), the image will be tainted and its usage restricted.  When not present, the resource is fetched without a CORS request (i.e. without sending the Origin: HTTP header), preventing its non-tainted use in <canvas> elements. If invalid, it is handled as if the enumerated keyword anonymous was used. See CORS settings attributes for additional information.
+          * @inheritdoc
+         */
+        "crossOrigin"?: string;
+        /**
+          * **EXPERIMENTAL:** Prevents the browser from suggesting a picture-in-picture context menu or to request picture-in-picture automatically in some cases.
+          * @inheritdoc
+         */
+        "disablePiP"?: boolean;
+        /**
+          * **EXPERIMENTAL:** Whether to disable the capability of remote playback in devices that are attached using wired (HDMI, DVI, etc.) and wireless technologies (Miracast, Chromecast, DLNA, AirPlay, etc).
+          * @inheritdoc
+         */
+        "disableRemotePlayback"?: boolean;
+        /**
+          * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
+          * @inheritdoc
+         */
+        "poster"?: string;
+        /**
+          * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience with regards to what content is loaded before the video is played.  It may have one of the following values:  - `none`: Indicates that the video should not be preloaded. - `metadata`: Indicates that only video metadata (e.g. length) is fetched. - `auto`: Indicates that the whole video file can be downloaded, even if the user is not expected to use it. - `''` (empty string): Synonym of the auto value.  The default value is different for each browser. The spec advises it to be set to metadata.
+          * @inheritdoc
+         */
+        "preload"?: MediaPreloadOption;
+        "willAttach"?: boolean;
     }
     interface VimeVimeo {
         "autoplay": boolean;
@@ -977,10 +1517,16 @@ declare namespace LocalJSX {
         "videoId": string;
     }
     interface IntrinsicElements {
+        "vime-audio": VimeAudio;
+        "vime-dailymotion": VimeDailymotion;
+        "vime-dash": VimeDash;
         "vime-embed": VimeEmbed;
         "vime-faketube": VimeFaketube;
+        "vime-file": VimeFile;
+        "vime-hls": VimeHls;
         "vime-icon": VimeIcon;
         "vime-player": VimePlayer;
+        "vime-video": VimeVideo;
         "vime-vimeo": VimeVimeo;
         "vime-youtube": VimeYoutube;
     }
@@ -989,10 +1535,16 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "vime-audio": LocalJSX.VimeAudio & JSXBase.HTMLAttributes<HTMLVimeAudioElement>;
+            "vime-dailymotion": LocalJSX.VimeDailymotion & JSXBase.HTMLAttributes<HTMLVimeDailymotionElement>;
+            "vime-dash": LocalJSX.VimeDash & JSXBase.HTMLAttributes<HTMLVimeDashElement>;
             "vime-embed": LocalJSX.VimeEmbed & JSXBase.HTMLAttributes<HTMLVimeEmbedElement>;
             "vime-faketube": LocalJSX.VimeFaketube & JSXBase.HTMLAttributes<HTMLVimeFaketubeElement>;
+            "vime-file": LocalJSX.VimeFile & JSXBase.HTMLAttributes<HTMLVimeFileElement>;
+            "vime-hls": LocalJSX.VimeHls & JSXBase.HTMLAttributes<HTMLVimeHlsElement>;
             "vime-icon": LocalJSX.VimeIcon & JSXBase.HTMLAttributes<HTMLVimeIconElement>;
             "vime-player": LocalJSX.VimePlayer & JSXBase.HTMLAttributes<HTMLVimePlayerElement>;
+            "vime-video": LocalJSX.VimeVideo & JSXBase.HTMLAttributes<HTMLVimeVideoElement>;
             "vime-vimeo": LocalJSX.VimeVimeo & JSXBase.HTMLAttributes<HTMLVimeVimeoElement>;
             "vime-youtube": LocalJSX.VimeYoutube & JSXBase.HTMLAttributes<HTMLVimeYoutubeElement>;
         }
