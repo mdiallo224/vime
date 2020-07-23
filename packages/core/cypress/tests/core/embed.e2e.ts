@@ -23,6 +23,6 @@ describe('vime-embed', () => {
     cy.get(embed)
       .find('iframe')
       .should('be.visible')
-      .and('have.attr', 'src', src)
+      .and('have.attr', 'src', src);
   });
 });

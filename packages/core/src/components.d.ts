@@ -23,6 +23,10 @@ export namespace Components {
          */
         "embedSrc": string;
         /**
+          * Whether the embedded player should defer loading until it enters the viewport.
+         */
+        "lazy": boolean;
+        /**
           * The title of the current media so it can be set on the inner `iframe` for screen readers.
          */
         "mediaTitle": string;
@@ -94,7 +98,7 @@ export namespace Components {
          */
         "autopause": boolean;
         /**
-          * Whether playback should automatically begin playing once the media is ready to do so. This will only work if the browsers `autoplay` policies have been satisfied. It'll generally work if the player is muted, or the user frequently interacts with your site. You can check if it's possible to autoplay via the `canAutoplay()` or `canMutedAutoplay()` methods.
+          * Whether playback should automatically begin playing once the media is ready to do so. This will only work if the browsers `autoplay` policies have been satisfied. It'll generally work if the player is muted, or the user frequently interacts with your site. You can check if it's possible to autoplay via the `canAutoplay()` or `canMutedAutoplay()` methods. Depending on the provider, changing this prop may cause the player to completely reset.
           * @inheritDoc
          */
         "autoplay": boolean;
@@ -145,7 +149,7 @@ export namespace Components {
          */
         "canSetPlaybackRate": () => Promise<boolean>;
         /**
-          * Indicates whether a user interface should be shown for controlling the resource. Set this to `false` when you want to provide your own custom controls, and `true` if you want the current provider to supply its own default controls.
+          * Indicates whether a user interface should be shown for controlling the resource. Set this to `false` when you want to provide your own custom controls, and `true` if you want the current provider to supply its own default controls. Depending on the provider, changing this prop may cause the player to completely reset.
           * @inheritDoc
          */
         "controls": boolean;
@@ -349,7 +353,7 @@ export namespace Components {
          */
         "playing": boolean;
         /**
-          * Whether the video is to be played "inline", that is within the element's playback area. Note that setting this to false does not imply that the video will always be played in fullscreen.
+          * Whether the video is to be played "inline", that is within the element's playback area. Note that setting this to false does not imply that the video will always be played in fullscreen. Depending on the provider, changing this prop may cause the player to completely reset.
           * @inheritDoc
          */
         "playsinline": boolean;
@@ -380,6 +384,32 @@ export namespace Components {
           * @inheritDoc
          */
         "volume": number;
+    }
+    interface VimeVimeo {
+        "autoplay": boolean;
+        /**
+          * Whether to display the video owner's name.
+         */
+        "byline": boolean;
+        /**
+          * The hexadecimal color value of the playback controls. The embed settings of the video might override this value.
+         */
+        "color"?: string;
+        "controls": boolean;
+        "debug": boolean;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLVimeEmbedElement>; play: () => Promise<void>; pause: () => Promise<void>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; }>;
+        "language": string;
+        "loop": boolean;
+        "muted": boolean;
+        "playsinline": boolean;
+        /**
+          * Whether to display the video owner's portrait.
+         */
+        "portrait": boolean;
+        /**
+          * The Vimeo resource ID of the video to load.
+         */
+        "videoId": string;
     }
     interface VimeYoutube {
         "autoplay": boolean;
@@ -429,6 +459,12 @@ declare global {
         prototype: HTMLVimePlayerElement;
         new (): HTMLVimePlayerElement;
     };
+    interface HTMLVimeVimeoElement extends Components.VimeVimeo, HTMLStencilElement {
+    }
+    var HTMLVimeVimeoElement: {
+        prototype: HTMLVimeVimeoElement;
+        new (): HTMLVimeVimeoElement;
+    };
     interface HTMLVimeYoutubeElement extends Components.VimeYoutube, HTMLStencilElement {
     }
     var HTMLVimeYoutubeElement: {
@@ -440,6 +476,7 @@ declare global {
         "vime-faketube": HTMLVimeFaketubeElement;
         "vime-icon": HTMLVimeIconElement;
         "vime-player": HTMLVimePlayerElement;
+        "vime-vimeo": HTMLVimeVimeoElement;
         "vime-youtube": HTMLVimeYoutubeElement;
     }
 }
@@ -453,6 +490,10 @@ declare namespace LocalJSX {
           * A URL that will load the external player and media (Eg: https://www.youtube.com/embed/DyTCOwB0DVw).
          */
         "embedSrc"?: string;
+        /**
+          * Whether the embedded player should defer loading until it enters the viewport.
+         */
+        "lazy"?: boolean;
         /**
           * The title of the current media so it can be set on the inner `iframe` for screen readers.
          */
@@ -522,7 +563,7 @@ declare namespace LocalJSX {
          */
         "autopause"?: boolean;
         /**
-          * Whether playback should automatically begin playing once the media is ready to do so. This will only work if the browsers `autoplay` policies have been satisfied. It'll generally work if the player is muted, or the user frequently interacts with your site. You can check if it's possible to autoplay via the `canAutoplay()` or `canMutedAutoplay()` methods.
+          * Whether playback should automatically begin playing once the media is ready to do so. This will only work if the browsers `autoplay` policies have been satisfied. It'll generally work if the player is muted, or the user frequently interacts with your site. You can check if it's possible to autoplay via the `canAutoplay()` or `canMutedAutoplay()` methods. Depending on the provider, changing this prop may cause the player to completely reset.
           * @inheritDoc
          */
         "autoplay"?: boolean;
@@ -537,7 +578,7 @@ declare namespace LocalJSX {
          */
         "buffering"?: boolean;
         /**
-          * Indicates whether a user interface should be shown for controlling the resource. Set this to `false` when you want to provide your own custom controls, and `true` if you want the current provider to supply its own default controls.
+          * Indicates whether a user interface should be shown for controlling the resource. Set this to `false` when you want to provide your own custom controls, and `true` if you want the current provider to supply its own default controls. Depending on the provider, changing this prop may cause the player to completely reset.
           * @inheritDoc
          */
         "controls"?: boolean;
@@ -857,7 +898,7 @@ declare namespace LocalJSX {
          */
         "playing"?: boolean;
         /**
-          * Whether the video is to be played "inline", that is within the element's playback area. Note that setting this to false does not imply that the video will always be played in fullscreen.
+          * Whether the video is to be played "inline", that is within the element's playback area. Note that setting this to false does not imply that the video will always be played in fullscreen. Depending on the provider, changing this prop may cause the player to completely reset.
           * @inheritDoc
          */
         "playsinline"?: boolean;
@@ -887,6 +928,32 @@ declare namespace LocalJSX {
          */
         "volume"?: number;
     }
+    interface VimeVimeo {
+        "autoplay": boolean;
+        /**
+          * Whether to display the video owner's name.
+         */
+        "byline"?: boolean;
+        /**
+          * The hexadecimal color value of the playback controls. The embed settings of the video might override this value.
+         */
+        "color"?: string;
+        "controls": boolean;
+        "debug": boolean;
+        "language": string;
+        "loop": boolean;
+        "muted": boolean;
+        "onVLoadStart"?: (event: CustomEvent<void>) => void;
+        "playsinline": boolean;
+        /**
+          * Whether to display the video owner's portrait.
+         */
+        "portrait"?: boolean;
+        /**
+          * The Vimeo resource ID of the video to load.
+         */
+        "videoId": string;
+    }
     interface VimeYoutube {
         "autoplay": boolean;
         "controls": boolean;
@@ -914,6 +981,7 @@ declare namespace LocalJSX {
         "vime-faketube": VimeFaketube;
         "vime-icon": VimeIcon;
         "vime-player": VimePlayer;
+        "vime-vimeo": VimeVimeo;
         "vime-youtube": VimeYoutube;
     }
 }
@@ -925,6 +993,7 @@ declare module "@stencil/core" {
             "vime-faketube": LocalJSX.VimeFaketube & JSXBase.HTMLAttributes<HTMLVimeFaketubeElement>;
             "vime-icon": LocalJSX.VimeIcon & JSXBase.HTMLAttributes<HTMLVimeIconElement>;
             "vime-player": LocalJSX.VimePlayer & JSXBase.HTMLAttributes<HTMLVimePlayerElement>;
+            "vime-vimeo": LocalJSX.VimeVimeo & JSXBase.HTMLAttributes<HTMLVimeVimeoElement>;
             "vime-youtube": LocalJSX.VimeYoutube & JSXBase.HTMLAttributes<HTMLVimeYoutubeElement>;
         }
     }
