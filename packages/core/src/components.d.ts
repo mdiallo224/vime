@@ -597,6 +597,20 @@ export namespace Components {
          */
         "volume": number;
     }
+    interface VimePoster {
+        "currentPoster"?: PlayerProps[PlayerProp.CurrentPoster];
+        /**
+          * How the poster image should be resized to fit the container (sets the `object-fit` property).
+         */
+        "fit"?: 'fill' | 'contain' | 'cover' | 'scale-down' | 'none';
+        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        "mediaTitle"?: PlayerProps[PlayerProp.MediaTitle];
+        "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
+    }
+    interface VimeSpinner {
+        "buffering": PlayerProps[PlayerProp.Buffering];
+        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+    }
     interface VimeUi {
     }
     interface VimeVideo {
@@ -742,6 +756,18 @@ declare global {
         prototype: HTMLVimePlayerElement;
         new (): HTMLVimePlayerElement;
     };
+    interface HTMLVimePosterElement extends Components.VimePoster, HTMLStencilElement {
+    }
+    var HTMLVimePosterElement: {
+        prototype: HTMLVimePosterElement;
+        new (): HTMLVimePosterElement;
+    };
+    interface HTMLVimeSpinnerElement extends Components.VimeSpinner, HTMLStencilElement {
+    }
+    var HTMLVimeSpinnerElement: {
+        prototype: HTMLVimeSpinnerElement;
+        new (): HTMLVimeSpinnerElement;
+    };
     interface HTMLVimeUiElement extends Components.VimeUi, HTMLStencilElement {
     }
     var HTMLVimeUiElement: {
@@ -776,6 +802,8 @@ declare global {
         "vime-hls": HTMLVimeHlsElement;
         "vime-icon": HTMLVimeIconElement;
         "vime-player": HTMLVimePlayerElement;
+        "vime-poster": HTMLVimePosterElement;
+        "vime-spinner": HTMLVimeSpinnerElement;
         "vime-ui": HTMLVimeUiElement;
         "vime-video": HTMLVimeVideoElement;
         "vime-vimeo": HTMLVimeVimeoElement;
@@ -1439,6 +1467,20 @@ declare namespace LocalJSX {
          */
         "volume"?: number;
     }
+    interface VimePoster {
+        "currentPoster"?: PlayerProps[PlayerProp.CurrentPoster];
+        /**
+          * How the poster image should be resized to fit the container (sets the `object-fit` property).
+         */
+        "fit"?: 'fill' | 'contain' | 'cover' | 'scale-down' | 'none';
+        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        "mediaTitle"?: PlayerProps[PlayerProp.MediaTitle];
+        "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
+    }
+    interface VimeSpinner {
+        "buffering": PlayerProps[PlayerProp.Buffering];
+        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+    }
     interface VimeUi {
     }
     interface VimeVideo {
@@ -1537,6 +1579,8 @@ declare namespace LocalJSX {
         "vime-hls": VimeHls;
         "vime-icon": VimeIcon;
         "vime-player": VimePlayer;
+        "vime-poster": VimePoster;
+        "vime-spinner": VimeSpinner;
         "vime-ui": VimeUi;
         "vime-video": VimeVideo;
         "vime-vimeo": VimeVimeo;
@@ -1556,6 +1600,8 @@ declare module "@stencil/core" {
             "vime-hls": LocalJSX.VimeHls & JSXBase.HTMLAttributes<HTMLVimeHlsElement>;
             "vime-icon": LocalJSX.VimeIcon & JSXBase.HTMLAttributes<HTMLVimeIconElement>;
             "vime-player": LocalJSX.VimePlayer & JSXBase.HTMLAttributes<HTMLVimePlayerElement>;
+            "vime-poster": LocalJSX.VimePoster & JSXBase.HTMLAttributes<HTMLVimePosterElement>;
+            "vime-spinner": LocalJSX.VimeSpinner & JSXBase.HTMLAttributes<HTMLVimeSpinnerElement>;
             "vime-ui": LocalJSX.VimeUi & JSXBase.HTMLAttributes<HTMLVimeUiElement>;
             "vime-video": LocalJSX.VimeVideo & JSXBase.HTMLAttributes<HTMLVimeVideoElement>;
             "vime-vimeo": LocalJSX.VimeVimeo & JSXBase.HTMLAttributes<HTMLVimeVimeoElement>;
