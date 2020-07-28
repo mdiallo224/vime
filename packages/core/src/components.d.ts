@@ -597,6 +597,8 @@ export namespace Components {
          */
         "volume": number;
     }
+    interface VimeUi {
+    }
     interface VimeVideo {
         /**
           * **EXPERIMENTAL:** Whether the browser should automatically toggle picture-in-picture mode as the user switches back and forth between this document and another document or application.
@@ -740,6 +742,12 @@ declare global {
         prototype: HTMLVimePlayerElement;
         new (): HTMLVimePlayerElement;
     };
+    interface HTMLVimeUiElement extends Components.VimeUi, HTMLStencilElement {
+    }
+    var HTMLVimeUiElement: {
+        prototype: HTMLVimeUiElement;
+        new (): HTMLVimeUiElement;
+    };
     interface HTMLVimeVideoElement extends Components.VimeVideo, HTMLStencilElement {
     }
     var HTMLVimeVideoElement: {
@@ -768,6 +776,7 @@ declare global {
         "vime-hls": HTMLVimeHlsElement;
         "vime-icon": HTMLVimeIconElement;
         "vime-player": HTMLVimePlayerElement;
+        "vime-ui": HTMLVimeUiElement;
         "vime-video": HTMLVimeVideoElement;
         "vime-vimeo": HTMLVimeVimeoElement;
         "vime-youtube": HTMLVimeYoutubeElement;
@@ -1430,6 +1439,8 @@ declare namespace LocalJSX {
          */
         "volume"?: number;
     }
+    interface VimeUi {
+    }
     interface VimeVideo {
         /**
           * **EXPERIMENTAL:** Whether the browser should automatically toggle picture-in-picture mode as the user switches back and forth between this document and another document or application.
@@ -1526,6 +1537,7 @@ declare namespace LocalJSX {
         "vime-hls": VimeHls;
         "vime-icon": VimeIcon;
         "vime-player": VimePlayer;
+        "vime-ui": VimeUi;
         "vime-video": VimeVideo;
         "vime-vimeo": VimeVimeo;
         "vime-youtube": VimeYoutube;
@@ -1544,6 +1556,7 @@ declare module "@stencil/core" {
             "vime-hls": LocalJSX.VimeHls & JSXBase.HTMLAttributes<HTMLVimeHlsElement>;
             "vime-icon": LocalJSX.VimeIcon & JSXBase.HTMLAttributes<HTMLVimeIconElement>;
             "vime-player": LocalJSX.VimePlayer & JSXBase.HTMLAttributes<HTMLVimePlayerElement>;
+            "vime-ui": LocalJSX.VimeUi & JSXBase.HTMLAttributes<HTMLVimeUiElement>;
             "vime-video": LocalJSX.VimeVideo & JSXBase.HTMLAttributes<HTMLVimeVideoElement>;
             "vime-vimeo": LocalJSX.VimeVimeo & JSXBase.HTMLAttributes<HTMLVimeVimeoElement>;
             "vime-youtube": LocalJSX.VimeYoutube & JSXBase.HTMLAttributes<HTMLVimeYoutubeElement>;
