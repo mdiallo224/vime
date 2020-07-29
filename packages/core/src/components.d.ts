@@ -286,9 +286,9 @@ export namespace Components {
          */
         "color": string;
         /**
-          * The icon SVG identifier. It's expected that this points to an SVG inside a loaded sprite.
+          * The URL to an SVG element or fragment to load.
          */
-        "icon"?: string;
+        "href"?: string;
         /**
           * The amount of transparency to add to the icon.
          */
@@ -297,6 +297,12 @@ export namespace Components {
           * The amount to scale the size of the icon (respecting aspect ratio) up or down by.
          */
         "scale": number;
+    }
+    interface VimeIcons {
+        /**
+          * The URL to an SVG sprite to load.
+         */
+        "href": string;
     }
     interface VimePlayer {
         /**
@@ -757,6 +763,12 @@ declare global {
         prototype: HTMLVimeIconElement;
         new (): HTMLVimeIconElement;
     };
+    interface HTMLVimeIconsElement extends Components.VimeIcons, HTMLStencilElement {
+    }
+    var HTMLVimeIconsElement: {
+        prototype: HTMLVimeIconsElement;
+        new (): HTMLVimeIconsElement;
+    };
     interface HTMLVimePlayerElement extends Components.VimePlayer, HTMLStencilElement {
     }
     var HTMLVimePlayerElement: {
@@ -814,6 +826,7 @@ declare global {
         "vime-file": HTMLVimeFileElement;
         "vime-hls": HTMLVimeHlsElement;
         "vime-icon": HTMLVimeIconElement;
+        "vime-icons": HTMLVimeIconsElement;
         "vime-player": HTMLVimePlayerElement;
         "vime-poster": HTMLVimePosterElement;
         "vime-scrim": HTMLVimeScrimElement;
@@ -1092,9 +1105,9 @@ declare namespace LocalJSX {
          */
         "color"?: string;
         /**
-          * The icon SVG identifier. It's expected that this points to an SVG inside a loaded sprite.
+          * The URL to an SVG element or fragment to load.
          */
-        "icon"?: string;
+        "href"?: string;
         /**
           * The amount of transparency to add to the icon.
          */
@@ -1103,6 +1116,12 @@ declare namespace LocalJSX {
           * The amount to scale the size of the icon (respecting aspect ratio) up or down by.
          */
         "scale"?: number;
+    }
+    interface VimeIcons {
+        /**
+          * The URL to an SVG sprite to load.
+         */
+        "href"?: string;
     }
     interface VimePlayer {
         /**
@@ -1599,6 +1618,7 @@ declare namespace LocalJSX {
         "vime-file": VimeFile;
         "vime-hls": VimeHls;
         "vime-icon": VimeIcon;
+        "vime-icons": VimeIcons;
         "vime-player": VimePlayer;
         "vime-poster": VimePoster;
         "vime-scrim": VimeScrim;
@@ -1621,6 +1641,7 @@ declare module "@stencil/core" {
             "vime-file": LocalJSX.VimeFile & JSXBase.HTMLAttributes<HTMLVimeFileElement>;
             "vime-hls": LocalJSX.VimeHls & JSXBase.HTMLAttributes<HTMLVimeHlsElement>;
             "vime-icon": LocalJSX.VimeIcon & JSXBase.HTMLAttributes<HTMLVimeIconElement>;
+            "vime-icons": LocalJSX.VimeIcons & JSXBase.HTMLAttributes<HTMLVimeIconsElement>;
             "vime-player": LocalJSX.VimePlayer & JSXBase.HTMLAttributes<HTMLVimePlayerElement>;
             "vime-poster": LocalJSX.VimePoster & JSXBase.HTMLAttributes<HTMLVimePosterElement>;
             "vime-scrim": LocalJSX.VimeScrim & JSXBase.HTMLAttributes<HTMLVimeScrimElement>;
