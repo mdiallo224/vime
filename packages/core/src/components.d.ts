@@ -607,6 +607,13 @@ export namespace Components {
         "mediaTitle"?: PlayerProps[PlayerProp.MediaTitle];
         "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
     }
+    interface VimeScrim {
+        /**
+          * Whether the scrim is visible or not.
+         */
+        "active": boolean;
+        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+    }
     interface VimeSpinner {
         "buffering": PlayerProps[PlayerProp.Buffering];
         "isVideoView": PlayerProps[PlayerProp.IsVideoView];
@@ -762,6 +769,12 @@ declare global {
         prototype: HTMLVimePosterElement;
         new (): HTMLVimePosterElement;
     };
+    interface HTMLVimeScrimElement extends Components.VimeScrim, HTMLStencilElement {
+    }
+    var HTMLVimeScrimElement: {
+        prototype: HTMLVimeScrimElement;
+        new (): HTMLVimeScrimElement;
+    };
     interface HTMLVimeSpinnerElement extends Components.VimeSpinner, HTMLStencilElement {
     }
     var HTMLVimeSpinnerElement: {
@@ -803,6 +816,7 @@ declare global {
         "vime-icon": HTMLVimeIconElement;
         "vime-player": HTMLVimePlayerElement;
         "vime-poster": HTMLVimePosterElement;
+        "vime-scrim": HTMLVimeScrimElement;
         "vime-spinner": HTMLVimeSpinnerElement;
         "vime-ui": HTMLVimeUiElement;
         "vime-video": HTMLVimeVideoElement;
@@ -1477,6 +1491,13 @@ declare namespace LocalJSX {
         "mediaTitle"?: PlayerProps[PlayerProp.MediaTitle];
         "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
     }
+    interface VimeScrim {
+        /**
+          * Whether the scrim is visible or not.
+         */
+        "active"?: boolean;
+        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+    }
     interface VimeSpinner {
         "buffering": PlayerProps[PlayerProp.Buffering];
         "isVideoView": PlayerProps[PlayerProp.IsVideoView];
@@ -1580,6 +1601,7 @@ declare namespace LocalJSX {
         "vime-icon": VimeIcon;
         "vime-player": VimePlayer;
         "vime-poster": VimePoster;
+        "vime-scrim": VimeScrim;
         "vime-spinner": VimeSpinner;
         "vime-ui": VimeUi;
         "vime-video": VimeVideo;
@@ -1601,6 +1623,7 @@ declare module "@stencil/core" {
             "vime-icon": LocalJSX.VimeIcon & JSXBase.HTMLAttributes<HTMLVimeIconElement>;
             "vime-player": LocalJSX.VimePlayer & JSXBase.HTMLAttributes<HTMLVimePlayerElement>;
             "vime-poster": LocalJSX.VimePoster & JSXBase.HTMLAttributes<HTMLVimePosterElement>;
+            "vime-scrim": LocalJSX.VimeScrim & JSXBase.HTMLAttributes<HTMLVimeScrimElement>;
             "vime-spinner": LocalJSX.VimeSpinner & JSXBase.HTMLAttributes<HTMLVimeSpinnerElement>;
             "vime-ui": LocalJSX.VimeUi & JSXBase.HTMLAttributes<HTMLVimeUiElement>;
             "vime-video": LocalJSX.VimeVideo & JSXBase.HTMLAttributes<HTMLVimeVideoElement>;
