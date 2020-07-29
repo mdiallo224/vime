@@ -6,10 +6,10 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { MediaPreloadOption } from "./components/providers/file/MediaFileProvider";
+import { PlayerProp, PlayerProps } from "./components/core/player/PlayerProp";
 import { Params } from "./utils/network";
 import { EmbedEvent, EmbedEventPayload } from "./components/core/embed/EmbedEvent";
 import { MediaProvider, MediaProviderAdapter, MockMediaProviderAdapter } from "./components/providers/MediaProvider";
-import { PlayerProp, PlayerProps } from "./components/core/player/PlayerProp";
 import { ViewType } from "./components/core/player/ViewType";
 import { MediaType } from "./components/core/player/MediaType";
 export namespace Components {
@@ -31,6 +31,20 @@ export namespace Components {
          */
         "preload"?: MediaPreloadOption;
         "willAttach": boolean;
+    }
+    interface VimeCaptions {
+        /**
+          * The height of any lower control bar in pixels so that the captions can reposition when it's active.
+         */
+        "controlsHeight": number;
+        /**
+          * Whether the captions should be visible or not.
+         */
+        "hidden": boolean;
+        "isControlsActive": PlayerProps[PlayerProp.IsControlsActive];
+        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
+        "textTracks": PlayerProps[PlayerProp.TextTracks];
     }
     interface VimeDailymotion {
         "autoplay": boolean;
@@ -451,6 +465,11 @@ export namespace Components {
          */
         "isAudioView": boolean;
         /**
+          * Whether the controls are currently visible. This is currently only supported by custom controls.
+          * @inheritDoc
+         */
+        "isControlsActive": boolean;
+        /**
           * `@readonly` Whether the player is currently in fullscreen mode.
           * @inheritDoc
          */
@@ -721,6 +740,12 @@ declare global {
         prototype: HTMLVimeAudioElement;
         new (): HTMLVimeAudioElement;
     };
+    interface HTMLVimeCaptionsElement extends Components.VimeCaptions, HTMLStencilElement {
+    }
+    var HTMLVimeCaptionsElement: {
+        prototype: HTMLVimeCaptionsElement;
+        new (): HTMLVimeCaptionsElement;
+    };
     interface HTMLVimeDailymotionElement extends Components.VimeDailymotion, HTMLStencilElement {
     }
     var HTMLVimeDailymotionElement: {
@@ -819,6 +844,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "vime-audio": HTMLVimeAudioElement;
+        "vime-captions": HTMLVimeCaptionsElement;
         "vime-dailymotion": HTMLVimeDailymotionElement;
         "vime-dash": HTMLVimeDashElement;
         "vime-embed": HTMLVimeEmbedElement;
@@ -855,6 +881,28 @@ declare namespace LocalJSX {
          */
         "preload"?: MediaPreloadOption;
         "willAttach"?: boolean;
+    }
+    interface VimeCaptions {
+        /**
+          * The height of any lower control bar in pixels so that the captions can reposition when it's active.
+         */
+        "controlsHeight"?: number;
+        /**
+          * Whether the captions should be visible or not.
+         */
+        "hidden"?: boolean;
+        "isControlsActive": PlayerProps[PlayerProp.IsControlsActive];
+        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        /**
+          * Emitted when the active cues change. A cue is active when `currentTime >= cue.startTime && currentTime <= cue.endTime`.
+         */
+        "onCuesChange"?: (event: CustomEvent<TextTrackCue[]>) => void;
+        /**
+          * Emitted when the current track changes.
+         */
+        "onTrackChange"?: (event: CustomEvent<TextTrack | undefined>) => void;
+        "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
+        "textTracks"?: PlayerProps[PlayerProp.TextTracks];
     }
     interface VimeDailymotion {
         "autoplay": boolean;
@@ -929,6 +977,7 @@ declare namespace LocalJSX {
           * @inheritdoc
          */
         "disableRemotePlayback"?: boolean;
+        "onVLoadStart"?: (event: CustomEvent<void>) => void;
         /**
           * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
           * @inheritdoc
@@ -1084,6 +1133,7 @@ declare namespace LocalJSX {
           * @inheritdoc
          */
         "disableRemotePlayback"?: boolean;
+        "onVLoadStart"?: (event: CustomEvent<void>) => void;
         /**
           * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
           * @inheritdoc
@@ -1200,6 +1250,11 @@ declare namespace LocalJSX {
          */
         "isAudioView"?: boolean;
         /**
+          * Whether the controls are currently visible. This is currently only supported by custom controls.
+          * @inheritDoc
+         */
+        "isControlsActive"?: boolean;
+        /**
           * `@readonly` Whether the player is currently in fullscreen mode.
           * @inheritDoc
          */
@@ -1274,6 +1329,11 @@ declare namespace LocalJSX {
           * @inheritDoc
          */
         "onVBufferingChange"?: (event: CustomEvent<PlayerProps[PlayerProp.Buffering]>) => void;
+        /**
+          * Emitted when the `isControlsActive` prop changes value.
+          * @inheritDoc
+         */
+        "onVControlsChange"?: (event: CustomEvent<PlayerProps[PlayerProp.IsControlsActive]>) => void;
         /**
           * Emitted when the `currentPoster` prop changes value.
           * @inheritDoc
@@ -1611,6 +1671,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "vime-audio": VimeAudio;
+        "vime-captions": VimeCaptions;
         "vime-dailymotion": VimeDailymotion;
         "vime-dash": VimeDash;
         "vime-embed": VimeEmbed;
@@ -1634,6 +1695,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "vime-audio": LocalJSX.VimeAudio & JSXBase.HTMLAttributes<HTMLVimeAudioElement>;
+            "vime-captions": LocalJSX.VimeCaptions & JSXBase.HTMLAttributes<HTMLVimeCaptionsElement>;
             "vime-dailymotion": LocalJSX.VimeDailymotion & JSXBase.HTMLAttributes<HTMLVimeDailymotionElement>;
             "vime-dash": LocalJSX.VimeDash & JSXBase.HTMLAttributes<HTMLVimeDashElement>;
             "vime-embed": LocalJSX.VimeEmbed & JSXBase.HTMLAttributes<HTMLVimeEmbedElement>;
