@@ -1568,6 +1568,18 @@ declare namespace LocalJSX {
         "fit"?: 'fill' | 'contain' | 'cover' | 'scale-down' | 'none';
         "isVideoView": PlayerProps[PlayerProp.IsVideoView];
         "mediaTitle"?: PlayerProps[PlayerProp.MediaTitle];
+        /**
+          * Emitted when the poster has loaded.
+         */
+        "onLoaded"?: (event: CustomEvent<void>) => void;
+        /**
+          * Emitted when the poster will be hidden.
+         */
+        "onWillHide"?: (event: CustomEvent<void>) => void;
+        /**
+          * Emitted when the poster will be shown.
+         */
+        "onWillShow"?: (event: CustomEvent<void>) => void;
         "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
     }
     interface VimeScrim {
@@ -1576,10 +1588,26 @@ declare namespace LocalJSX {
          */
         "active"?: boolean;
         "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        /**
+          * Emitted when the scrim will be hidden.
+         */
+        "onWillHide"?: (event: CustomEvent<void>) => void;
+        /**
+          * Emitted when the scrim will be shown.
+         */
+        "onWillShow"?: (event: CustomEvent<void>) => void;
     }
     interface VimeSpinner {
         "buffering": PlayerProps[PlayerProp.Buffering];
         "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        /**
+          * Emitted when the spinner will be hidden.
+         */
+        "onWillHide"?: (event: CustomEvent<void>) => void;
+        /**
+          * Emitted when the spinner will be shown.
+         */
+        "onWillShow"?: (event: CustomEvent<void>) => void;
     }
     interface VimeUi {
     }
