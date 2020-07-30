@@ -46,6 +46,10 @@ export namespace Components {
         "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
         "textTracks": PlayerProps[PlayerProp.TextTracks];
     }
+    interface VimeClickToPlay {
+        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        "paused": PlayerProps[PlayerProp.Paused];
+    }
     interface VimeDailymotion {
         "autoplay": boolean;
         /**
@@ -594,7 +598,7 @@ export namespace Components {
           * @inheritDoc
          */
         "playsinline": boolean;
-        "queuePropChange": (prop: PlayerProp, value: any, by?: string | undefined) => Promise<void>;
+        "queuePropChange": (prop: PlayerProp, value: any, by?: string | undefined, byProvider?: boolean) => Promise<void>;
         "queueStateChange": (description: string, change: () => Promise<void>) => Promise<void>;
         /**
           * `@readonly` Whether the player is in the process of seeking to a new time position.
@@ -746,6 +750,12 @@ declare global {
         prototype: HTMLVimeCaptionsElement;
         new (): HTMLVimeCaptionsElement;
     };
+    interface HTMLVimeClickToPlayElement extends Components.VimeClickToPlay, HTMLStencilElement {
+    }
+    var HTMLVimeClickToPlayElement: {
+        prototype: HTMLVimeClickToPlayElement;
+        new (): HTMLVimeClickToPlayElement;
+    };
     interface HTMLVimeDailymotionElement extends Components.VimeDailymotion, HTMLStencilElement {
     }
     var HTMLVimeDailymotionElement: {
@@ -845,6 +855,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "vime-audio": HTMLVimeAudioElement;
         "vime-captions": HTMLVimeCaptionsElement;
+        "vime-click-to-play": HTMLVimeClickToPlayElement;
         "vime-dailymotion": HTMLVimeDailymotionElement;
         "vime-dash": HTMLVimeDashElement;
         "vime-embed": HTMLVimeEmbedElement;
@@ -903,6 +914,10 @@ declare namespace LocalJSX {
         "onTrackChange"?: (event: CustomEvent<TextTrack | undefined>) => void;
         "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
         "textTracks"?: PlayerProps[PlayerProp.TextTracks];
+    }
+    interface VimeClickToPlay {
+        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        "paused": PlayerProps[PlayerProp.Paused];
     }
     interface VimeDailymotion {
         "autoplay": boolean;
@@ -1700,6 +1715,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "vime-audio": VimeAudio;
         "vime-captions": VimeCaptions;
+        "vime-click-to-play": VimeClickToPlay;
         "vime-dailymotion": VimeDailymotion;
         "vime-dash": VimeDash;
         "vime-embed": VimeEmbed;
@@ -1724,6 +1740,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "vime-audio": LocalJSX.VimeAudio & JSXBase.HTMLAttributes<HTMLVimeAudioElement>;
             "vime-captions": LocalJSX.VimeCaptions & JSXBase.HTMLAttributes<HTMLVimeCaptionsElement>;
+            "vime-click-to-play": LocalJSX.VimeClickToPlay & JSXBase.HTMLAttributes<HTMLVimeClickToPlayElement>;
             "vime-dailymotion": LocalJSX.VimeDailymotion & JSXBase.HTMLAttributes<HTMLVimeDailymotionElement>;
             "vime-dash": LocalJSX.VimeDash & JSXBase.HTMLAttributes<HTMLVimeDashElement>;
             "vime-embed": LocalJSX.VimeEmbed & JSXBase.HTMLAttributes<HTMLVimeEmbedElement>;
