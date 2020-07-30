@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { MediaPreloadOption } from "./components/providers/file/MediaFileProvider";
+import { TooltipDirection, TooltipPosition } from "./components/ui/tooltip/types";
 import { PlayerProp, PlayerProps } from "./components/core/player/PlayerProp";
 import { Params } from "./utils/network";
 import { EmbedEvent, EmbedEventPayload } from "./components/core/embed/EmbedEvent";
@@ -26,11 +27,46 @@ export namespace Components {
         "disableRemotePlayback"?: boolean;
         "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLMediaElement>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
         /**
+          * The title of the current media.
+         */
+        "mediaTitle"?: string;
+        /**
           * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience with regards to what content is loaded before the video is played.  It may have one of the following values:  - `none`: Indicates that the video should not be preloaded. - `metadata`: Indicates that only video metadata (e.g. length) is fetched. - `auto`: Indicates that the whole video file can be downloaded, even if the user is not expected to use it. - `''` (empty string): Synonym of the auto value.  The default value is different for each browser. The spec advises it to be set to metadata.
           * @inheritdoc
          */
         "preload"?: MediaPreloadOption;
         "willAttach": boolean;
+    }
+    interface VimeCaptionControl {
+        "currentCaption"?: PlayerProps[PlayerProp.CurrentCaption];
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "hideIcon": string;
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip": boolean;
+        "i18n": PlayerProps[PlayerProp.I18N];
+        "isCaptionsActive": PlayerProps[PlayerProp.IsCaptionsActive];
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * @inheritdoc
+         */
+        "keyCodes"?: string;
+        /**
+          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
+          * @inheritdoc
+         */
+        "keyboardHint"?: string;
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "showIcon": string;
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection": TooltipDirection;
     }
     interface VimeCaptions {
         /**
@@ -44,11 +80,111 @@ export namespace Components {
         "isControlsActive": PlayerProps[PlayerProp.IsControlsActive];
         "isVideoView": PlayerProps[PlayerProp.IsVideoView];
         "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
-        "textTracks": PlayerProps[PlayerProp.TextTracks];
+        "textTracks"?: PlayerProps[PlayerProp.TextTracks];
     }
     interface VimeClickToPlay {
         "isVideoView": PlayerProps[PlayerProp.IsVideoView];
         "paused": PlayerProps[PlayerProp.Paused];
+        /**
+          * By default this is disabled on mobile to not interfere with playback, set this to `true` to enable it.
+         */
+        "useOnMobile": boolean;
+    }
+    interface VimeControl {
+        /**
+          * If the control has a popup menu, this indicates whether the menu is open or not. Sets the `aria-expanded` property.
+         */
+        "expanded"?: boolean;
+        /**
+          * Whether the control should be displayed or not.
+         */
+        "hidden": boolean;
+        "isTouch": PlayerProps[PlayerProp.IsTouch];
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * @inheritdoc
+         */
+        "keyCodes"?: string;
+        /**
+          * The `aria-label` property of the control.
+         */
+        "label": string;
+        /**
+          * If the control has a popup menu, then this should be the `id` of said menu. Sets the `aria-controls` property.
+         */
+        "menu"?: string;
+    }
+    interface VimeControlGroup {
+        /**
+          * Determines where to add spacing/margin. The amount of spacing is determined by the CSS variable `--control-group-spacing`.
+         */
+        "space": 'top' | 'bottom' | 'both' | 'none';
+    }
+    interface VimeControlSpacer {
+    }
+    interface VimeControls {
+        /**
+          * The length in milliseconds that the controls are active for before fading out. Audio players are not effected by this prop.
+         */
+        "activeDuration": number;
+        /**
+          * Sets the `align-items` flex property that aligns the individual controls on the cross-axis.
+         */
+        "align": 'start' | 'center' | 'end';
+        /**
+          * Sets the `flex-direction` property that manages the direction in which the controls are layed out.
+         */
+        "direction": 'row' | 'column';
+        /**
+          * Whether the controls container should be 100% height. This has no effect if the view is of type `audio`.
+         */
+        "fullHeight": boolean;
+        /**
+          * Whether the controls container should be 100% width. This has no effect if the view is of type `audio`.
+         */
+        "fullWidth": boolean;
+        /**
+          * Whether the controls are visible or not.
+         */
+        "hidden": boolean;
+        /**
+          * Whether the controls should hide when the mouse leaves the player. Audio players are not effected by this prop.
+         */
+        "hideOnMouseLeave": boolean;
+        /**
+          * Whether the controls should show/hide when paused. Audio players are not effected by this prop.
+         */
+        "hideWhenPaused": boolean;
+        "isAudioView": PlayerProps[PlayerProp.IsAudioView];
+        "isControlsActive": PlayerProps[PlayerProp.IsControlsActive];
+        /**
+          * Sets the `justify-content` flex property that aligns the individual controls on the main-axis.
+         */
+        "justify": 'start'
+  | 'center'
+  | 'end'
+  | 'space-around'
+  | 'space-between'
+  | 'space-evenly';
+        "paused": PlayerProps[PlayerProp.Paused];
+        /**
+          * Pins the controls to the defined position inside the video player. This has no effect when the view is of type `audio`.
+         */
+        "pin": 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'center';
+        "playbackReady": PlayerProps[PlayerProp.PlaybackReady];
+        "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
+        /**
+          * Whether the controls should wait for playback to start before being shown. Audio players are not effected by this prop.
+         */
+        "waitForPlaybackStart": boolean;
+    }
+    interface VimeCurrentTime {
+        /**
+          * Whether the time should always show the hours unit, even if the time is less than 1 hour (eg: `20:35` -> `00:20:35`).
+         */
+        "alwaysShowHours": boolean;
+        "currentTime": PlayerProps[PlayerProp.CurrentTime];
+        "i18n": PlayerProps[PlayerProp.I18N];
     }
     interface VimeDailymotion {
         "autoplay": boolean;
@@ -125,6 +261,10 @@ export namespace Components {
         "disableRemotePlayback"?: boolean;
         "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<any>; canPlay: (type: any) => Promise<boolean>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
         /**
+          * The title of the current media.
+         */
+        "mediaTitle"?: string;
+        /**
           * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
           * @inheritdoc
          */
@@ -142,6 +282,29 @@ export namespace Components {
           * The NPM package version of the `dashjs` library to download and use.
          */
         "version": string;
+    }
+    interface VimeDefaultControls {
+        /**
+          * The length in milliseconds that the controls are active for before fading out. Audio players are not effected by this prop.
+         */
+        "activeDuration": number;
+        /**
+          * Whether the controls should hide when the mouse leaves the player. Audio players are not effected by this prop.
+         */
+        "hideOnMouseLeave": boolean;
+        /**
+          * Whether the controls should show/hide when paused. Audio players are not effected by this prop.
+         */
+        "hideWhenPaused": boolean;
+        "isAudioView": PlayerProps[PlayerProp.IsAudioView];
+        "isControlsActive": PlayerProps[PlayerProp.IsControlsActive];
+        "isLive": PlayerProps[PlayerProp.IsLive];
+        "isMobile": PlayerProps[PlayerProp.IsMobile];
+        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        /**
+          * Whether the controls should wait for playback to start before being shown. Audio players are not effected by this prop.
+         */
+        "waitForPlaybackStart": boolean;
     }
     interface VimeEmbed {
         /**
@@ -176,6 +339,14 @@ export namespace Components {
           * A collection of URLs to that the browser should immediately start establishing a connection with.
          */
         "preconnections": string[];
+    }
+    interface VimeEndTime {
+        /**
+          * Whether the time should always show the hours unit, even if the time is less than 1 hour (eg: `20:35` -> `00:20:35`).
+         */
+        "alwaysShowHours": boolean;
+        "duration": PlayerProps[PlayerProp.Duration];
+        "i18n": PlayerProps[PlayerProp.I18N];
     }
     interface VimeFaketube {
         "autoplay": boolean;
@@ -230,6 +401,10 @@ export namespace Components {
         "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLMediaElement>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
         "language": string;
         "loop": boolean;
+        /**
+          * The title of the current media.
+         */
+        "mediaTitle"?: string;
         "muted": boolean;
         /**
           * The playback rates that are available for this media.
@@ -251,6 +426,37 @@ export namespace Components {
          */
         "viewType"?: ViewType;
         "willAttach": boolean;
+    }
+    interface VimeFullscreenControl {
+        /**
+          * The URL to an SVG element or fragment to display for entering fullscreen.
+         */
+        "enterIcon": string;
+        /**
+          * The URL to an SVG element or fragment to display for exiting fullscreen.
+         */
+        "exitIcon": string;
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip": boolean;
+        "i18n": PlayerProps[PlayerProp.I18N];
+        "isFullscreenActive": PlayerProps[PlayerProp.IsFullscreenActive];
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * @inheritdoc
+         */
+        "keyCodes"?: string;
+        /**
+          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
+          * @inheritdoc
+         */
+        "keyboardHint"?: string;
+        "playbackReady": PlayerProps[PlayerProp.PlaybackReady];
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection": TooltipDirection;
     }
     interface VimeHls {
         /**
@@ -284,6 +490,10 @@ export namespace Components {
         "disableRemotePlayback"?: boolean;
         "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<import("/Users/rahim/Desktop/vime/node_modules/.pnpm/@types/hls.js@0.13.0/node_modules/@types/hls.js/index") | undefined>; canPlay: (type: any) => Promise<boolean>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
         /**
+          * The title of the current media.
+         */
+        "mediaTitle"?: string;
+        /**
           * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
           * @inheritdoc
          */
@@ -302,7 +512,7 @@ export namespace Components {
         /**
           * The color (fill) of the icon.
          */
-        "color": string;
+        "color"?: string;
         /**
           * The URL to an SVG element or fragment to load.
          */
@@ -321,6 +531,106 @@ export namespace Components {
           * The URL to an SVG sprite to load.
          */
         "href": string;
+    }
+    interface VimeLiveIndicator {
+        "i18n": PlayerProps[PlayerProp.I18N];
+        "isLive": PlayerProps[PlayerProp.IsLive];
+    }
+    interface VimeMuteControl {
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip": boolean;
+        /**
+          * The URL to an SVG element or fragment.
+         */
+        "highVolumeIcon": string;
+        "i18n": PlayerProps[PlayerProp.I18N];
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * @inheritdoc
+         */
+        "keyCodes"?: string;
+        /**
+          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
+          * @inheritdoc
+         */
+        "keyboardHint"?: string;
+        /**
+          * The URL to an SVG element or fragment.
+         */
+        "lowVolumeIcon": string;
+        "muted": PlayerProps[PlayerProp.Muted];
+        /**
+          * The URL to an SVG element or fragment.
+         */
+        "mutedIcon": string;
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection": TooltipDirection;
+        "volume": PlayerProps[PlayerProp.Volume];
+    }
+    interface VimePipControl {
+        /**
+          * The URL to an SVG element or fragment to display for entering PiP.
+         */
+        "enterIcon": string;
+        /**
+          * The URL to an SVG element or fragment to display for exiting PiP.
+         */
+        "exitIcon": string;
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip": boolean;
+        "i18n": PlayerProps[PlayerProp.I18N];
+        "isPiPActive": PlayerProps[PlayerProp.IsPiPActive];
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * @inheritdoc
+         */
+        "keyCodes"?: string;
+        /**
+          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
+          * @inheritdoc
+         */
+        "keyboardHint"?: string;
+        "playbackReady": PlayerProps[PlayerProp.PlaybackReady];
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection": TooltipDirection;
+    }
+    interface VimePlaybackControl {
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip": boolean;
+        "i18n": PlayerProps[PlayerProp.I18N];
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * @inheritdoc
+         */
+        "keyCodes"?: string;
+        /**
+          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
+          * @inheritdoc
+         */
+        "keyboardHint"?: string;
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "pauseIcon": string;
+        "paused": PlayerProps[PlayerProp.Paused];
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "playIcon": string;
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection": TooltipDirection;
     }
     interface VimePlayer {
         /**
@@ -390,6 +700,11 @@ export namespace Components {
          */
         "controls": boolean;
         /**
+          * `@readonly` The selected caption/subtitle text track to display. Defaults to `undefined` if there is none. This does not mean this track is active, only that is the current selection. To know if it is active, check the `isCaptionsActive` prop.
+          * @inheritDoc
+         */
+        "currentCaption"?: TextTrack;
+        /**
           * `@readonly` The absolute URL of the poster for the current media resource. Defaults to `undefined` if no media/poster has been loaded.
           * @inheritDoc
          */
@@ -410,7 +725,7 @@ export namespace Components {
          */
         "debug": boolean;
         /**
-          * `@readonly` A `double` indicating the total playback length of the media in seconds. Defaults to `-1` if no media has been loaded.
+          * `@readonly` A `double` indicating the total playback length of the media in seconds. Defaults to `-1` if no media has been loaded. If the media is being streamed live then the duration is equal to `Infinity`.
           * @inheritDoc
          */
         "duration": number;
@@ -469,6 +784,11 @@ export namespace Components {
          */
         "isAudioView": boolean;
         /**
+          * `@readonly` Whether any captions or subtitles are currently showing.
+          * @inheritDoc
+         */
+        "isCaptionsActive": boolean;
+        /**
           * Whether the controls are currently visible. This is currently only supported by custom controls.
           * @inheritDoc
          */
@@ -479,7 +799,7 @@ export namespace Components {
          */
         "isFullscreenActive": boolean;
         /**
-          * `@readonly` Whether the current media is being broadcast live.
+          * `@readonly` Whether the current media is being broadcast live (`duration === Infinity`).
           * @inheritDoc
          */
         "isLive": boolean;
@@ -643,11 +963,117 @@ export namespace Components {
         "active": boolean;
         "isVideoView": PlayerProps[PlayerProp.IsVideoView];
     }
+    interface VimeScrubberControl {
+        /**
+          * Whether the timestamp in the tooltip should show the hours unit, even if the time is less than 1 hour (eg: `20:35` -> `00:20:35`).
+         */
+        "alwaysShowHours": boolean;
+        "buffered": PlayerProps[PlayerProp.Buffered];
+        "buffering": PlayerProps[PlayerProp.Buffering];
+        "currentTime": PlayerProps[PlayerProp.CurrentTime];
+        "duration": PlayerProps[PlayerProp.Duration];
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip": boolean;
+        "i18n": PlayerProps[PlayerProp.I18N];
+        /**
+          * Prevents seeking forward/backward by using the Left/Right arrow keys.
+         */
+        "noKeyboard": boolean;
+    }
+    interface VimeSettingsControl {
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip": boolean;
+        "i18n": PlayerProps[PlayerProp.I18N];
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "icon": string;
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection": TooltipDirection;
+    }
+    interface VimeSlider {
+        /**
+          * A human-readable label for the purpose of the slider.
+         */
+        "label"?: string;
+        /**
+          * The greatest permitted value.
+         */
+        "max": number;
+        /**
+          * The lowest value in the range of permitted values.
+         */
+        "min": number;
+        /**
+          * A number that specifies the granularity that the value must adhere to.
+         */
+        "step": number;
+        /**
+          * The current value.
+         */
+        "value": number;
+        /**
+          * Human-readable text alternative for the current value. Defaults to `value:max` percentage.
+         */
+        "valueText"?: string;
+    }
     interface VimeSpinner {
         "buffering": PlayerProps[PlayerProp.Buffering];
         "isVideoView": PlayerProps[PlayerProp.IsVideoView];
     }
+    interface VimeTime {
+        /**
+          * Whether the time should always show the hours unit, even if the time is less than 1 hour (eg: `20:35` -> `00:20:35`).
+         */
+        "alwaysShowHours": boolean;
+        /**
+          * The `aria-label` property of the time.
+         */
+        "label": string;
+        /**
+          * The length of time in seconds.
+         */
+        "seconds": number;
+    }
+    interface VimeTimeProgress {
+        /**
+          * Whether the times should always show the hours unit, even if the time is less than 1 hour (eg: `20:35` -> `00:20:35`).
+         */
+        "alwaysShowHours": boolean;
+        /**
+          * The string used to separate the current time and end time.
+         */
+        "separator": string;
+    }
+    interface VimeTooltip {
+        /**
+          * Whether the tooltip is visible or not.
+         */
+        "active": boolean;
+        /**
+          * Determines if the tooltip should grow according to its contents to the left/right. By default content grows outwards from the center.
+         */
+        "direction"?: TooltipDirection;
+        /**
+          * Whether the tooltip is displayed or not.
+         */
+        "hidden": boolean;
+        "isTouch": PlayerProps[PlayerProp.IsTouch];
+        /**
+          * Determines if the tooltip appears on top/bottom of it's parent.
+         */
+        "position": TooltipPosition;
+    }
     interface VimeUi {
+        "isFullscreenActive": PlayerProps[PlayerProp.IsFullscreenActive];
+        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        "playsinline": PlayerProps[PlayerProp.Playsinline];
     }
     interface VimeVideo {
         /**
@@ -676,6 +1102,10 @@ export namespace Components {
          */
         "disableRemotePlayback"?: boolean;
         "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLMediaElement>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
+        /**
+          * The title of the current media.
+         */
+        "mediaTitle"?: string;
         /**
           * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
           * @inheritdoc
@@ -714,6 +1144,44 @@ export namespace Components {
          */
         "videoId": string;
     }
+    interface VimeVolumeControl {
+        /**
+          * Whether the tooltip should be hidden.
+         */
+        "hideTooltip": boolean;
+        /**
+          * The URL to an SVG element or fragment.
+         */
+        "highVolumeIcon": string;
+        "i18n": PlayerProps[PlayerProp.I18N];
+        "isMobile": PlayerProps[PlayerProp.IsMobile];
+        /**
+          * The URL to an SVG element or fragment.
+         */
+        "lowVolumeIcon": string;
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will toggle the muted state of the player.
+         */
+        "muteKeyCodes"?: string;
+        /**
+          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the control tooltip, on what key presses will toggle the muted state of the player.
+         */
+        "muteKeyboardHint"?: string;
+        "muted": PlayerProps[PlayerProp.Muted];
+        /**
+          * The URL to an SVG element or fragment.
+         */
+        "mutedIcon": string;
+        /**
+          * Prevents the volume being changed using the Up/Down arrow keys.
+         */
+        "noKeyboard": boolean;
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection": TooltipDirection;
+        "volume": PlayerProps[PlayerProp.Volume];
+    }
     interface VimeYoutube {
         "autoplay": boolean;
         "controls": boolean;
@@ -744,6 +1212,12 @@ declare global {
         prototype: HTMLVimeAudioElement;
         new (): HTMLVimeAudioElement;
     };
+    interface HTMLVimeCaptionControlElement extends Components.VimeCaptionControl, HTMLStencilElement {
+    }
+    var HTMLVimeCaptionControlElement: {
+        prototype: HTMLVimeCaptionControlElement;
+        new (): HTMLVimeCaptionControlElement;
+    };
     interface HTMLVimeCaptionsElement extends Components.VimeCaptions, HTMLStencilElement {
     }
     var HTMLVimeCaptionsElement: {
@@ -755,6 +1229,36 @@ declare global {
     var HTMLVimeClickToPlayElement: {
         prototype: HTMLVimeClickToPlayElement;
         new (): HTMLVimeClickToPlayElement;
+    };
+    interface HTMLVimeControlElement extends Components.VimeControl, HTMLStencilElement {
+    }
+    var HTMLVimeControlElement: {
+        prototype: HTMLVimeControlElement;
+        new (): HTMLVimeControlElement;
+    };
+    interface HTMLVimeControlGroupElement extends Components.VimeControlGroup, HTMLStencilElement {
+    }
+    var HTMLVimeControlGroupElement: {
+        prototype: HTMLVimeControlGroupElement;
+        new (): HTMLVimeControlGroupElement;
+    };
+    interface HTMLVimeControlSpacerElement extends Components.VimeControlSpacer, HTMLStencilElement {
+    }
+    var HTMLVimeControlSpacerElement: {
+        prototype: HTMLVimeControlSpacerElement;
+        new (): HTMLVimeControlSpacerElement;
+    };
+    interface HTMLVimeControlsElement extends Components.VimeControls, HTMLStencilElement {
+    }
+    var HTMLVimeControlsElement: {
+        prototype: HTMLVimeControlsElement;
+        new (): HTMLVimeControlsElement;
+    };
+    interface HTMLVimeCurrentTimeElement extends Components.VimeCurrentTime, HTMLStencilElement {
+    }
+    var HTMLVimeCurrentTimeElement: {
+        prototype: HTMLVimeCurrentTimeElement;
+        new (): HTMLVimeCurrentTimeElement;
     };
     interface HTMLVimeDailymotionElement extends Components.VimeDailymotion, HTMLStencilElement {
     }
@@ -768,11 +1272,23 @@ declare global {
         prototype: HTMLVimeDashElement;
         new (): HTMLVimeDashElement;
     };
+    interface HTMLVimeDefaultControlsElement extends Components.VimeDefaultControls, HTMLStencilElement {
+    }
+    var HTMLVimeDefaultControlsElement: {
+        prototype: HTMLVimeDefaultControlsElement;
+        new (): HTMLVimeDefaultControlsElement;
+    };
     interface HTMLVimeEmbedElement extends Components.VimeEmbed, HTMLStencilElement {
     }
     var HTMLVimeEmbedElement: {
         prototype: HTMLVimeEmbedElement;
         new (): HTMLVimeEmbedElement;
+    };
+    interface HTMLVimeEndTimeElement extends Components.VimeEndTime, HTMLStencilElement {
+    }
+    var HTMLVimeEndTimeElement: {
+        prototype: HTMLVimeEndTimeElement;
+        new (): HTMLVimeEndTimeElement;
     };
     interface HTMLVimeFaketubeElement extends Components.VimeFaketube, HTMLStencilElement {
     }
@@ -785,6 +1301,12 @@ declare global {
     var HTMLVimeFileElement: {
         prototype: HTMLVimeFileElement;
         new (): HTMLVimeFileElement;
+    };
+    interface HTMLVimeFullscreenControlElement extends Components.VimeFullscreenControl, HTMLStencilElement {
+    }
+    var HTMLVimeFullscreenControlElement: {
+        prototype: HTMLVimeFullscreenControlElement;
+        new (): HTMLVimeFullscreenControlElement;
     };
     interface HTMLVimeHlsElement extends Components.VimeHls, HTMLStencilElement {
     }
@@ -804,6 +1326,30 @@ declare global {
         prototype: HTMLVimeIconsElement;
         new (): HTMLVimeIconsElement;
     };
+    interface HTMLVimeLiveIndicatorElement extends Components.VimeLiveIndicator, HTMLStencilElement {
+    }
+    var HTMLVimeLiveIndicatorElement: {
+        prototype: HTMLVimeLiveIndicatorElement;
+        new (): HTMLVimeLiveIndicatorElement;
+    };
+    interface HTMLVimeMuteControlElement extends Components.VimeMuteControl, HTMLStencilElement {
+    }
+    var HTMLVimeMuteControlElement: {
+        prototype: HTMLVimeMuteControlElement;
+        new (): HTMLVimeMuteControlElement;
+    };
+    interface HTMLVimePipControlElement extends Components.VimePipControl, HTMLStencilElement {
+    }
+    var HTMLVimePipControlElement: {
+        prototype: HTMLVimePipControlElement;
+        new (): HTMLVimePipControlElement;
+    };
+    interface HTMLVimePlaybackControlElement extends Components.VimePlaybackControl, HTMLStencilElement {
+    }
+    var HTMLVimePlaybackControlElement: {
+        prototype: HTMLVimePlaybackControlElement;
+        new (): HTMLVimePlaybackControlElement;
+    };
     interface HTMLVimePlayerElement extends Components.VimePlayer, HTMLStencilElement {
     }
     var HTMLVimePlayerElement: {
@@ -822,11 +1368,47 @@ declare global {
         prototype: HTMLVimeScrimElement;
         new (): HTMLVimeScrimElement;
     };
+    interface HTMLVimeScrubberControlElement extends Components.VimeScrubberControl, HTMLStencilElement {
+    }
+    var HTMLVimeScrubberControlElement: {
+        prototype: HTMLVimeScrubberControlElement;
+        new (): HTMLVimeScrubberControlElement;
+    };
+    interface HTMLVimeSettingsControlElement extends Components.VimeSettingsControl, HTMLStencilElement {
+    }
+    var HTMLVimeSettingsControlElement: {
+        prototype: HTMLVimeSettingsControlElement;
+        new (): HTMLVimeSettingsControlElement;
+    };
+    interface HTMLVimeSliderElement extends Components.VimeSlider, HTMLStencilElement {
+    }
+    var HTMLVimeSliderElement: {
+        prototype: HTMLVimeSliderElement;
+        new (): HTMLVimeSliderElement;
+    };
     interface HTMLVimeSpinnerElement extends Components.VimeSpinner, HTMLStencilElement {
     }
     var HTMLVimeSpinnerElement: {
         prototype: HTMLVimeSpinnerElement;
         new (): HTMLVimeSpinnerElement;
+    };
+    interface HTMLVimeTimeElement extends Components.VimeTime, HTMLStencilElement {
+    }
+    var HTMLVimeTimeElement: {
+        prototype: HTMLVimeTimeElement;
+        new (): HTMLVimeTimeElement;
+    };
+    interface HTMLVimeTimeProgressElement extends Components.VimeTimeProgress, HTMLStencilElement {
+    }
+    var HTMLVimeTimeProgressElement: {
+        prototype: HTMLVimeTimeProgressElement;
+        new (): HTMLVimeTimeProgressElement;
+    };
+    interface HTMLVimeTooltipElement extends Components.VimeTooltip, HTMLStencilElement {
+    }
+    var HTMLVimeTooltipElement: {
+        prototype: HTMLVimeTooltipElement;
+        new (): HTMLVimeTooltipElement;
     };
     interface HTMLVimeUiElement extends Components.VimeUi, HTMLStencilElement {
     }
@@ -846,6 +1428,12 @@ declare global {
         prototype: HTMLVimeVimeoElement;
         new (): HTMLVimeVimeoElement;
     };
+    interface HTMLVimeVolumeControlElement extends Components.VimeVolumeControl, HTMLStencilElement {
+    }
+    var HTMLVimeVolumeControlElement: {
+        prototype: HTMLVimeVolumeControlElement;
+        new (): HTMLVimeVolumeControlElement;
+    };
     interface HTMLVimeYoutubeElement extends Components.VimeYoutube, HTMLStencilElement {
     }
     var HTMLVimeYoutubeElement: {
@@ -854,23 +1442,43 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "vime-audio": HTMLVimeAudioElement;
+        "vime-caption-control": HTMLVimeCaptionControlElement;
         "vime-captions": HTMLVimeCaptionsElement;
         "vime-click-to-play": HTMLVimeClickToPlayElement;
+        "vime-control": HTMLVimeControlElement;
+        "vime-control-group": HTMLVimeControlGroupElement;
+        "vime-control-spacer": HTMLVimeControlSpacerElement;
+        "vime-controls": HTMLVimeControlsElement;
+        "vime-current-time": HTMLVimeCurrentTimeElement;
         "vime-dailymotion": HTMLVimeDailymotionElement;
         "vime-dash": HTMLVimeDashElement;
+        "vime-default-controls": HTMLVimeDefaultControlsElement;
         "vime-embed": HTMLVimeEmbedElement;
+        "vime-end-time": HTMLVimeEndTimeElement;
         "vime-faketube": HTMLVimeFaketubeElement;
         "vime-file": HTMLVimeFileElement;
+        "vime-fullscreen-control": HTMLVimeFullscreenControlElement;
         "vime-hls": HTMLVimeHlsElement;
         "vime-icon": HTMLVimeIconElement;
         "vime-icons": HTMLVimeIconsElement;
+        "vime-live-indicator": HTMLVimeLiveIndicatorElement;
+        "vime-mute-control": HTMLVimeMuteControlElement;
+        "vime-pip-control": HTMLVimePipControlElement;
+        "vime-playback-control": HTMLVimePlaybackControlElement;
         "vime-player": HTMLVimePlayerElement;
         "vime-poster": HTMLVimePosterElement;
         "vime-scrim": HTMLVimeScrimElement;
+        "vime-scrubber-control": HTMLVimeScrubberControlElement;
+        "vime-settings-control": HTMLVimeSettingsControlElement;
+        "vime-slider": HTMLVimeSliderElement;
         "vime-spinner": HTMLVimeSpinnerElement;
+        "vime-time": HTMLVimeTimeElement;
+        "vime-time-progress": HTMLVimeTimeProgressElement;
+        "vime-tooltip": HTMLVimeTooltipElement;
         "vime-ui": HTMLVimeUiElement;
         "vime-video": HTMLVimeVideoElement;
         "vime-vimeo": HTMLVimeVimeoElement;
+        "vime-volume-control": HTMLVimeVolumeControlElement;
         "vime-youtube": HTMLVimeYoutubeElement;
     }
 }
@@ -887,11 +1495,46 @@ declare namespace LocalJSX {
          */
         "disableRemotePlayback"?: boolean;
         /**
+          * The title of the current media.
+         */
+        "mediaTitle"?: string;
+        /**
           * This enumerated attribute is intended to provide a hint to the browser about what the author thinks will lead to the best user experience with regards to what content is loaded before the video is played.  It may have one of the following values:  - `none`: Indicates that the video should not be preloaded. - `metadata`: Indicates that only video metadata (e.g. length) is fetched. - `auto`: Indicates that the whole video file can be downloaded, even if the user is not expected to use it. - `''` (empty string): Synonym of the auto value.  The default value is different for each browser. The spec advises it to be set to metadata.
           * @inheritdoc
          */
         "preload"?: MediaPreloadOption;
         "willAttach"?: boolean;
+    }
+    interface VimeCaptionControl {
+        "currentCaption"?: PlayerProps[PlayerProp.CurrentCaption];
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "hideIcon"?: string;
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip"?: boolean;
+        "i18n"?: PlayerProps[PlayerProp.I18N];
+        "isCaptionsActive"?: PlayerProps[PlayerProp.IsCaptionsActive];
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * @inheritdoc
+         */
+        "keyCodes"?: string;
+        /**
+          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
+          * @inheritdoc
+         */
+        "keyboardHint"?: string;
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "showIcon"?: string;
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection"?: TooltipDirection;
     }
     interface VimeCaptions {
         /**
@@ -902,8 +1545,8 @@ declare namespace LocalJSX {
           * Whether the captions should be visible or not.
          */
         "hidden"?: boolean;
-        "isControlsActive": PlayerProps[PlayerProp.IsControlsActive];
-        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        "isControlsActive"?: PlayerProps[PlayerProp.IsControlsActive];
+        "isVideoView"?: PlayerProps[PlayerProp.IsVideoView];
         /**
           * Emitted when the active cues change. A cue is active when `currentTime >= cue.startTime && currentTime <= cue.endTime`.
          */
@@ -912,12 +1555,116 @@ declare namespace LocalJSX {
           * Emitted when the current track changes.
          */
         "onTrackChange"?: (event: CustomEvent<TextTrack | undefined>) => void;
-        "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
+        "playbackStarted"?: PlayerProps[PlayerProp.PlaybackStarted];
         "textTracks"?: PlayerProps[PlayerProp.TextTracks];
     }
     interface VimeClickToPlay {
-        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
-        "paused": PlayerProps[PlayerProp.Paused];
+        "isVideoView"?: PlayerProps[PlayerProp.IsVideoView];
+        "paused"?: PlayerProps[PlayerProp.Paused];
+        /**
+          * By default this is disabled on mobile to not interfere with playback, set this to `true` to enable it.
+         */
+        "useOnMobile"?: boolean;
+    }
+    interface VimeControl {
+        /**
+          * If the control has a popup menu, this indicates whether the menu is open or not. Sets the `aria-expanded` property.
+         */
+        "expanded"?: boolean;
+        /**
+          * Whether the control should be displayed or not.
+         */
+        "hidden"?: boolean;
+        "isTouch"?: PlayerProps[PlayerProp.IsTouch];
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * @inheritdoc
+         */
+        "keyCodes"?: string;
+        /**
+          * The `aria-label` property of the control.
+         */
+        "label": string;
+        /**
+          * If the control has a popup menu, then this should be the `id` of said menu. Sets the `aria-controls` property.
+         */
+        "menu"?: string;
+        /**
+          * Emitted when the user is interacting with the control by focusing, touching or hovering on it.
+         */
+        "onInteractionChange"?: (event: CustomEvent<boolean>) => void;
+    }
+    interface VimeControlGroup {
+        /**
+          * Determines where to add spacing/margin. The amount of spacing is determined by the CSS variable `--control-group-spacing`.
+         */
+        "space"?: 'top' | 'bottom' | 'both' | 'none';
+    }
+    interface VimeControlSpacer {
+    }
+    interface VimeControls {
+        /**
+          * The length in milliseconds that the controls are active for before fading out. Audio players are not effected by this prop.
+         */
+        "activeDuration"?: number;
+        /**
+          * Sets the `align-items` flex property that aligns the individual controls on the cross-axis.
+         */
+        "align"?: 'start' | 'center' | 'end';
+        /**
+          * Sets the `flex-direction` property that manages the direction in which the controls are layed out.
+         */
+        "direction"?: 'row' | 'column';
+        /**
+          * Whether the controls container should be 100% height. This has no effect if the view is of type `audio`.
+         */
+        "fullHeight"?: boolean;
+        /**
+          * Whether the controls container should be 100% width. This has no effect if the view is of type `audio`.
+         */
+        "fullWidth"?: boolean;
+        /**
+          * Whether the controls are visible or not.
+         */
+        "hidden"?: boolean;
+        /**
+          * Whether the controls should hide when the mouse leaves the player. Audio players are not effected by this prop.
+         */
+        "hideOnMouseLeave"?: boolean;
+        /**
+          * Whether the controls should show/hide when paused. Audio players are not effected by this prop.
+         */
+        "hideWhenPaused"?: boolean;
+        "isAudioView"?: PlayerProps[PlayerProp.IsAudioView];
+        "isControlsActive"?: PlayerProps[PlayerProp.IsControlsActive];
+        /**
+          * Sets the `justify-content` flex property that aligns the individual controls on the main-axis.
+         */
+        "justify"?: 'start'
+  | 'center'
+  | 'end'
+  | 'space-around'
+  | 'space-between'
+  | 'space-evenly';
+        "paused"?: PlayerProps[PlayerProp.Paused];
+        /**
+          * Pins the controls to the defined position inside the video player. This has no effect when the view is of type `audio`.
+         */
+        "pin"?: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight' | 'center';
+        "playbackReady"?: PlayerProps[PlayerProp.PlaybackReady];
+        "playbackStarted"?: PlayerProps[PlayerProp.PlaybackStarted];
+        /**
+          * Whether the controls should wait for playback to start before being shown. Audio players are not effected by this prop.
+         */
+        "waitForPlaybackStart"?: boolean;
+    }
+    interface VimeCurrentTime {
+        /**
+          * Whether the time should always show the hours unit, even if the time is less than 1 hour (eg: `20:35` -> `00:20:35`).
+         */
+        "alwaysShowHours"?: boolean;
+        "currentTime"?: PlayerProps[PlayerProp.CurrentTime];
+        "i18n"?: PlayerProps[PlayerProp.I18N];
     }
     interface VimeDailymotion {
         "autoplay": boolean;
@@ -992,6 +1739,10 @@ declare namespace LocalJSX {
           * @inheritdoc
          */
         "disableRemotePlayback"?: boolean;
+        /**
+          * The title of the current media.
+         */
+        "mediaTitle"?: string;
         "onVLoadStart"?: (event: CustomEvent<void>) => void;
         /**
           * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
@@ -1011,6 +1762,29 @@ declare namespace LocalJSX {
           * The NPM package version of the `dashjs` library to download and use.
          */
         "version"?: string;
+    }
+    interface VimeDefaultControls {
+        /**
+          * The length in milliseconds that the controls are active for before fading out. Audio players are not effected by this prop.
+         */
+        "activeDuration"?: number;
+        /**
+          * Whether the controls should hide when the mouse leaves the player. Audio players are not effected by this prop.
+         */
+        "hideOnMouseLeave"?: boolean;
+        /**
+          * Whether the controls should show/hide when paused. Audio players are not effected by this prop.
+         */
+        "hideWhenPaused"?: boolean;
+        "isAudioView"?: PlayerProps[PlayerProp.IsAudioView];
+        "isControlsActive"?: PlayerProps[PlayerProp.IsControlsActive];
+        "isLive"?: PlayerProps[PlayerProp.IsLive];
+        "isMobile"?: PlayerProps[PlayerProp.IsMobile];
+        "isVideoView"?: PlayerProps[PlayerProp.IsVideoView];
+        /**
+          * Whether the controls should wait for playback to start before being shown. Audio players are not effected by this prop.
+         */
+        "waitForPlaybackStart"?: boolean;
     }
     interface VimeEmbed {
         /**
@@ -1054,6 +1828,14 @@ declare namespace LocalJSX {
          */
         "preconnections"?: string[];
     }
+    interface VimeEndTime {
+        /**
+          * Whether the time should always show the hours unit, even if the time is less than 1 hour (eg: `20:35` -> `00:20:35`).
+         */
+        "alwaysShowHours"?: boolean;
+        "duration"?: PlayerProps[PlayerProp.Duration];
+        "i18n"?: PlayerProps[PlayerProp.I18N];
+    }
     interface VimeFaketube {
         "autoplay": boolean;
         "controls": boolean;
@@ -1095,6 +1877,10 @@ declare namespace LocalJSX {
         "disableRemotePlayback"?: boolean;
         "language": string;
         "loop": boolean;
+        /**
+          * The title of the current media.
+         */
+        "mediaTitle"?: string;
         "muted": boolean;
         "onVLoadStart"?: (event: CustomEvent<void>) => void;
         /**
@@ -1117,6 +1903,37 @@ declare namespace LocalJSX {
          */
         "viewType"?: ViewType;
         "willAttach"?: boolean;
+    }
+    interface VimeFullscreenControl {
+        /**
+          * The URL to an SVG element or fragment to display for entering fullscreen.
+         */
+        "enterIcon"?: string;
+        /**
+          * The URL to an SVG element or fragment to display for exiting fullscreen.
+         */
+        "exitIcon"?: string;
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip"?: boolean;
+        "i18n"?: PlayerProps[PlayerProp.I18N];
+        "isFullscreenActive"?: PlayerProps[PlayerProp.IsFullscreenActive];
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * @inheritdoc
+         */
+        "keyCodes"?: string;
+        /**
+          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
+          * @inheritdoc
+         */
+        "keyboardHint"?: string;
+        "playbackReady"?: PlayerProps[PlayerProp.PlaybackReady];
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection"?: TooltipDirection;
     }
     interface VimeHls {
         /**
@@ -1148,6 +1965,10 @@ declare namespace LocalJSX {
           * @inheritdoc
          */
         "disableRemotePlayback"?: boolean;
+        /**
+          * The title of the current media.
+         */
+        "mediaTitle"?: string;
         "onVLoadStart"?: (event: CustomEvent<void>) => void;
         /**
           * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
@@ -1188,6 +2009,106 @@ declare namespace LocalJSX {
          */
         "href"?: string;
     }
+    interface VimeLiveIndicator {
+        "i18n"?: PlayerProps[PlayerProp.I18N];
+        "isLive"?: PlayerProps[PlayerProp.IsLive];
+    }
+    interface VimeMuteControl {
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip"?: boolean;
+        /**
+          * The URL to an SVG element or fragment.
+         */
+        "highVolumeIcon"?: string;
+        "i18n"?: PlayerProps[PlayerProp.I18N];
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * @inheritdoc
+         */
+        "keyCodes"?: string;
+        /**
+          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
+          * @inheritdoc
+         */
+        "keyboardHint"?: string;
+        /**
+          * The URL to an SVG element or fragment.
+         */
+        "lowVolumeIcon"?: string;
+        "muted"?: PlayerProps[PlayerProp.Muted];
+        /**
+          * The URL to an SVG element or fragment.
+         */
+        "mutedIcon"?: string;
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection"?: TooltipDirection;
+        "volume"?: PlayerProps[PlayerProp.Volume];
+    }
+    interface VimePipControl {
+        /**
+          * The URL to an SVG element or fragment to display for entering PiP.
+         */
+        "enterIcon"?: string;
+        /**
+          * The URL to an SVG element or fragment to display for exiting PiP.
+         */
+        "exitIcon"?: string;
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip"?: boolean;
+        "i18n"?: PlayerProps[PlayerProp.I18N];
+        "isPiPActive"?: PlayerProps[PlayerProp.IsPiPActive];
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * @inheritdoc
+         */
+        "keyCodes"?: string;
+        /**
+          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
+          * @inheritdoc
+         */
+        "keyboardHint"?: string;
+        "playbackReady"?: PlayerProps[PlayerProp.PlaybackReady];
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection"?: TooltipDirection;
+    }
+    interface VimePlaybackControl {
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip"?: boolean;
+        "i18n"?: PlayerProps[PlayerProp.I18N];
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * @inheritdoc
+         */
+        "keyCodes"?: string;
+        /**
+          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
+          * @inheritdoc
+         */
+        "keyboardHint"?: string;
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "pauseIcon"?: string;
+        "paused"?: PlayerProps[PlayerProp.Paused];
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "playIcon"?: string;
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection"?: TooltipDirection;
+    }
     interface VimePlayer {
         /**
           * The aspect ratio of the player expressed as `width:height` (`16:9`). This is only applied if the `viewType` is `video` and the player is not in fullscreen mode.
@@ -1220,6 +2141,11 @@ declare namespace LocalJSX {
          */
         "controls"?: boolean;
         /**
+          * `@readonly` The selected caption/subtitle text track to display. Defaults to `undefined` if there is none. This does not mean this track is active, only that is the current selection. To know if it is active, check the `isCaptionsActive` prop.
+          * @inheritDoc
+         */
+        "currentCaption"?: TextTrack;
+        /**
           * `@readonly` The absolute URL of the poster for the current media resource. Defaults to `undefined` if no media/poster has been loaded.
           * @inheritDoc
          */
@@ -1240,7 +2166,7 @@ declare namespace LocalJSX {
          */
         "debug"?: boolean;
         /**
-          * `@readonly` A `double` indicating the total playback length of the media in seconds. Defaults to `-1` if no media has been loaded.
+          * `@readonly` A `double` indicating the total playback length of the media in seconds. Defaults to `-1` if no media has been loaded. If the media is being streamed live then the duration is equal to `Infinity`.
           * @inheritDoc
          */
         "duration"?: number;
@@ -1265,6 +2191,11 @@ declare namespace LocalJSX {
          */
         "isAudioView"?: boolean;
         /**
+          * `@readonly` Whether any captions or subtitles are currently showing.
+          * @inheritDoc
+         */
+        "isCaptionsActive"?: boolean;
+        /**
           * Whether the controls are currently visible. This is currently only supported by custom controls.
           * @inheritDoc
          */
@@ -1275,7 +2206,7 @@ declare namespace LocalJSX {
          */
         "isFullscreenActive"?: boolean;
         /**
-          * `@readonly` Whether the current media is being broadcast live.
+          * `@readonly` Whether the current media is being broadcast live (`duration === Infinity`).
           * @inheritDoc
          */
         "isLive"?: boolean;
@@ -1581,7 +2512,7 @@ declare namespace LocalJSX {
           * How the poster image should be resized to fit the container (sets the `object-fit` property).
          */
         "fit"?: 'fill' | 'contain' | 'cover' | 'scale-down' | 'none';
-        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        "isVideoView"?: PlayerProps[PlayerProp.IsVideoView];
         "mediaTitle"?: PlayerProps[PlayerProp.MediaTitle];
         /**
           * Emitted when the poster has loaded.
@@ -1595,14 +2526,14 @@ declare namespace LocalJSX {
           * Emitted when the poster will be shown.
          */
         "onWillShow"?: (event: CustomEvent<void>) => void;
-        "playbackStarted": PlayerProps[PlayerProp.PlaybackStarted];
+        "playbackStarted"?: PlayerProps[PlayerProp.PlaybackStarted];
     }
     interface VimeScrim {
         /**
           * Whether the scrim is visible or not.
          */
         "active"?: boolean;
-        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        "isVideoView"?: PlayerProps[PlayerProp.IsVideoView];
         /**
           * Emitted when the scrim will be hidden.
          */
@@ -1612,9 +2543,73 @@ declare namespace LocalJSX {
          */
         "onWillShow"?: (event: CustomEvent<void>) => void;
     }
+    interface VimeScrubberControl {
+        /**
+          * Whether the timestamp in the tooltip should show the hours unit, even if the time is less than 1 hour (eg: `20:35` -> `00:20:35`).
+         */
+        "alwaysShowHours"?: boolean;
+        "buffered"?: PlayerProps[PlayerProp.Buffered];
+        "buffering"?: PlayerProps[PlayerProp.Buffering];
+        "currentTime"?: PlayerProps[PlayerProp.CurrentTime];
+        "duration"?: PlayerProps[PlayerProp.Duration];
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip"?: boolean;
+        "i18n"?: PlayerProps[PlayerProp.I18N];
+        /**
+          * Prevents seeking forward/backward by using the Left/Right arrow keys.
+         */
+        "noKeyboard"?: boolean;
+    }
+    interface VimeSettingsControl {
+        /**
+          * Whether the tooltip should not be displayed.
+         */
+        "hideTooltip"?: boolean;
+        "i18n"?: PlayerProps[PlayerProp.I18N];
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "icon"?: string;
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection"?: TooltipDirection;
+    }
+    interface VimeSlider {
+        /**
+          * A human-readable label for the purpose of the slider.
+         */
+        "label"?: string;
+        /**
+          * The greatest permitted value.
+         */
+        "max"?: number;
+        /**
+          * The lowest value in the range of permitted values.
+         */
+        "min"?: number;
+        /**
+          * Emitted when the value of the underlying `input` field changes.
+         */
+        "onValueChange"?: (event: CustomEvent<number>) => void;
+        /**
+          * A number that specifies the granularity that the value must adhere to.
+         */
+        "step"?: number;
+        /**
+          * The current value.
+         */
+        "value"?: number;
+        /**
+          * Human-readable text alternative for the current value. Defaults to `value:max` percentage.
+         */
+        "valueText"?: string;
+    }
     interface VimeSpinner {
         "buffering": PlayerProps[PlayerProp.Buffering];
-        "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+        "isVideoView"?: PlayerProps[PlayerProp.IsVideoView];
         /**
           * Emitted when the spinner will be hidden.
          */
@@ -1624,7 +2619,53 @@ declare namespace LocalJSX {
          */
         "onWillShow"?: (event: CustomEvent<void>) => void;
     }
+    interface VimeTime {
+        /**
+          * Whether the time should always show the hours unit, even if the time is less than 1 hour (eg: `20:35` -> `00:20:35`).
+         */
+        "alwaysShowHours"?: boolean;
+        /**
+          * The `aria-label` property of the time.
+         */
+        "label": string;
+        /**
+          * The length of time in seconds.
+         */
+        "seconds"?: number;
+    }
+    interface VimeTimeProgress {
+        /**
+          * Whether the times should always show the hours unit, even if the time is less than 1 hour (eg: `20:35` -> `00:20:35`).
+         */
+        "alwaysShowHours"?: boolean;
+        /**
+          * The string used to separate the current time and end time.
+         */
+        "separator"?: string;
+    }
+    interface VimeTooltip {
+        /**
+          * Whether the tooltip is visible or not.
+         */
+        "active"?: boolean;
+        /**
+          * Determines if the tooltip should grow according to its contents to the left/right. By default content grows outwards from the center.
+         */
+        "direction"?: TooltipDirection;
+        /**
+          * Whether the tooltip is displayed or not.
+         */
+        "hidden"?: boolean;
+        "isTouch"?: PlayerProps[PlayerProp.IsTouch];
+        /**
+          * Determines if the tooltip appears on top/bottom of it's parent.
+         */
+        "position"?: TooltipPosition;
+    }
     interface VimeUi {
+        "isFullscreenActive"?: PlayerProps[PlayerProp.IsFullscreenActive];
+        "isVideoView"?: PlayerProps[PlayerProp.IsVideoView];
+        "playsinline"?: PlayerProps[PlayerProp.Playsinline];
     }
     interface VimeVideo {
         /**
@@ -1652,6 +2693,10 @@ declare namespace LocalJSX {
           * @inheritdoc
          */
         "disableRemotePlayback"?: boolean;
+        /**
+          * The title of the current media.
+         */
+        "mediaTitle"?: string;
         /**
           * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
           * @inheritdoc
@@ -1690,6 +2735,44 @@ declare namespace LocalJSX {
          */
         "videoId": string;
     }
+    interface VimeVolumeControl {
+        /**
+          * Whether the tooltip should be hidden.
+         */
+        "hideTooltip"?: boolean;
+        /**
+          * The URL to an SVG element or fragment.
+         */
+        "highVolumeIcon"?: string;
+        "i18n"?: PlayerProps[PlayerProp.I18N];
+        "isMobile"?: PlayerProps[PlayerProp.IsMobile];
+        /**
+          * The URL to an SVG element or fragment.
+         */
+        "lowVolumeIcon"?: string;
+        /**
+          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will toggle the muted state of the player.
+         */
+        "muteKeyCodes"?: string;
+        /**
+          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the control tooltip, on what key presses will toggle the muted state of the player.
+         */
+        "muteKeyboardHint"?: string;
+        "muted"?: PlayerProps[PlayerProp.Muted];
+        /**
+          * The URL to an SVG element or fragment.
+         */
+        "mutedIcon"?: string;
+        /**
+          * Prevents the volume being changed using the Up/Down arrow keys.
+         */
+        "noKeyboard"?: boolean;
+        /**
+          * The direction in which the tooltip should grow.
+         */
+        "tooltipDirection"?: TooltipDirection;
+        "volume"?: PlayerProps[PlayerProp.Volume];
+    }
     interface VimeYoutube {
         "autoplay": boolean;
         "controls": boolean;
@@ -1714,23 +2797,43 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "vime-audio": VimeAudio;
+        "vime-caption-control": VimeCaptionControl;
         "vime-captions": VimeCaptions;
         "vime-click-to-play": VimeClickToPlay;
+        "vime-control": VimeControl;
+        "vime-control-group": VimeControlGroup;
+        "vime-control-spacer": VimeControlSpacer;
+        "vime-controls": VimeControls;
+        "vime-current-time": VimeCurrentTime;
         "vime-dailymotion": VimeDailymotion;
         "vime-dash": VimeDash;
+        "vime-default-controls": VimeDefaultControls;
         "vime-embed": VimeEmbed;
+        "vime-end-time": VimeEndTime;
         "vime-faketube": VimeFaketube;
         "vime-file": VimeFile;
+        "vime-fullscreen-control": VimeFullscreenControl;
         "vime-hls": VimeHls;
         "vime-icon": VimeIcon;
         "vime-icons": VimeIcons;
+        "vime-live-indicator": VimeLiveIndicator;
+        "vime-mute-control": VimeMuteControl;
+        "vime-pip-control": VimePipControl;
+        "vime-playback-control": VimePlaybackControl;
         "vime-player": VimePlayer;
         "vime-poster": VimePoster;
         "vime-scrim": VimeScrim;
+        "vime-scrubber-control": VimeScrubberControl;
+        "vime-settings-control": VimeSettingsControl;
+        "vime-slider": VimeSlider;
         "vime-spinner": VimeSpinner;
+        "vime-time": VimeTime;
+        "vime-time-progress": VimeTimeProgress;
+        "vime-tooltip": VimeTooltip;
         "vime-ui": VimeUi;
         "vime-video": VimeVideo;
         "vime-vimeo": VimeVimeo;
+        "vime-volume-control": VimeVolumeControl;
         "vime-youtube": VimeYoutube;
     }
 }
@@ -1739,23 +2842,43 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "vime-audio": LocalJSX.VimeAudio & JSXBase.HTMLAttributes<HTMLVimeAudioElement>;
+            "vime-caption-control": LocalJSX.VimeCaptionControl & JSXBase.HTMLAttributes<HTMLVimeCaptionControlElement>;
             "vime-captions": LocalJSX.VimeCaptions & JSXBase.HTMLAttributes<HTMLVimeCaptionsElement>;
             "vime-click-to-play": LocalJSX.VimeClickToPlay & JSXBase.HTMLAttributes<HTMLVimeClickToPlayElement>;
+            "vime-control": LocalJSX.VimeControl & JSXBase.HTMLAttributes<HTMLVimeControlElement>;
+            "vime-control-group": LocalJSX.VimeControlGroup & JSXBase.HTMLAttributes<HTMLVimeControlGroupElement>;
+            "vime-control-spacer": LocalJSX.VimeControlSpacer & JSXBase.HTMLAttributes<HTMLVimeControlSpacerElement>;
+            "vime-controls": LocalJSX.VimeControls & JSXBase.HTMLAttributes<HTMLVimeControlsElement>;
+            "vime-current-time": LocalJSX.VimeCurrentTime & JSXBase.HTMLAttributes<HTMLVimeCurrentTimeElement>;
             "vime-dailymotion": LocalJSX.VimeDailymotion & JSXBase.HTMLAttributes<HTMLVimeDailymotionElement>;
             "vime-dash": LocalJSX.VimeDash & JSXBase.HTMLAttributes<HTMLVimeDashElement>;
+            "vime-default-controls": LocalJSX.VimeDefaultControls & JSXBase.HTMLAttributes<HTMLVimeDefaultControlsElement>;
             "vime-embed": LocalJSX.VimeEmbed & JSXBase.HTMLAttributes<HTMLVimeEmbedElement>;
+            "vime-end-time": LocalJSX.VimeEndTime & JSXBase.HTMLAttributes<HTMLVimeEndTimeElement>;
             "vime-faketube": LocalJSX.VimeFaketube & JSXBase.HTMLAttributes<HTMLVimeFaketubeElement>;
             "vime-file": LocalJSX.VimeFile & JSXBase.HTMLAttributes<HTMLVimeFileElement>;
+            "vime-fullscreen-control": LocalJSX.VimeFullscreenControl & JSXBase.HTMLAttributes<HTMLVimeFullscreenControlElement>;
             "vime-hls": LocalJSX.VimeHls & JSXBase.HTMLAttributes<HTMLVimeHlsElement>;
             "vime-icon": LocalJSX.VimeIcon & JSXBase.HTMLAttributes<HTMLVimeIconElement>;
             "vime-icons": LocalJSX.VimeIcons & JSXBase.HTMLAttributes<HTMLVimeIconsElement>;
+            "vime-live-indicator": LocalJSX.VimeLiveIndicator & JSXBase.HTMLAttributes<HTMLVimeLiveIndicatorElement>;
+            "vime-mute-control": LocalJSX.VimeMuteControl & JSXBase.HTMLAttributes<HTMLVimeMuteControlElement>;
+            "vime-pip-control": LocalJSX.VimePipControl & JSXBase.HTMLAttributes<HTMLVimePipControlElement>;
+            "vime-playback-control": LocalJSX.VimePlaybackControl & JSXBase.HTMLAttributes<HTMLVimePlaybackControlElement>;
             "vime-player": LocalJSX.VimePlayer & JSXBase.HTMLAttributes<HTMLVimePlayerElement>;
             "vime-poster": LocalJSX.VimePoster & JSXBase.HTMLAttributes<HTMLVimePosterElement>;
             "vime-scrim": LocalJSX.VimeScrim & JSXBase.HTMLAttributes<HTMLVimeScrimElement>;
+            "vime-scrubber-control": LocalJSX.VimeScrubberControl & JSXBase.HTMLAttributes<HTMLVimeScrubberControlElement>;
+            "vime-settings-control": LocalJSX.VimeSettingsControl & JSXBase.HTMLAttributes<HTMLVimeSettingsControlElement>;
+            "vime-slider": LocalJSX.VimeSlider & JSXBase.HTMLAttributes<HTMLVimeSliderElement>;
             "vime-spinner": LocalJSX.VimeSpinner & JSXBase.HTMLAttributes<HTMLVimeSpinnerElement>;
+            "vime-time": LocalJSX.VimeTime & JSXBase.HTMLAttributes<HTMLVimeTimeElement>;
+            "vime-time-progress": LocalJSX.VimeTimeProgress & JSXBase.HTMLAttributes<HTMLVimeTimeProgressElement>;
+            "vime-tooltip": LocalJSX.VimeTooltip & JSXBase.HTMLAttributes<HTMLVimeTooltipElement>;
             "vime-ui": LocalJSX.VimeUi & JSXBase.HTMLAttributes<HTMLVimeUiElement>;
             "vime-video": LocalJSX.VimeVideo & JSXBase.HTMLAttributes<HTMLVimeVideoElement>;
             "vime-vimeo": LocalJSX.VimeVimeo & JSXBase.HTMLAttributes<HTMLVimeVimeoElement>;
+            "vime-volume-control": LocalJSX.VimeVolumeControl & JSXBase.HTMLAttributes<HTMLVimeVolumeControlElement>;
             "vime-youtube": LocalJSX.VimeYoutube & JSXBase.HTMLAttributes<HTMLVimeYoutubeElement>;
         }
     }
