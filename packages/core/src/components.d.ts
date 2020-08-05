@@ -13,6 +13,7 @@ import { EmbedEvent, EmbedEventPayload } from "./components/core/embed/EmbedEven
 import { MediaProvider, MediaProviderAdapter, MockMediaProviderAdapter } from "./components/providers/MediaProvider";
 import { ViewType } from "./components/core/player/ViewType";
 import { MediaType } from "./components/core/player/MediaType";
+import { SettingsController } from "./components/ui/settings/settings/SettingsController";
 export namespace Components {
     interface VimeAudio {
         /**
@@ -103,6 +104,10 @@ export namespace Components {
           * Whether the control should be displayed or not.
          */
         "hidden": boolean;
+        /**
+          * The `id` attribute of the control.
+         */
+        "identifier"?: string;
         "isTouch": PlayerProps[PlayerProp.IsTouch];
         /**
           * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
@@ -165,6 +170,7 @@ export namespace Components {
         "hideWhenPaused": boolean;
         "isAudioView": PlayerProps[PlayerProp.IsAudioView];
         "isControlsActive": PlayerProps[PlayerProp.IsControlsActive];
+        "isSettingsActive": PlayerProps[PlayerProp.IsSettingsActive];
         /**
           * Sets the `justify-content` flex property that aligns the individual controls on the main-axis.
          */
@@ -312,6 +318,18 @@ export namespace Components {
           * Whether the controls should wait for playback to start before being shown. Audio players are not effected by this prop.
          */
         "waitForPlaybackStart": boolean;
+    }
+    interface VimeDefaultSettings {
+        "currentCaption"?: PlayerProps[PlayerProp.CurrentCaption];
+        "i18n": PlayerProps[PlayerProp.I18N];
+        "isCaptionsActive": PlayerProps[PlayerProp.IsCaptionsActive];
+        "playbackQualities": PlayerProps[PlayerProp.PlaybackQualities];
+        "playbackQuality"?: PlayerProps[PlayerProp.PlaybackQuality];
+        "playbackRate": PlayerProps[PlayerProp.PlaybackRate];
+        "playbackRates": PlayerProps[PlayerProp.PlaybackRates];
+        "textTracks"?: PlayerProps[PlayerProp.TextTracks];
+    }
+    interface VimeDefaultUi {
     }
     interface VimeEmbed {
         /**
@@ -546,6 +564,99 @@ export namespace Components {
     interface VimeLiveIndicator {
         "i18n": PlayerProps[PlayerProp.I18N];
         "isLive": PlayerProps[PlayerProp.IsLive];
+    }
+    interface VimeMenu {
+        /**
+          * Whether the menu is open/visible.
+         */
+        "active": boolean;
+        /**
+          * The `id` attribute value of the control responsible for opening/closing this menu.
+         */
+        "controller": string;
+        /**
+          * This should be called directly before opening the menu to set the keyboard focus on it. This is a one-time operation and needs to be called everytime prior to opening the menu.
+         */
+        "focusOnOpen": () => Promise<void>;
+        /**
+          * Returns the controller responsible for opening/closing this menu.
+         */
+        "getController": () => Promise<HTMLElement>;
+        /**
+          * Returns the currently focused menu item.
+         */
+        "getFocusedMenuItem": () => Promise<HTMLVimeMenuItemElement>;
+        /**
+          * The `id` attribute of the menu.
+         */
+        "identifier": string;
+    }
+    interface VimeMenuItem {
+        /**
+          * This can provide additional context about the value of a menu item. For example, if the item is a radio button for a set of video qualities, the badge could describe whether the quality is UHD, HD etc.
+         */
+        "badge"?: string;
+        /**
+          * If this item is to behave as a radio button, then this property determines whether the radio is selected or not. Sets the `aria-checked` property.
+         */
+        "checked"?: boolean;
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "checkedIcon"?: string;
+        /**
+          * If the item has a popup menu, this indicates whether the menu is open or not. Sets the `aria-expanded` property.
+         */
+        "expanded"?: boolean;
+        /**
+          * Whether the item is displayed or not.
+         */
+        "hidden": boolean;
+        /**
+          * This can provide additional context about some underlying state of the item. For example, if the menu item opens/closes a submenu with options, the hint could be the currently selected option.
+         */
+        "hint"?: string;
+        /**
+          * The `id` attribute of the item.
+         */
+        "identifier"?: string;
+        "isTouch": PlayerProps[PlayerProp.IsTouch];
+        /**
+          * The label/title of the item.
+         */
+        "label": string;
+        /**
+          * If the item has a popup menu, then this should be the `id` of said menu. Sets the `aria-controls` property.
+         */
+        "menu"?: string;
+    }
+    interface VimeMenuRadio {
+        /**
+          * This can provide additional context about the value. For example, if the option is for a set of video qualities, the badge could describe whether the quality is UHD, HD etc.
+         */
+        "badge"?: string;
+        /**
+          * Whether the radio item is selected or not.
+         */
+        "checked": boolean;
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "checkedIcon"?: string;
+        /**
+          * The title of the radio item displayed to the user.
+         */
+        "label": string;
+        /**
+          * The value associated with this radio item.
+         */
+        "value": string;
+    }
+    interface VimeMenuRadioGroup {
+        /**
+          * The current value selected for this group.
+         */
+        "value"?: string;
     }
     interface VimeMuteControl {
         /**
@@ -837,6 +948,11 @@ export namespace Components {
          */
         "isPiPActive": boolean;
         /**
+          * `@readonly` Whether the settings menu has been opened and is currently visible. This is currently only supported by custom settings.
+          * @inheritDoc
+         */
+        "isSettingsActive": boolean;
+        /**
           * `@readonly` Whether the player is in touch mode. This is determined by listening for mouse/touch events and toggling this value.
           * @inheritDoc
          */
@@ -1006,16 +1122,28 @@ export namespace Components {
          */
         "noKeyboard": boolean;
     }
-    interface VimeSettingsControl {
+    interface VimeSettings {
         /**
-          * Whether the tooltip should not be displayed.
+          * Whether the settings menu is opened/closed.
          */
-        "hideTooltip": boolean;
+        "active": boolean;
+        /**
+          * The height of any lower control bar in pixels so that the settings can re-position itself accordingly.
+         */
+        "controlsHeight": number;
+        /**
+          * Sets the controller responsible for opening/closing this settings.
+         */
+        "setController": (id: string, controller: SettingsController) => Promise<void>;
+    }
+    interface VimeSettingsControl {
+        "expanded": boolean;
         "i18n": PlayerProps[PlayerProp.I18N];
         /**
           * The URL to an SVG element or fragment to load.
          */
         "icon": string;
+        "menu"?: string;
         /**
           * The direction in which the tooltip should grow.
          */
@@ -1050,6 +1178,24 @@ export namespace Components {
     interface VimeSpinner {
         "buffering": PlayerProps[PlayerProp.Buffering];
         "isVideoView": PlayerProps[PlayerProp.IsVideoView];
+    }
+    interface VimeSubmenu {
+        /**
+          * Whether the submenu is open/closed.
+         */
+        "active": boolean;
+        /**
+          * Whether the submenu should be displayed or not.
+         */
+        "hidden": boolean;
+        /**
+          * This can provide additional context about the current state of the submenu. For example, the hint could be the currently selected option if the submenu contains a radio group.
+         */
+        "hint"?: string;
+        /**
+          * The title of the submenu.
+         */
+        "label": string;
     }
     interface VimeTime {
         /**
@@ -1302,6 +1448,18 @@ declare global {
         prototype: HTMLVimeDefaultControlsElement;
         new (): HTMLVimeDefaultControlsElement;
     };
+    interface HTMLVimeDefaultSettingsElement extends Components.VimeDefaultSettings, HTMLStencilElement {
+    }
+    var HTMLVimeDefaultSettingsElement: {
+        prototype: HTMLVimeDefaultSettingsElement;
+        new (): HTMLVimeDefaultSettingsElement;
+    };
+    interface HTMLVimeDefaultUiElement extends Components.VimeDefaultUi, HTMLStencilElement {
+    }
+    var HTMLVimeDefaultUiElement: {
+        prototype: HTMLVimeDefaultUiElement;
+        new (): HTMLVimeDefaultUiElement;
+    };
     interface HTMLVimeEmbedElement extends Components.VimeEmbed, HTMLStencilElement {
     }
     var HTMLVimeEmbedElement: {
@@ -1356,6 +1514,30 @@ declare global {
         prototype: HTMLVimeLiveIndicatorElement;
         new (): HTMLVimeLiveIndicatorElement;
     };
+    interface HTMLVimeMenuElement extends Components.VimeMenu, HTMLStencilElement {
+    }
+    var HTMLVimeMenuElement: {
+        prototype: HTMLVimeMenuElement;
+        new (): HTMLVimeMenuElement;
+    };
+    interface HTMLVimeMenuItemElement extends Components.VimeMenuItem, HTMLStencilElement {
+    }
+    var HTMLVimeMenuItemElement: {
+        prototype: HTMLVimeMenuItemElement;
+        new (): HTMLVimeMenuItemElement;
+    };
+    interface HTMLVimeMenuRadioElement extends Components.VimeMenuRadio, HTMLStencilElement {
+    }
+    var HTMLVimeMenuRadioElement: {
+        prototype: HTMLVimeMenuRadioElement;
+        new (): HTMLVimeMenuRadioElement;
+    };
+    interface HTMLVimeMenuRadioGroupElement extends Components.VimeMenuRadioGroup, HTMLStencilElement {
+    }
+    var HTMLVimeMenuRadioGroupElement: {
+        prototype: HTMLVimeMenuRadioGroupElement;
+        new (): HTMLVimeMenuRadioGroupElement;
+    };
     interface HTMLVimeMuteControlElement extends Components.VimeMuteControl, HTMLStencilElement {
     }
     var HTMLVimeMuteControlElement: {
@@ -1398,6 +1580,12 @@ declare global {
         prototype: HTMLVimeScrubberControlElement;
         new (): HTMLVimeScrubberControlElement;
     };
+    interface HTMLVimeSettingsElement extends Components.VimeSettings, HTMLStencilElement {
+    }
+    var HTMLVimeSettingsElement: {
+        prototype: HTMLVimeSettingsElement;
+        new (): HTMLVimeSettingsElement;
+    };
     interface HTMLVimeSettingsControlElement extends Components.VimeSettingsControl, HTMLStencilElement {
     }
     var HTMLVimeSettingsControlElement: {
@@ -1415,6 +1603,12 @@ declare global {
     var HTMLVimeSpinnerElement: {
         prototype: HTMLVimeSpinnerElement;
         new (): HTMLVimeSpinnerElement;
+    };
+    interface HTMLVimeSubmenuElement extends Components.VimeSubmenu, HTMLStencilElement {
+    }
+    var HTMLVimeSubmenuElement: {
+        prototype: HTMLVimeSubmenuElement;
+        new (): HTMLVimeSubmenuElement;
     };
     interface HTMLVimeTimeElement extends Components.VimeTime, HTMLStencilElement {
     }
@@ -1477,6 +1671,8 @@ declare global {
         "vime-dailymotion": HTMLVimeDailymotionElement;
         "vime-dash": HTMLVimeDashElement;
         "vime-default-controls": HTMLVimeDefaultControlsElement;
+        "vime-default-settings": HTMLVimeDefaultSettingsElement;
+        "vime-default-ui": HTMLVimeDefaultUiElement;
         "vime-embed": HTMLVimeEmbedElement;
         "vime-end-time": HTMLVimeEndTimeElement;
         "vime-faketube": HTMLVimeFaketubeElement;
@@ -1486,6 +1682,10 @@ declare global {
         "vime-icon": HTMLVimeIconElement;
         "vime-icons": HTMLVimeIconsElement;
         "vime-live-indicator": HTMLVimeLiveIndicatorElement;
+        "vime-menu": HTMLVimeMenuElement;
+        "vime-menu-item": HTMLVimeMenuItemElement;
+        "vime-menu-radio": HTMLVimeMenuRadioElement;
+        "vime-menu-radio-group": HTMLVimeMenuRadioGroupElement;
         "vime-mute-control": HTMLVimeMuteControlElement;
         "vime-pip-control": HTMLVimePipControlElement;
         "vime-playback-control": HTMLVimePlaybackControlElement;
@@ -1493,9 +1693,11 @@ declare global {
         "vime-poster": HTMLVimePosterElement;
         "vime-scrim": HTMLVimeScrimElement;
         "vime-scrubber-control": HTMLVimeScrubberControlElement;
+        "vime-settings": HTMLVimeSettingsElement;
         "vime-settings-control": HTMLVimeSettingsControlElement;
         "vime-slider": HTMLVimeSliderElement;
         "vime-spinner": HTMLVimeSpinnerElement;
+        "vime-submenu": HTMLVimeSubmenuElement;
         "vime-time": HTMLVimeTimeElement;
         "vime-time-progress": HTMLVimeTimeProgressElement;
         "vime-tooltip": HTMLVimeTooltipElement;
@@ -1603,6 +1805,10 @@ declare namespace LocalJSX {
           * Whether the control should be displayed or not.
          */
         "hidden"?: boolean;
+        /**
+          * The `id` attribute of the control.
+         */
+        "identifier"?: string;
         "isTouch"?: PlayerProps[PlayerProp.IsTouch];
         /**
           * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
@@ -1669,6 +1875,7 @@ declare namespace LocalJSX {
         "hideWhenPaused"?: boolean;
         "isAudioView"?: PlayerProps[PlayerProp.IsAudioView];
         "isControlsActive"?: PlayerProps[PlayerProp.IsControlsActive];
+        "isSettingsActive"?: PlayerProps[PlayerProp.IsSettingsActive];
         /**
           * Sets the `justify-content` flex property that aligns the individual controls on the main-axis.
          */
@@ -1816,6 +2023,18 @@ declare namespace LocalJSX {
           * Whether the controls should wait for playback to start before being shown. Audio players are not effected by this prop.
          */
         "waitForPlaybackStart"?: boolean;
+    }
+    interface VimeDefaultSettings {
+        "currentCaption"?: PlayerProps[PlayerProp.CurrentCaption];
+        "i18n"?: PlayerProps[PlayerProp.I18N];
+        "isCaptionsActive"?: PlayerProps[PlayerProp.IsCaptionsActive];
+        "playbackQualities"?: PlayerProps[PlayerProp.PlaybackQualities];
+        "playbackQuality"?: PlayerProps[PlayerProp.PlaybackQuality];
+        "playbackRate"?: PlayerProps[PlayerProp.PlaybackRate];
+        "playbackRates"?: PlayerProps[PlayerProp.PlaybackRates];
+        "textTracks"?: PlayerProps[PlayerProp.TextTracks];
+    }
+    interface VimeDefaultUi {
     }
     interface VimeEmbed {
         /**
@@ -2048,6 +2267,111 @@ declare namespace LocalJSX {
         "i18n"?: PlayerProps[PlayerProp.I18N];
         "isLive"?: PlayerProps[PlayerProp.IsLive];
     }
+    interface VimeMenu {
+        /**
+          * Whether the menu is open/visible.
+         */
+        "active"?: boolean;
+        /**
+          * The `id` attribute value of the control responsible for opening/closing this menu.
+         */
+        "controller": string;
+        /**
+          * The `id` attribute of the menu.
+         */
+        "identifier": string;
+        /**
+          * Emitted when the menu has closed/is not active.
+         */
+        "onClose"?: (event: CustomEvent<void>) => void;
+        /**
+          * Emitted when the currently focused menu item changes.
+         */
+        "onFocusedMenuItem"?: (event: CustomEvent<HTMLVimeMenuItemElement | undefined>) => void;
+        /**
+          * Emitted when the menu items present changes.
+         */
+        "onMenuItemsChange"?: (event: CustomEvent<NodeListOf<HTMLVimeMenuItemElement> | undefined>) => void;
+        /**
+          * Emitted when the menu is open/active.
+         */
+        "onOpen"?: (event: CustomEvent<void>) => void;
+    }
+    interface VimeMenuItem {
+        /**
+          * This can provide additional context about the value of a menu item. For example, if the item is a radio button for a set of video qualities, the badge could describe whether the quality is UHD, HD etc.
+         */
+        "badge"?: string;
+        /**
+          * If this item is to behave as a radio button, then this property determines whether the radio is selected or not. Sets the `aria-checked` property.
+         */
+        "checked"?: boolean;
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "checkedIcon"?: string;
+        /**
+          * If the item has a popup menu, this indicates whether the menu is open or not. Sets the `aria-expanded` property.
+         */
+        "expanded"?: boolean;
+        /**
+          * Whether the item is displayed or not.
+         */
+        "hidden"?: boolean;
+        /**
+          * This can provide additional context about some underlying state of the item. For example, if the menu item opens/closes a submenu with options, the hint could be the currently selected option.
+         */
+        "hint"?: string;
+        /**
+          * The `id` attribute of the item.
+         */
+        "identifier"?: string;
+        "isTouch"?: PlayerProps[PlayerProp.IsTouch];
+        /**
+          * The label/title of the item.
+         */
+        "label": string;
+        /**
+          * If the item has a popup menu, then this should be the `id` of said menu. Sets the `aria-controls` property.
+         */
+        "menu"?: string;
+    }
+    interface VimeMenuRadio {
+        /**
+          * This can provide additional context about the value. For example, if the option is for a set of video qualities, the badge could describe whether the quality is UHD, HD etc.
+         */
+        "badge"?: string;
+        /**
+          * Whether the radio item is selected or not.
+         */
+        "checked"?: boolean;
+        /**
+          * The URL to an SVG element or fragment to load.
+         */
+        "checkedIcon"?: string;
+        /**
+          * The title of the radio item displayed to the user.
+         */
+        "label": string;
+        /**
+          * Emitted when the radio button is selected.
+         */
+        "onCheck"?: (event: CustomEvent<void>) => void;
+        /**
+          * The value associated with this radio item.
+         */
+        "value": string;
+    }
+    interface VimeMenuRadioGroup {
+        /**
+          * Emitted when a new radio button is selected for this group.
+         */
+        "onCheck"?: (event: CustomEvent<void>) => void;
+        /**
+          * The current value selected for this group.
+         */
+        "value"?: string;
+    }
     interface VimeMuteControl {
         /**
           * Whether the tooltip should not be displayed.
@@ -2267,6 +2591,11 @@ declare namespace LocalJSX {
           * @inheritDoc
          */
         "isPiPActive"?: boolean;
+        /**
+          * `@readonly` Whether the settings menu has been opened and is currently visible. This is currently only supported by custom settings.
+          * @inheritDoc
+         */
+        "isSettingsActive"?: boolean;
         /**
           * `@readonly` Whether the player is in touch mode. This is determined by listening for mouse/touch events and toggling this value.
           * @inheritDoc
@@ -2602,16 +2931,24 @@ declare namespace LocalJSX {
          */
         "noKeyboard"?: boolean;
     }
-    interface VimeSettingsControl {
+    interface VimeSettings {
         /**
-          * Whether the tooltip should not be displayed.
+          * Whether the settings menu is opened/closed.
          */
-        "hideTooltip"?: boolean;
+        "active"?: boolean;
+        /**
+          * The height of any lower control bar in pixels so that the settings can re-position itself accordingly.
+         */
+        "controlsHeight"?: number;
+    }
+    interface VimeSettingsControl {
+        "expanded"?: boolean;
         "i18n"?: PlayerProps[PlayerProp.I18N];
         /**
           * The URL to an SVG element or fragment to load.
          */
         "icon"?: string;
+        "menu"?: string;
         /**
           * The direction in which the tooltip should grow.
          */
@@ -2648,7 +2985,7 @@ declare namespace LocalJSX {
         "valueText"?: string;
     }
     interface VimeSpinner {
-        "buffering": PlayerProps[PlayerProp.Buffering];
+        "buffering"?: PlayerProps[PlayerProp.Buffering];
         "isVideoView"?: PlayerProps[PlayerProp.IsVideoView];
         /**
           * Emitted when the spinner will be hidden.
@@ -2658,6 +2995,24 @@ declare namespace LocalJSX {
           * Emitted when the spinner will be shown.
          */
         "onWillShow"?: (event: CustomEvent<void>) => void;
+    }
+    interface VimeSubmenu {
+        /**
+          * Whether the submenu is open/closed.
+         */
+        "active"?: boolean;
+        /**
+          * Whether the submenu should be displayed or not.
+         */
+        "hidden"?: boolean;
+        /**
+          * This can provide additional context about the current state of the submenu. For example, the hint could be the currently selected option if the submenu contains a radio group.
+         */
+        "hint"?: string;
+        /**
+          * The title of the submenu.
+         */
+        "label": string;
     }
     interface VimeTime {
         /**
@@ -2848,6 +3203,8 @@ declare namespace LocalJSX {
         "vime-dailymotion": VimeDailymotion;
         "vime-dash": VimeDash;
         "vime-default-controls": VimeDefaultControls;
+        "vime-default-settings": VimeDefaultSettings;
+        "vime-default-ui": VimeDefaultUi;
         "vime-embed": VimeEmbed;
         "vime-end-time": VimeEndTime;
         "vime-faketube": VimeFaketube;
@@ -2857,6 +3214,10 @@ declare namespace LocalJSX {
         "vime-icon": VimeIcon;
         "vime-icons": VimeIcons;
         "vime-live-indicator": VimeLiveIndicator;
+        "vime-menu": VimeMenu;
+        "vime-menu-item": VimeMenuItem;
+        "vime-menu-radio": VimeMenuRadio;
+        "vime-menu-radio-group": VimeMenuRadioGroup;
         "vime-mute-control": VimeMuteControl;
         "vime-pip-control": VimePipControl;
         "vime-playback-control": VimePlaybackControl;
@@ -2864,9 +3225,11 @@ declare namespace LocalJSX {
         "vime-poster": VimePoster;
         "vime-scrim": VimeScrim;
         "vime-scrubber-control": VimeScrubberControl;
+        "vime-settings": VimeSettings;
         "vime-settings-control": VimeSettingsControl;
         "vime-slider": VimeSlider;
         "vime-spinner": VimeSpinner;
+        "vime-submenu": VimeSubmenu;
         "vime-time": VimeTime;
         "vime-time-progress": VimeTimeProgress;
         "vime-tooltip": VimeTooltip;
@@ -2893,6 +3256,8 @@ declare module "@stencil/core" {
             "vime-dailymotion": LocalJSX.VimeDailymotion & JSXBase.HTMLAttributes<HTMLVimeDailymotionElement>;
             "vime-dash": LocalJSX.VimeDash & JSXBase.HTMLAttributes<HTMLVimeDashElement>;
             "vime-default-controls": LocalJSX.VimeDefaultControls & JSXBase.HTMLAttributes<HTMLVimeDefaultControlsElement>;
+            "vime-default-settings": LocalJSX.VimeDefaultSettings & JSXBase.HTMLAttributes<HTMLVimeDefaultSettingsElement>;
+            "vime-default-ui": LocalJSX.VimeDefaultUi & JSXBase.HTMLAttributes<HTMLVimeDefaultUiElement>;
             "vime-embed": LocalJSX.VimeEmbed & JSXBase.HTMLAttributes<HTMLVimeEmbedElement>;
             "vime-end-time": LocalJSX.VimeEndTime & JSXBase.HTMLAttributes<HTMLVimeEndTimeElement>;
             "vime-faketube": LocalJSX.VimeFaketube & JSXBase.HTMLAttributes<HTMLVimeFaketubeElement>;
@@ -2902,6 +3267,10 @@ declare module "@stencil/core" {
             "vime-icon": LocalJSX.VimeIcon & JSXBase.HTMLAttributes<HTMLVimeIconElement>;
             "vime-icons": LocalJSX.VimeIcons & JSXBase.HTMLAttributes<HTMLVimeIconsElement>;
             "vime-live-indicator": LocalJSX.VimeLiveIndicator & JSXBase.HTMLAttributes<HTMLVimeLiveIndicatorElement>;
+            "vime-menu": LocalJSX.VimeMenu & JSXBase.HTMLAttributes<HTMLVimeMenuElement>;
+            "vime-menu-item": LocalJSX.VimeMenuItem & JSXBase.HTMLAttributes<HTMLVimeMenuItemElement>;
+            "vime-menu-radio": LocalJSX.VimeMenuRadio & JSXBase.HTMLAttributes<HTMLVimeMenuRadioElement>;
+            "vime-menu-radio-group": LocalJSX.VimeMenuRadioGroup & JSXBase.HTMLAttributes<HTMLVimeMenuRadioGroupElement>;
             "vime-mute-control": LocalJSX.VimeMuteControl & JSXBase.HTMLAttributes<HTMLVimeMuteControlElement>;
             "vime-pip-control": LocalJSX.VimePipControl & JSXBase.HTMLAttributes<HTMLVimePipControlElement>;
             "vime-playback-control": LocalJSX.VimePlaybackControl & JSXBase.HTMLAttributes<HTMLVimePlaybackControlElement>;
@@ -2909,9 +3278,11 @@ declare module "@stencil/core" {
             "vime-poster": LocalJSX.VimePoster & JSXBase.HTMLAttributes<HTMLVimePosterElement>;
             "vime-scrim": LocalJSX.VimeScrim & JSXBase.HTMLAttributes<HTMLVimeScrimElement>;
             "vime-scrubber-control": LocalJSX.VimeScrubberControl & JSXBase.HTMLAttributes<HTMLVimeScrubberControlElement>;
+            "vime-settings": LocalJSX.VimeSettings & JSXBase.HTMLAttributes<HTMLVimeSettingsElement>;
             "vime-settings-control": LocalJSX.VimeSettingsControl & JSXBase.HTMLAttributes<HTMLVimeSettingsControlElement>;
             "vime-slider": LocalJSX.VimeSlider & JSXBase.HTMLAttributes<HTMLVimeSliderElement>;
             "vime-spinner": LocalJSX.VimeSpinner & JSXBase.HTMLAttributes<HTMLVimeSpinnerElement>;
+            "vime-submenu": LocalJSX.VimeSubmenu & JSXBase.HTMLAttributes<HTMLVimeSubmenuElement>;
             "vime-time": LocalJSX.VimeTime & JSXBase.HTMLAttributes<HTMLVimeTimeElement>;
             "vime-time-progress": LocalJSX.VimeTimeProgress & JSXBase.HTMLAttributes<HTMLVimeTimeProgressElement>;
             "vime-tooltip": LocalJSX.VimeTooltip & JSXBase.HTMLAttributes<HTMLVimeTooltipElement>;
