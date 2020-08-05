@@ -297,7 +297,6 @@ export namespace Components {
          */
         "hideWhenPaused": boolean;
         "isAudioView": PlayerProps[PlayerProp.IsAudioView];
-        "isControlsActive": PlayerProps[PlayerProp.IsControlsActive];
         "isLive": PlayerProps[PlayerProp.IsLive];
         "isMobile": PlayerProps[PlayerProp.IsMobile];
         "isVideoView": PlayerProps[PlayerProp.IsVideoView];
@@ -958,9 +957,10 @@ export namespace Components {
     }
     interface VimeScrim {
         /**
-          * Whether the scrim is visible or not.
+          * If this prop is defined, a dark gradient that smoothly fades out without being noticed will be used instead of a set color. This prop also sets the direction in which the dark end of the gradient should start. If the direction is set to `up`, the dark end of the gradient will start at the bottom of the player and fade out to the center. If the direction is set to `down`, the gradient will start at the top of the player and fade out to the center.
          */
-        "active": boolean;
+        "gradient"?: 'up' | 'down';
+        "isControlsActive": PlayerProps[PlayerProp.IsControlsActive];
         "isVideoView": PlayerProps[PlayerProp.IsVideoView];
     }
     interface VimeScrubberControl {
@@ -1777,7 +1777,6 @@ declare namespace LocalJSX {
          */
         "hideWhenPaused"?: boolean;
         "isAudioView"?: PlayerProps[PlayerProp.IsAudioView];
-        "isControlsActive"?: PlayerProps[PlayerProp.IsControlsActive];
         "isLive"?: PlayerProps[PlayerProp.IsLive];
         "isMobile"?: PlayerProps[PlayerProp.IsMobile];
         "isVideoView"?: PlayerProps[PlayerProp.IsVideoView];
@@ -2530,18 +2529,11 @@ declare namespace LocalJSX {
     }
     interface VimeScrim {
         /**
-          * Whether the scrim is visible or not.
+          * If this prop is defined, a dark gradient that smoothly fades out without being noticed will be used instead of a set color. This prop also sets the direction in which the dark end of the gradient should start. If the direction is set to `up`, the dark end of the gradient will start at the bottom of the player and fade out to the center. If the direction is set to `down`, the gradient will start at the top of the player and fade out to the center.
          */
-        "active"?: boolean;
+        "gradient"?: 'up' | 'down';
+        "isControlsActive"?: PlayerProps[PlayerProp.IsControlsActive];
         "isVideoView"?: PlayerProps[PlayerProp.IsVideoView];
-        /**
-          * Emitted when the scrim will be hidden.
-         */
-        "onWillHide"?: (event: CustomEvent<void>) => void;
-        /**
-          * Emitted when the scrim will be shown.
-         */
-        "onWillShow"?: (event: CustomEvent<void>) => void;
     }
     interface VimeScrubberControl {
         /**
