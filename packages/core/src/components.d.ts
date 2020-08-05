@@ -60,6 +60,10 @@ export namespace Components {
          */
         "keyboardHint"?: string;
         /**
+          * Scale the size of the control up/down by the amount given.
+         */
+        "scale": number;
+        /**
           * The URL to an SVG element or fragment to load.
          */
         "showIcon": string;
@@ -113,6 +117,10 @@ export namespace Components {
           * If the control has a popup menu, then this should be the `id` of said menu. Sets the `aria-controls` property.
          */
         "menu"?: string;
+        /**
+          * Scale the size of the control up/down by the amount given.
+         */
+        "scale": number;
     }
     interface VimeControlGroup {
         /**
@@ -453,6 +461,10 @@ export namespace Components {
         "keyboardHint"?: string;
         "playbackReady": PlayerProps[PlayerProp.PlaybackReady];
         /**
+          * Scale the size of the control up/down by the amount given.
+         */
+        "scale": number;
+        /**
           * The direction in which the tooltip should grow.
          */
         "tooltipDirection": TooltipDirection;
@@ -565,6 +577,10 @@ export namespace Components {
          */
         "mutedIcon": string;
         /**
+          * Scale the size of the control up/down by the amount given.
+         */
+        "scale": number;
+        /**
           * The direction in which the tooltip should grow.
          */
         "tooltipDirection": TooltipDirection;
@@ -597,6 +613,10 @@ export namespace Components {
         "keyboardHint"?: string;
         "playbackReady": PlayerProps[PlayerProp.PlaybackReady];
         /**
+          * Scale the size of the control up/down by the amount given.
+         */
+        "scale": number;
+        /**
           * The direction in which the tooltip should grow.
          */
         "tooltipDirection": TooltipDirection;
@@ -626,6 +646,10 @@ export namespace Components {
           * The URL to an SVG element or fragment to load.
          */
         "playIcon": string;
+        /**
+          * Scale the size of the control up/down by the amount given.
+         */
+        "scale": number;
         /**
           * The direction in which the tooltip should grow.
          */
@@ -1528,6 +1552,10 @@ declare namespace LocalJSX {
          */
         "keyboardHint"?: string;
         /**
+          * Scale the size of the control up/down by the amount given.
+         */
+        "scale"?: number;
+        /**
           * The URL to an SVG element or fragment to load.
          */
         "showIcon"?: string;
@@ -1593,6 +1621,10 @@ declare namespace LocalJSX {
           * Emitted when the user is interacting with the control by focusing, touching or hovering on it.
          */
         "onInteractionChange"?: (event: CustomEvent<boolean>) => void;
+        /**
+          * Scale the size of the control up/down by the amount given.
+         */
+        "scale"?: number;
     }
     interface VimeControlGroup {
         /**
@@ -1930,6 +1962,10 @@ declare namespace LocalJSX {
         "keyboardHint"?: string;
         "playbackReady"?: PlayerProps[PlayerProp.PlaybackReady];
         /**
+          * Scale the size of the control up/down by the amount given.
+         */
+        "scale"?: number;
+        /**
           * The direction in which the tooltip should grow.
          */
         "tooltipDirection"?: TooltipDirection;
@@ -2042,6 +2078,10 @@ declare namespace LocalJSX {
          */
         "mutedIcon"?: string;
         /**
+          * Scale the size of the control up/down by the amount given.
+         */
+        "scale"?: number;
+        /**
           * The direction in which the tooltip should grow.
          */
         "tooltipDirection"?: TooltipDirection;
@@ -2074,6 +2114,10 @@ declare namespace LocalJSX {
         "keyboardHint"?: string;
         "playbackReady"?: PlayerProps[PlayerProp.PlaybackReady];
         /**
+          * Scale the size of the control up/down by the amount given.
+         */
+        "scale"?: number;
+        /**
           * The direction in which the tooltip should grow.
          */
         "tooltipDirection"?: TooltipDirection;
@@ -2103,6 +2147,10 @@ declare namespace LocalJSX {
           * The URL to an SVG element or fragment to load.
          */
         "playIcon"?: string;
+        /**
+          * Scale the size of the control up/down by the amount given.
+         */
+        "scale"?: number;
         /**
           * The direction in which the tooltip should grow.
          */
