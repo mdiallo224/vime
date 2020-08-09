@@ -994,6 +994,10 @@ export namespace Components {
          */
         "muted": boolean;
         /**
+          * Whether the skeleton loading animation should be shown while media is loading.
+         */
+        "noSkeleton": boolean;
+        /**
           * Pauses playback of the media.
           * @inheritDoc
          */
@@ -2635,6 +2639,10 @@ declare namespace LocalJSX {
           * @inheritDoc
          */
         "muted"?: boolean;
+        /**
+          * Whether the skeleton loading animation should be shown while media is loading.
+         */
+        "noSkeleton"?: boolean;
         /**
           * Emitted when the `buffered` prop changes value.
           * @inheritDoc
