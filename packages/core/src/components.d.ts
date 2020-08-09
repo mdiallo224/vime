@@ -1131,6 +1131,8 @@ export namespace Components {
           * The height of any lower control bar in pixels so that the settings can re-position itself accordingly.
          */
         "controlsHeight": number;
+        "isAudioView": PlayerProps[PlayerProp.IsAudioView];
+        "isMobile": PlayerProps[PlayerProp.IsMobile];
         /**
           * Sets the controller responsible for opening/closing this settings.
          */
@@ -2940,6 +2942,8 @@ declare namespace LocalJSX {
           * The height of any lower control bar in pixels so that the settings can re-position itself accordingly.
          */
         "controlsHeight"?: number;
+        "isAudioView"?: PlayerProps[PlayerProp.IsAudioView];
+        "isMobile"?: PlayerProps[PlayerProp.IsMobile];
     }
     interface VimeSettingsControl {
         "expanded"?: boolean;
