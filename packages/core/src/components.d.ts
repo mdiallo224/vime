@@ -341,10 +341,6 @@ export namespace Components {
          */
         "embedSrc": string;
         /**
-          * Whether the embedded player should defer loading until it enters the viewport.
-         */
-        "lazy": boolean;
-        /**
           * The title of the current media so it can be set on the inner `iframe` for screen readers.
          */
         "mediaTitle": string;
@@ -2047,10 +2043,6 @@ declare namespace LocalJSX {
           * A URL that will load the external player and media (Eg: https://www.youtube.com/embed/DyTCOwB0DVw).
          */
         "embedSrc"?: string;
-        /**
-          * Whether the embedded player should defer loading until it enters the viewport.
-         */
-        "lazy"?: boolean;
         /**
           * The title of the current media so it can be set on the inner `iframe` for screen readers.
          */

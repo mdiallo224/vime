@@ -34,6 +34,7 @@ importers:
       typescript: ^3.9.7
   packages/core:
     dependencies:
+      lozad: 1.15.0
       stencil-wormhole: 3.0.1_@stencil+core@1.17.2
     devDependencies:
       '@babel/core': 7.10.5
@@ -43,6 +44,7 @@ importers:
       '@stencil/sass': 1.3.2_@stencil+core@1.17.2
       '@types/hls.js': 0.13.0
       '@types/jest': 26.0.7
+      '@types/lozad': 1.9.0
       '@types/puppeteer': 3.0.1
       babel-loader: 8.1.0_4b901dba6592bf2864fdbe6e1b49a270
       concurrently: 5.2.0
@@ -62,6 +64,7 @@ importers:
       '@stencil/sass': ^1.3.2
       '@types/hls.js': ^0.13.0
       '@types/jest': ^26.0.7
+      '@types/lozad': ^1.9.0
       '@types/puppeteer': ^3.0.1
       babel-loader: ^8.1.0
       concurrently: ^5.2.0
@@ -70,6 +73,7 @@ importers:
       jest: 26.1.0
       jest-watch-typeahead: ^0.6.0
       js-base64: 2.5.2
+      lozad: ^1.15.0
       sirv-cli: ^1.0.3
       stencil-wormhole: ^3.0.1
       ts-loader: ^8.0.1
@@ -2181,6 +2185,10 @@ packages:
     dev: true
     resolution:
       integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
+  /@types/lozad/1.9.0:
+    dev: true
+    resolution:
+      integrity: sha512-G8vLv048DBkH3dkDwURnDnF24pohdK/OwKVU70LQw2lrgeSDz48x4x+GnlIcyeDW47iZ+rxQ5wkgNLe+FhdPWQ==
   /@types/minimist/1.2.0:
     dev: true
     resolution:
@@ -7046,6 +7054,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-W0b4AUft7leIcPCG0Eghz5mOVR8=
+  /lozad/1.15.0:
+    dev: false
+    resolution:
+      integrity: sha512-P60iyIiud4XSH5SXxrgPCXoebEaT6SYAvRBgeMBZPYmWVRSfOhQks8ZmyZ/WFgDgwvrHnWffXw9HMg8G0gvt0w==
   /lru-cache/5.1.1:
     dependencies:
       yallist: 3.1.1
