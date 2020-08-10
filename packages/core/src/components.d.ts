@@ -51,15 +51,10 @@ export namespace Components {
         "i18n": PlayerProps[PlayerProp.I18N];
         "isCaptionsActive": PlayerProps[PlayerProp.IsCaptionsActive];
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * A slash (`/`) seperated string of JS keyboard keys (`KeyboardEvent.key`), that when caught in a `keydown` event, will trigger a `click` event on the control.
           * @inheritdoc
          */
-        "keyCodes"?: string;
-        /**
-          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
-          * @inheritdoc
-         */
-        "keyboardHint"?: string;
+        "keys"?: string;
         /**
           * Scale the size of the control up/down by the amount given.
          */
@@ -110,10 +105,10 @@ export namespace Components {
         "identifier"?: string;
         "isTouch": PlayerProps[PlayerProp.IsTouch];
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * A slash (`/`) seperated string of JS keyboard keys (`KeyboardEvent.key`), that when caught in a `keydown` event, will trigger a `click` event on the control.
           * @inheritdoc
          */
-        "keyCodes"?: string;
+        "keys"?: string;
         /**
           * The `aria-label` property of the control.
          */
@@ -122,6 +117,10 @@ export namespace Components {
           * If the control has a popup menu, then this should be the `id` of said menu. Sets the `aria-controls` property.
          */
         "menu"?: string;
+        /**
+          * If the control is a toggle, this indicated whether the control is in a "pressed" state or not. Sets the `aria-pressed` property.
+         */
+        "pressed"?: boolean;
         /**
           * Scale the size of the control up/down by the amount given.
          */
@@ -464,15 +463,10 @@ export namespace Components {
         "i18n": PlayerProps[PlayerProp.I18N];
         "isFullscreenActive": PlayerProps[PlayerProp.IsFullscreenActive];
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * A slash (`/`) seperated string of JS keyboard keys (`KeyboardEvent.key`), that when caught in a `keydown` event, will trigger a `click` event on the control.
           * @inheritdoc
          */
-        "keyCodes"?: string;
-        /**
-          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
-          * @inheritdoc
-         */
-        "keyboardHint"?: string;
+        "keys"?: string;
         "playbackReady": PlayerProps[PlayerProp.PlaybackReady];
         /**
           * Scale the size of the control up/down by the amount given.
@@ -665,15 +659,10 @@ export namespace Components {
         "highVolumeIcon": string;
         "i18n": PlayerProps[PlayerProp.I18N];
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * A slash (`/`) seperated string of JS keyboard keys (`KeyboardEvent.key`), that when caught in a `keydown` event, will trigger a `click` event on the control.
           * @inheritdoc
          */
-        "keyCodes"?: string;
-        /**
-          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
-          * @inheritdoc
-         */
-        "keyboardHint"?: string;
+        "keys"?: string;
         /**
           * The URL to an SVG element or fragment.
          */
@@ -709,15 +698,10 @@ export namespace Components {
         "i18n": PlayerProps[PlayerProp.I18N];
         "isPiPActive": PlayerProps[PlayerProp.IsPiPActive];
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * A slash (`/`) seperated string of JS keyboard keys (`KeyboardEvent.key`), that when caught in a `keydown` event, will trigger a `click` event on the control.
           * @inheritdoc
          */
-        "keyCodes"?: string;
-        /**
-          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
-          * @inheritdoc
-         */
-        "keyboardHint"?: string;
+        "keys"?: string;
         "playbackReady": PlayerProps[PlayerProp.PlaybackReady];
         /**
           * Scale the size of the control up/down by the amount given.
@@ -735,15 +719,10 @@ export namespace Components {
         "hideTooltip": boolean;
         "i18n": PlayerProps[PlayerProp.I18N];
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * A slash (`/`) seperated string of JS keyboard keys (`KeyboardEvent.key`), that when caught in a `keydown` event, will trigger a `click` event on the control.
           * @inheritdoc
          */
-        "keyCodes"?: string;
-        /**
-          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
-          * @inheritdoc
-         */
-        "keyboardHint"?: string;
+        "keys"?: string;
         /**
           * The URL to an SVG element or fragment to load.
          */
@@ -1332,13 +1311,9 @@ export namespace Components {
          */
         "lowVolumeIcon": string;
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will toggle the muted state of the player.
+          * A pipe (`/`) seperated string of JS keyboard keys, that when caught in a `keydown` event, will toggle the muted state of the player.
          */
-        "muteKeyCodes"?: string;
-        /**
-          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the control tooltip, on what key presses will toggle the muted state of the player.
-         */
-        "muteKeyboardHint"?: string;
+        "muteKeys"?: string;
         "muted": PlayerProps[PlayerProp.Muted];
         /**
           * The URL to an SVG element or fragment.
@@ -1746,15 +1721,10 @@ declare namespace LocalJSX {
         "i18n"?: PlayerProps[PlayerProp.I18N];
         "isCaptionsActive"?: PlayerProps[PlayerProp.IsCaptionsActive];
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * A slash (`/`) seperated string of JS keyboard keys (`KeyboardEvent.key`), that when caught in a `keydown` event, will trigger a `click` event on the control.
           * @inheritdoc
          */
-        "keyCodes"?: string;
-        /**
-          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
-          * @inheritdoc
-         */
-        "keyboardHint"?: string;
+        "keys"?: string;
         /**
           * Scale the size of the control up/down by the amount given.
          */
@@ -1813,10 +1783,10 @@ declare namespace LocalJSX {
         "identifier"?: string;
         "isTouch"?: PlayerProps[PlayerProp.IsTouch];
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * A slash (`/`) seperated string of JS keyboard keys (`KeyboardEvent.key`), that when caught in a `keydown` event, will trigger a `click` event on the control.
           * @inheritdoc
          */
-        "keyCodes"?: string;
+        "keys"?: string;
         /**
           * The `aria-label` property of the control.
          */
@@ -1829,6 +1799,10 @@ declare namespace LocalJSX {
           * Emitted when the user is interacting with the control by focusing, touching or hovering on it.
          */
         "onInteractionChange"?: (event: CustomEvent<boolean>) => void;
+        /**
+          * If the control is a toggle, this indicated whether the control is in a "pressed" state or not. Sets the `aria-pressed` property.
+         */
+        "pressed"?: boolean;
         /**
           * Scale the size of the control up/down by the amount given.
          */
@@ -2168,15 +2142,10 @@ declare namespace LocalJSX {
         "i18n"?: PlayerProps[PlayerProp.I18N];
         "isFullscreenActive"?: PlayerProps[PlayerProp.IsFullscreenActive];
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * A slash (`/`) seperated string of JS keyboard keys (`KeyboardEvent.key`), that when caught in a `keydown` event, will trigger a `click` event on the control.
           * @inheritdoc
          */
-        "keyCodes"?: string;
-        /**
-          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
-          * @inheritdoc
-         */
-        "keyboardHint"?: string;
+        "keys"?: string;
         "playbackReady"?: PlayerProps[PlayerProp.PlaybackReady];
         /**
           * Scale the size of the control up/down by the amount given.
@@ -2381,15 +2350,10 @@ declare namespace LocalJSX {
         "highVolumeIcon"?: string;
         "i18n"?: PlayerProps[PlayerProp.I18N];
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * A slash (`/`) seperated string of JS keyboard keys (`KeyboardEvent.key`), that when caught in a `keydown` event, will trigger a `click` event on the control.
           * @inheritdoc
          */
-        "keyCodes"?: string;
-        /**
-          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
-          * @inheritdoc
-         */
-        "keyboardHint"?: string;
+        "keys"?: string;
         /**
           * The URL to an SVG element or fragment.
          */
@@ -2425,15 +2389,10 @@ declare namespace LocalJSX {
         "i18n"?: PlayerProps[PlayerProp.I18N];
         "isPiPActive"?: PlayerProps[PlayerProp.IsPiPActive];
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * A slash (`/`) seperated string of JS keyboard keys (`KeyboardEvent.key`), that when caught in a `keydown` event, will trigger a `click` event on the control.
           * @inheritdoc
          */
-        "keyCodes"?: string;
-        /**
-          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
-          * @inheritdoc
-         */
-        "keyboardHint"?: string;
+        "keys"?: string;
         "playbackReady"?: PlayerProps[PlayerProp.PlaybackReady];
         /**
           * Scale the size of the control up/down by the amount given.
@@ -2451,15 +2410,10 @@ declare namespace LocalJSX {
         "hideTooltip"?: boolean;
         "i18n"?: PlayerProps[PlayerProp.I18N];
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will trigger a `click` event on the control.
+          * A slash (`/`) seperated string of JS keyboard keys (`KeyboardEvent.key`), that when caught in a `keydown` event, will trigger a `click` event on the control.
           * @inheritdoc
          */
-        "keyCodes"?: string;
-        /**
-          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the tooltip for what keys can be pressed to trigger the control.
-          * @inheritdoc
-         */
-        "keyboardHint"?: string;
+        "keys"?: string;
         /**
           * The URL to an SVG element or fragment to load.
          */
@@ -3150,13 +3104,9 @@ declare namespace LocalJSX {
          */
         "lowVolumeIcon"?: string;
         /**
-          * A pipe (`|`) seperated string of JS key codes, that when caught in a `keydown` event, will toggle the muted state of the player.
+          * A pipe (`/`) seperated string of JS keyboard keys, that when caught in a `keydown` event, will toggle the muted state of the player.
          */
-        "muteKeyCodes"?: string;
-        /**
-          * If the `keyCodes` prop is provided, this prop can provide a hint to the user inside the control tooltip, on what key presses will toggle the muted state of the player.
-         */
-        "muteKeyboardHint"?: string;
+        "muteKeys"?: string;
         "muted"?: PlayerProps[PlayerProp.Muted];
         /**
           * The URL to an SVG element or fragment.
