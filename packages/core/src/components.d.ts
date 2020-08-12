@@ -26,7 +26,7 @@ export namespace Components {
           * @inheritdoc
          */
         "disableRemotePlayback"?: boolean;
-        "getAdapter": () => Promise<any>;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLMediaElement>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
         /**
           * The title of the current media.
          */
@@ -207,7 +207,7 @@ export namespace Components {
         "color"?: string;
         "controls": boolean;
         "debug": boolean;
-        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<any>; play: () => Promise<void>; pause: () => Promise<void>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackQuality: () => Promise<boolean>; setPlaybackQuality: (quality: string) => Promise<void>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<void>; exitFullscreen: () => Promise<void>; }>;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLVimeEmbedElement>; play: () => Promise<void>; pause: () => Promise<void>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackQuality: () => Promise<boolean>; setPlaybackQuality: (quality: string) => Promise<void>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<void>; exitFullscreen: () => Promise<void>; }>;
         "language": string;
         "loop": boolean;
         "muted": boolean;
@@ -272,7 +272,7 @@ export namespace Components {
           * @inheritdoc
          */
         "disableRemotePlayback"?: boolean;
-        "getAdapter": () => Promise<any>;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<any>; canPlay: (type: any) => Promise<boolean>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
         /**
           * The title of the current media.
          */
@@ -507,7 +507,7 @@ export namespace Components {
           * @inheritdoc
          */
         "disableRemotePlayback"?: boolean;
-        "getAdapter": () => Promise<any>;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<import("/Users/rahim/Desktop/vime/node_modules/.pnpm/@types/hls.js@0.13.0/node_modules/@types/hls.js/index") | undefined>; canPlay: (type: any) => Promise<boolean>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
         /**
           * The title of the current media.
          */
@@ -575,7 +575,7 @@ export namespace Components {
         /**
           * Returns the currently focused menu item.
          */
-        "getFocusedMenuItem": () => Promise<any>;
+        "getFocusedMenuItem": () => Promise<HTMLVimeMenuItemElement>;
         /**
           * The `id` attribute of the menu.
          */
@@ -1252,7 +1252,7 @@ export namespace Components {
           * @inheritdoc
          */
         "disableRemotePlayback"?: boolean;
-        "getAdapter": () => Promise<any>;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLMediaElement>; play: () => Promise<void | undefined>; pause: () => Promise<void | undefined>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; canSetPiP: () => Promise<boolean>; enterPiP: () => Promise<any>; exitPiP: () => Promise<any>; canSetFullscreen: () => Promise<boolean>; enterFullscreen: () => Promise<any>; exitFullscreen: () => Promise<any>; }>;
         /**
           * The title of the current media.
          */
@@ -1281,7 +1281,7 @@ export namespace Components {
         "color"?: string;
         "controls": boolean;
         "debug": boolean;
-        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<any>; play: () => Promise<void>; pause: () => Promise<void>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; }>;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLVimeEmbedElement>; play: () => Promise<void>; pause: () => Promise<void>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; }>;
         "language": string;
         "loop": boolean;
         "muted": boolean;
@@ -1337,7 +1337,7 @@ export namespace Components {
          */
         "cookies": boolean;
         "debug": boolean;
-        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<any>; play: () => Promise<void>; pause: () => Promise<void>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; }>;
+        "getAdapter": () => Promise<{ getInternalPlayer: () => Promise<HTMLVimeEmbedElement>; play: () => Promise<void>; pause: () => Promise<void>; canPlay: (type: any) => Promise<boolean>; setCurrentTime: (time: number) => Promise<void>; setMuted: (muted: boolean) => Promise<void>; setVolume: (volume: number) => Promise<void>; canSetPlaybackRate: () => Promise<boolean>; setPlaybackRate: (rate: number) => Promise<void>; }>;
         "language": string;
         "loop": boolean;
         "muted": boolean;
