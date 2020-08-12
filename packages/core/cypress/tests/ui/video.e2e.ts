@@ -6,7 +6,6 @@ before(() => {
   cy.get('#video').click();
   cy.player().should('be.readyForPlayback');
   cy.get('vime-controls').should('be.visible');
-  cy.wait(500);
 });
 
 after(() => {
@@ -19,6 +18,7 @@ afterEach(() => {
 });
 
 it('should load video ui', () => {
+  cy.wait(1000);
   cy.player().toMatchImageSnapshot();
 });
 
