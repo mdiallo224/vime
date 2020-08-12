@@ -2,7 +2,7 @@ import { en } from '../../../src/components/core/player/lang/en';
 
 before(() => {
   cy.viewport('iphone-x');
-  cy.visit('ui/tests', {
+  cy.visit('ui.html', {
     onBeforeLoad: (win) => {
       Object.defineProperty(win.navigator, 'userAgent', { value: 'android' });
     },
@@ -10,6 +10,7 @@ before(() => {
   cy.get('#video').click();
   cy.player().should('be.readyForPlayback');
   cy.get('vime-controls').should('be.visible');
+  cy.wait(500);
 });
 
 // This is a simplified test suite because most tests overlap with `video-ui.e2e.ts`.

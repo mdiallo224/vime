@@ -1882,18 +1882,18 @@ declare namespace LocalJSX {
         "i18n"?: PlayerProps[PlayerProp.I18N];
     }
     interface VimeDailymotion {
-        "autoplay": boolean;
+        "autoplay"?: boolean;
         /**
           * Change the default highlight color used in the controls (hex value without the leading #). Color set in the Partner HQ will override this prop.
          */
         "color"?: string;
-        "controls": boolean;
-        "debug": boolean;
-        "language": string;
-        "loop": boolean;
-        "muted": boolean;
+        "controls"?: boolean;
+        "debug"?: boolean;
+        "language"?: string;
+        "loop"?: boolean;
+        "muted"?: boolean;
         "onVLoadStart"?: (event: CustomEvent<void>) => void;
-        "playsinline": boolean;
+        "playsinline"?: boolean;
         /**
           * Whether to automatically play the next video in the queue.
          */
@@ -2059,14 +2059,14 @@ declare namespace LocalJSX {
         "i18n"?: PlayerProps[PlayerProp.I18N];
     }
     interface VimeFaketube {
-        "autoplay": boolean;
-        "controls": boolean;
-        "debug": boolean;
-        "language": string;
-        "loop": boolean;
-        "muted": boolean;
+        "autoplay"?: boolean;
+        "controls"?: boolean;
+        "debug"?: boolean;
+        "language"?: string;
+        "loop"?: boolean;
+        "muted"?: boolean;
         "onVLoadStart"?: (event: CustomEvent<void>) => void;
-        "playsinline": boolean;
+        "playsinline"?: boolean;
     }
     interface VimeFile {
         /**
@@ -2074,8 +2074,8 @@ declare namespace LocalJSX {
           * @inheritdoc
          */
         "autoPiP"?: boolean;
-        "autoplay": boolean;
-        "controls": boolean;
+        "autoplay"?: boolean;
+        "controls"?: boolean;
         /**
           * Determines what controls to show on the media element whenever the browser shows its own set of controls (e.g. when the controls attribute is specified).
           * @inheritdoc
@@ -2086,7 +2086,7 @@ declare namespace LocalJSX {
           * @inheritdoc
          */
         "crossOrigin"?: string;
-        "debug": boolean;
+        "debug"?: boolean;
         /**
           * **EXPERIMENTAL:** Prevents the browser from suggesting a picture-in-picture context menu or to request picture-in-picture automatically in some cases.
           * @inheritdoc
@@ -2097,19 +2097,19 @@ declare namespace LocalJSX {
           * @inheritdoc
          */
         "disableRemotePlayback"?: boolean;
-        "language": string;
-        "loop": boolean;
+        "language"?: string;
+        "loop"?: boolean;
         /**
           * The title of the current media.
          */
         "mediaTitle"?: string;
-        "muted": boolean;
+        "muted"?: boolean;
         "onVLoadStart"?: (event: CustomEvent<void>) => void;
         /**
           * The playback rates that are available for this media.
          */
         "playbackRates"?: number[];
-        "playsinline": boolean;
+        "playsinline"?: boolean;
         /**
           * A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
           * @inheritdoc
@@ -3063,7 +3063,7 @@ declare namespace LocalJSX {
         "willAttach"?: boolean;
     }
     interface VimeVimeo {
-        "autoplay": boolean;
+        "autoplay"?: boolean;
         /**
           * Whether to display the video owner's name.
          */
@@ -3072,13 +3072,13 @@ declare namespace LocalJSX {
           * The hexadecimal color value of the playback controls. The embed settings of the video might override this value.
          */
         "color"?: string;
-        "controls": boolean;
-        "debug": boolean;
-        "language": string;
-        "loop": boolean;
-        "muted": boolean;
+        "controls"?: boolean;
+        "debug"?: boolean;
+        "language"?: string;
+        "loop"?: boolean;
+        "muted"?: boolean;
         "onVLoadStart"?: (event: CustomEvent<void>) => void;
-        "playsinline": boolean;
+        "playsinline"?: boolean;
         /**
           * Whether to display the video owner's portrait.
          */
@@ -3123,18 +3123,18 @@ declare namespace LocalJSX {
         "volume"?: PlayerProps[PlayerProp.Volume];
     }
     interface VimeYoutube {
-        "autoplay": boolean;
-        "controls": boolean;
+        "autoplay"?: boolean;
+        "controls"?: boolean;
         /**
           * Whether cookies should be enabled on the embed.
          */
         "cookies"?: boolean;
-        "debug": boolean;
-        "language": string;
-        "loop": boolean;
-        "muted": boolean;
+        "debug"?: boolean;
+        "language"?: string;
+        "loop"?: boolean;
+        "muted"?: boolean;
         "onVLoadStart"?: (event: CustomEvent<void>) => void;
-        "playsinline": boolean;
+        "playsinline"?: boolean;
         /**
           * Whether the fullscreen control should be shown.
          */

@@ -2,10 +2,11 @@ import { en } from '../../../src/components/core/player/lang/en';
 import { PlayerProp } from '../../../src/components/core/player/PlayerProp';
 
 before(() => {
-  cy.visit('ui/tests');
+  cy.visit('ui.html');
   cy.get('#video').click();
   cy.player().should('be.readyForPlayback');
   cy.get('vime-controls').should('be.visible');
+  cy.wait(500);
 });
 
 after(() => {
