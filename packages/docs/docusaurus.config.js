@@ -1,6 +1,6 @@
 module.exports = {
   title: 'Vime',
-  tagline: 'Build and customize your own media player on the web.',
+  tagline: 'Build and customize your own media player with web components.',
   url: 'https://vimejs.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -16,10 +16,10 @@ module.exports = {
       },
       items: [
         {
-          to: 'docs/',
-          activeBasePath: 'docs',
-          label: 'Docs',
-          position: 'left',
+          to: 'demo/',
+          activeBasePath: 'demo',
+          label: 'Demo',
+          position: 'right',
         },
         {
           href: 'https://github.com/vime-js/vime',
@@ -34,6 +34,7 @@ module.exports = {
       '@docusaurus/preset-classic',
       {
         docs: {
+          routeBasePath: '/',
           homePageId: 'introduction',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:

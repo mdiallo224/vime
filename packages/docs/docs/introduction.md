@@ -1,7 +1,6 @@
 ---
-id: introduction
 title: Introduction
 sidebar_label: Introduction
 ---
 
-WIP.
+Coming soon.

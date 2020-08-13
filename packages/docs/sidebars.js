@@ -3,7 +3,7 @@ module.exports = {
     'Getting Started': [
       'introduction'
     ],
-    'API': [
+    'Components': [
       // ...
     ]
   },
