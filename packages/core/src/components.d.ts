@@ -486,7 +486,7 @@ export namespace Components {
         /**
           * The `hls.js` configuration.
          */
-        "config"?: Hls.Config;
+        "config"?: any;
         /**
           * Determines what controls to show on the media element whenever the browser shows its own set of controls (e.g. when the controls attribute is specified).
           * @inheritdoc
@@ -2165,7 +2165,7 @@ declare namespace LocalJSX {
         /**
           * The `hls.js` configuration.
          */
-        "config"?: Hls.Config;
+        "config"?: any;
         /**
           * Determines what controls to show on the media element whenever the browser shows its own set of controls (e.g. when the controls attribute is specified).
           * @inheritdoc
