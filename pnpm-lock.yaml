@@ -92,6 +92,11 @@ importers:
       tslib: ^2.0.0
       typescript: ~3.9.5
       zone.js: ~0.10.3
+  examples/html:
+    devDependencies:
+      sirv-cli: 1.0.6
+    specifiers:
+      sirv-cli: ^1.0.6
   examples/react:
     dependencies:
       '@vime/react': 'link:../../packages/react'
