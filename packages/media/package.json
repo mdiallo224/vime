@@ -13,6 +13,9 @@
   "bugs": {
     "url": "https://github.com/vime-js/vime/issues"
   },
+  "scripts": {
+    "release": "semantic-release -e ../../tools/semantic-release"
+  },
   "publishConfig": {
     "access": "public"
   },
