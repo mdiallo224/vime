@@ -21,49 +21,6 @@ community and shares their work, please consider [supporting them][blender-sub].
 [cc-by-nd-license]: https://creativecommons.org/licenses/by-nd/2.0
 [martin-wiki]: https://en.wikipedia.org/wiki/Martin_Lodewijk
 
-## Usage
-
-**⚠️ package install size is ~440 MB.**
-
-Install `@vime/media` and [`sirv-cli`](https://github.com/lukeed/sirv) to serve it:
-
-```bash
-$: npm install sirv-cli @vime/media -D
-```
-
-Create a script in `package.json` to serve the media:
-
-```json
-{
-  "scripts": {
-    "serve": "npm run serve:media & npm run serve:app",
-    "serve:media": "sirv node_modules/@vime/media --cors --port 3335 --quiet",
-    "serve:app": "echo \"Serving app.\""
-  }
-}
-```
-
-Load the required media file from `http://localhost:3335` (eg: `http://localhost:3335/720p.mp4`).
-
-- `/audio.mp3`
-- `/{240p,360p,480p,720p,1080p}.mp4`
-- `/blank.mp4`
-- `/poster.png`
-- `/poster-2.png`
-- `/hls/index.m3u8`
-- `/mpd/manifest.mpd`
-- `/subs/{english,french,german,italian,russian,spanish}.vtt`
-
-### Example
-
-```html
-<video poster="http://localhost:3335/poster.png">
-  <source src="http://localhost:3335/720p.mp4" type="video/mp4">
-  <track default kind="subtitles" src="http://localhost:3335/subs/english.vtt" srclang="en" label="English" >
-  <track kind="subtitles" src="http://localhost:3335/subs/spanish.vtt" srclang="es" label="Spanish" >
-</video>
-```
-
 ## Related
 
 - [GitHub](https://github.com/vime-js/vime)
