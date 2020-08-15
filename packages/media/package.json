@@ -1,0 +1,34 @@
+{
+  "name": "@vime/media",
+  "version": "1.0.0",
+  "description": "Collection of audio/video files used throughout Vime.",
+  "license": "CC-BY-ND",
+  "contributors": [
+    "Rahim Alwer <rahim_alwer@outlook.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vime-js/vime.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vime-js/vime/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "vime",
+    "media",
+    "mp4",
+    "mp3",
+    "hls",
+    "dash",
+    "poster",
+    "video",
+    "audio",
+    "source",
+    "track",
+    "agent-327",
+    "barbershop"
+  ]
+}
