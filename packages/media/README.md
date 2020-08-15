@@ -1,8 +1,8 @@
 # @vime/media
 
 Vime is simply a collection of [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) 
-that help you easily build your own media player. This package contains media files that 
-are used for testing and demonstration purposes throughout Vime's source code, examples and 
+that help you easily build and customize your our own media player. This package contains media files 
+that are used for testing and demonstration purposes throughout Vime's source code, examples and 
 public content.
 
 The audio and video files are extracted from [Agent 327: Operation Barbershop][agent-327-blender], 
@@ -57,7 +57,7 @@ Load the required media file from `http://localhost:3335` (eg: `http://localhost
 ### Example
 
 ```html
-<video>
+<video poster="http://localhost:3335/poster.png">
   <source src="http://localhost:3335/720p.mp4" type="video/mp4">
   <track default kind="subtitles" src="http://localhost:3335/subs/english.vtt" srclang="en" label="English" >
   <track kind="subtitles" src="http://localhost:3335/subs/spanish.vtt" srclang="es" label="Spanish" >

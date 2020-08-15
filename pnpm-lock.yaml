@@ -55,7 +55,9 @@ importers:
       '@angular/platform-browser-dynamic': 10.0.9_c9c96915c0e6bd68711a079c4ffea1e3
       '@angular/router': 10.0.9_bbbf816e57604d8c4a67d1dd809de462
       '@vime/angular': 'link:../../packages/angular'
+      '@vime/media': 'link:../../packages/media'
       rxjs: 6.5.5
+      sirv-cli: 1.0.6
       tslib: 2.0.1
       zone.js: 0.10.3
     devDependencies:
@@ -84,33 +86,42 @@ importers:
       '@types/jest': ^26.0.9
       '@types/node': ^12.11.1
       '@vime/angular': ^1.0.0
+      '@vime/media': ^1.0.0
       codelyzer: ^6.0.0
       jest-diff: ^26.4.0
       pretty-format: ^26.4.0
       rxjs: ~6.5.5
+      sirv-cli: ^1.0.6
       ts-node: ~8.3.0
       tslib: ^2.0.0
       typescript: ~3.9.5
       zone.js: ~0.10.3
   examples/html:
-    devDependencies:
+    dependencies:
+      '@vime/media': 'link:../../packages/media'
       sirv-cli: 1.0.6
     specifiers:
+      '@vime/media': ^1.0.0
       sirv-cli: ^1.0.6
   examples/react:
     dependencies:
+      '@vime/media': 'link:../../packages/media'
       '@vime/react': 'link:../../packages/react'
       react: 16.13.1
       react-dom: 16.13.1_react@16.13.1
       react-scripts: 3.4.3
+      sirv-cli: 1.0.6
     specifiers:
+      '@vime/media': ^1.0.0
       '@vime/react': ^1.0.0
       react: ^16.13.1
       react-dom: ^16.13.1
       react-scripts: 3.4.3
+      sirv-cli: ^1.0.6
   examples/svelte:
     dependencies:
       '@vime/core': 'link:../../packages/core'
+      '@vime/media': 'link:../../packages/media'
       sirv-cli: 1.0.6
     devDependencies:
       '@rollup/plugin-commonjs': 14.0.0_rollup@2.25.0
@@ -132,6 +143,7 @@ importers:
       '@rollup/plugin-typescript': ^4.0.0
       '@tsconfig/svelte': ^1.0.0
       '@vime/core': ^1.0.0
+      '@vime/media': ^1.0.0
       rollup: ^2.3.4
       rollup-plugin-livereload: ^1.0.0
       rollup-plugin-svelte: ^5.0.3
@@ -144,7 +156,9 @@ importers:
       typescript: ^3.9.3
   examples/vue:
     dependencies:
+      '@vime/media': 'link:../../packages/media'
       '@vime/vue': 'link:../../packages/vue'
+      sirv-cli: 1.0.6
       tslib: 2.0.1
       vue: 2.6.11
       vue-class-component: 7.2.5_vue@2.6.11
@@ -155,9 +169,11 @@ importers:
       typescript: 3.9.7
       vue-template-compiler: 2.6.11
     specifiers:
+      '@vime/media': ^1.0.0
       '@vime/vue': ^1.0.0
       '@vue/cli-plugin-typescript': ~4.5.0
       '@vue/cli-service': ~4.5.0
+      sirv-cli: ^1.0.0
       tslib: ^2.0.1
       typescript: ~3.9.3
       vue: ^2.6.11
