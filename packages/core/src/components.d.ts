@@ -9,7 +9,6 @@ import { MediaPreloadOption } from "./components/providers/file/MediaFileProvide
 import { TooltipDirection, TooltipPosition } from "./components/ui/tooltip/types";
 import { PlayerProp, PlayerProps } from "./components/core/player/PlayerProp";
 import { Params } from "./utils/network";
-import { EmbedEvent, EmbedEventPayload } from "./components/core/embed/EmbedEvent";
 import { MediaProvider, MediaProviderAdapter, MockMediaProviderAdapter } from "./components/providers/MediaProvider";
 import { ViewType } from "./components/core/player/ViewType";
 import { MediaType } from "./components/core/player/MediaType";
@@ -1752,11 +1751,11 @@ declare namespace LocalJSX {
         /**
           * Emitted when the active cues change. A cue is active when `currentTime >= cue.startTime && currentTime <= cue.endTime`.
          */
-        "onCuesChange"?: (event: CustomEvent<TextTrackCue[]>) => void;
+        "onVCuesChange"?: (event: CustomEvent<TextTrackCue[]>) => void;
         /**
           * Emitted when the current track changes.
          */
-        "onTrackChange"?: (event: CustomEvent<TextTrack | undefined>) => void;
+        "onVTrackChange"?: (event: CustomEvent<TextTrack | undefined>) => void;
         "playbackStarted"?: PlayerProps[PlayerProp.PlaybackStarted];
         "textTracks"?: PlayerProps[PlayerProp.TextTracks];
     }
@@ -1798,7 +1797,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the user is interacting with the control by focusing, touching or hovering on it.
          */
-        "onInteractionChange"?: (event: CustomEvent<boolean>) => void;
+        "onVInteractionChange"?: (event: CustomEvent<boolean>) => void;
         /**
           * If the control is a toggle, this indicated whether the control is in a "pressed" state or not. Sets the `aria-pressed` property.
          */
@@ -2028,15 +2027,15 @@ declare namespace LocalJSX {
         /**
           * Emitted when the embedded player and any new media has loaded.
          */
-        "onEmbedLoaded"?: (event: CustomEvent<EmbedEventPayload[EmbedEvent.Loaded]>) => void;
+        "onVEmbedLoaded"?: (event: CustomEvent<void>) => void;
         /**
           * Emitted when a new message is received from the embedded player via `postMessage`.
          */
-        "onEmbedMessage"?: (event: CustomEvent<EmbedEventPayload[EmbedEvent.Message]>) => void;
+        "onVEmbedMessage"?: (event: CustomEvent<any>) => void;
         /**
           * Emitted when the `embedSrc` or `params` props change. The payload contains the `params` serialized into a query string and appended to `embedSrc`.
          */
-        "onEmbedSrcChange"?: (event: CustomEvent<EmbedEventPayload[EmbedEvent.SrcChange]>) => void;
+        "onVEmbedSrcChange"?: (event: CustomEvent<string>) => void;
         /**
           * Where the src request had originated from without any path information.
          */
@@ -2250,19 +2249,19 @@ declare namespace LocalJSX {
         /**
           * Emitted when the menu has closed/is not active.
          */
-        "onClose"?: (event: CustomEvent<void>) => void;
+        "onVClose"?: (event: CustomEvent<void>) => void;
         /**
           * Emitted when the currently focused menu item changes.
          */
-        "onFocusedMenuItem"?: (event: CustomEvent<HTMLVimeMenuItemElement | undefined>) => void;
+        "onVFocusMenuItemChange"?: (event: CustomEvent<HTMLVimeMenuItemElement | undefined>) => void;
         /**
           * Emitted when the menu items present changes.
          */
-        "onMenuItemsChange"?: (event: CustomEvent<NodeListOf<HTMLVimeMenuItemElement> | undefined>) => void;
+        "onVMenuItemsChange"?: (event: CustomEvent<NodeListOf<HTMLVimeMenuItemElement> | undefined>) => void;
         /**
           * Emitted when the menu is open/active.
          */
-        "onOpen"?: (event: CustomEvent<void>) => void;
+        "onVOpen"?: (event: CustomEvent<void>) => void;
     }
     interface VimeMenuItem {
         /**
@@ -2323,7 +2322,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the radio button is selected.
          */
-        "onCheck"?: (event: CustomEvent<void>) => void;
+        "onVCheck"?: (event: CustomEvent<void>) => void;
         /**
           * The value associated with this radio item.
          */
@@ -2333,7 +2332,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when a new radio button is selected for this group.
          */
-        "onCheck"?: (event: CustomEvent<void>) => void;
+        "onVCheck"?: (event: CustomEvent<void>) => void;
         /**
           * The current value selected for this group.
          */
@@ -2849,15 +2848,15 @@ declare namespace LocalJSX {
         /**
           * Emitted when the poster has loaded.
          */
-        "onLoaded"?: (event: CustomEvent<void>) => void;
+        "onVLoaded"?: (event: CustomEvent<void>) => void;
         /**
           * Emitted when the poster will be hidden.
          */
-        "onWillHide"?: (event: CustomEvent<void>) => void;
+        "onVWillHide"?: (event: CustomEvent<void>) => void;
         /**
           * Emitted when the poster will be shown.
          */
-        "onWillShow"?: (event: CustomEvent<void>) => void;
+        "onVWillShow"?: (event: CustomEvent<void>) => void;
         "playbackStarted"?: PlayerProps[PlayerProp.PlaybackStarted];
     }
     interface VimeScrim {
@@ -2928,7 +2927,7 @@ declare namespace LocalJSX {
         /**
           * Emitted when the value of the underlying `input` field changes.
          */
-        "onValueChange"?: (event: CustomEvent<number>) => void;
+        "onVValueChange"?: (event: CustomEvent<number>) => void;
         /**
           * A number that specifies the granularity that the value must adhere to.
          */
@@ -2948,11 +2947,11 @@ declare namespace LocalJSX {
         /**
           * Emitted when the spinner will be hidden.
          */
-        "onWillHide"?: (event: CustomEvent<void>) => void;
+        "onVWillHide"?: (event: CustomEvent<void>) => void;
         /**
           * Emitted when the spinner will be shown.
          */
-        "onWillShow"?: (event: CustomEvent<void>) => void;
+        "onVWillShow"?: (event: CustomEvent<void>) => void;
     }
     interface VimeSubmenu {
         /**
