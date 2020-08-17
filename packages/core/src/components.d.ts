@@ -1035,8 +1035,11 @@ export namespace Components {
           * @inheritDoc
          */
         "playsinline": boolean;
-        "queuePropChange": (prop: PlayerProp, value: any, by?: string | undefined, byProvider?: boolean) => Promise<void>;
-        "queueStateChange": (description: string, change: () => Promise<void>) => Promise<void>;
+        /**
+          * `@readonly` Whether the player has loaded and is ready to be interacted with.
+          * @inheritDoc
+         */
+        "ready": boolean;
         /**
           * `@readonly` Whether the player is in the process of seeking to a new time position.
           * @inheritDoc
@@ -1047,6 +1050,11 @@ export namespace Components {
           * @inheritDoc
          */
         "textTracks"?: TextTrackList;
+        /**
+          * Toggles the visibility of the captions.
+          * @inheritdoc
+         */
+        "toggleCaptionsVisiblity": (isVisible?: boolean | undefined) => Promise<void>;
         /**
           * `@readonly` Contains each language and it's respective translation map.
           * @inheritDoc
@@ -2732,6 +2740,11 @@ declare namespace LocalJSX {
          */
         "onVPlayingChange"?: (event: CustomEvent<PlayerProps[PlayerProp.Playing]>) => void;
         /**
+          * Emitted when the player has loaded and is ready to be interacted with.
+          * @inheritDoc
+         */
+        "onVReady"?: (event: CustomEvent<void>) => void;
+        /**
           * Emitted directly after the player has successfully transitioned/seeked to a new time position. Event flow: `seeking` -> `seeked`.
           * @inheritDoc
          */
@@ -2811,6 +2824,11 @@ declare namespace LocalJSX {
           * @inheritDoc
          */
         "playsinline"?: boolean;
+        /**
+          * `@readonly` Whether the player has loaded and is ready to be interacted with.
+          * @inheritDoc
+         */
+        "ready"?: boolean;
         /**
           * `@readonly` Whether the player is in the process of seeking to a new time position.
           * @inheritDoc

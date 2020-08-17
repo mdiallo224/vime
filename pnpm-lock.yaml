@@ -204,7 +204,7 @@ importers:
       typescript: ^3.9.7
   packages/core:
     dependencies:
-      stencil-wormhole: 3.0.1_@stencil+core@2.0.0-2
+      stencil-wormhole: 3.0.2_@stencil+core@2.0.0-2
     devDependencies:
       '@babel/core': 7.11.1
       '@babel/preset-env': 7.11.0_@babel+core@7.11.1
@@ -261,7 +261,7 @@ importers:
       rimraf: ^3.0.2
       sirv-cli: ^1.0.3
       start-server-and-test: ^1.11.3
-      stencil-wormhole: ^3.0.1
+      stencil-wormhole: ^3.0.2
       ts-loader: ^8.0.1
       webpack: ^4.44.1
   packages/docs:
@@ -21353,14 +21353,14 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-NbCYdbT/SfJqd35QmzCQoyJr8ks=
-  /stencil-wormhole/3.0.1_@stencil+core@2.0.0-2:
+  /stencil-wormhole/3.0.2_@stencil+core@2.0.0-2:
     dependencies:
       '@stencil/core': 2.0.0-2
     dev: false
     peerDependencies:
-      '@stencil/core': ^1
+      '@stencil/core': ^1 || ^2
     resolution:
-      integrity: sha512-64jC72T1EnYMQz4anlBS2W64MS7iwFQw+KtV8LInfy9+fXUP+Tl7OmYwWYC9fJBV1fG/4gvdPUasZfN/PNCBfw==
+      integrity: sha512-zmcjZGBheJqxNQJ7aesY7gt+pMV7VtOUIgTjQc9M99FQuuCxTWP1eNY2ZkEeI1W6rVtIQhD683FfIBCGb8TIHQ==
   /stream-browserify/2.0.2:
     dependencies:
       inherits: 2.0.4
